@@ -1,5 +1,558 @@
 1:"$Sreact.fragment"
-2:I[75049,["/qwik-benchmark/_next/static/chunks/d2c13bb33c4fcd54.js","/qwik-benchmark/_next/static/chunks/c21188132e0e0d48.js"],"OutletBoundary"]
-3:"$Sreact.suspense"
-0:{"buildId":"Be4WPaNR4L2UdeWZcRaV6","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-background text-foreground font-sans selection:bg-primary/20","children":[["$","div",null,{"className":"fixed inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#2a2a2a_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-40"}],["$","div",null,{"className":"container mx-auto px-4 sm:px-8 lg:px-12 py-8 max-w-screen-2xl h-[100dvh] flex flex-col overflow-hidden","children":[["$","div",null,{"className":"mb-6 space-y-4 shrink-0","children":[["$","div",null,{"className":"flex items-center gap-4","children":["$","a",null,{"href":"/","className":"text-sm text-muted-foreground hover:text-foreground transition-colors","children":"← Back to Leaderboard"}]}],["$","div",null,{"children":["$","h1",null,{"className":"text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50","children":"Task"}]}]]}],["$","div",null,{"className":"relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card/90 to-background/90 px-5 pb-10 pt-6 text-center shadow-[0_0_0_1px_hsl(var(--primary)/0.18),0_28px_72px_-32px_hsl(var(--foreground)/0.45)] backdrop-blur-sm sm:px-8 sm:pb-14 sm:pt-8","children":[["$","div",null,{"className":"pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-primary/20 blur-3xl sm:-right-14 sm:-top-14 sm:h-40 sm:w-40"}],["$","div",null,{"className":"pointer-events-none absolute -left-20 bottom-0 h-32 w-32 rounded-full bg-foreground/10 blur-3xl sm:h-36 sm:w-36"}],["$","div",null,{"className":"relative mx-auto mb-8 inline-flex items-center rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-xs font-semibold tracking-[0.12em] text-foreground sm:text-sm sm:tracking-[0.16em]","children":"⏳ PIPELINE PENDING REVIEW"}],["$","p",null,{"className":"relative mx-auto max-w-2xl px-4 text-center text-lg font-semibold tracking-wide text-foreground sm:px-5 sm:text-xl","children":[0," sample cases generated — pending review"]}],["$","p",null,{"className":"relative mx-auto mt-2 max-w-2xl px-4 text-left text-sm leading-relaxed text-muted-foreground sm:px-5","children":"Your sample cases are ready. Before moving forward, we do a quick review together to make sure everything looks right and aligns with real-world usage."}],["$","div",null,{"className":"relative mx-auto mt-8 max-w-2xl rounded-xl bg-primary/10 px-4 py-4 text-left sm:px-5","children":[["$","p",null,{"className":"text-base font-semibold text-foreground sm:text-lg text-center","children":"Next step: join Slack for review"}],["$","p",null,{"className":"mt-1 text-sm leading-relaxed text-muted-foreground","children":"We've sent you a Slack invitation to your registered email with Zealt. Please join and we'll walk through the next step together."}],["$","p",null,{"className":"mt-3 text-xs text-muted-foreground","children":["If you don't see it, just reach out at"," ",["$","a",null,{"href":"mailto:zealtdev@tabbyml.com","className":"font-normal text-foreground underline decoration-primary/60 underline-offset-4 hover:text-primary transition-colors","children":"zealtdev@tabbyml.com"}],"."]}]]}]]}]]}]]}],[["$","script","script-0",{"src":"/qwik-benchmark/_next/static/chunks/b7786bc204f070d9.js","async":true}],["$","script","script-1",{"src":"/qwik-benchmark/_next/static/chunks/2ee232ed1e88c469.js","async":true}]],["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
-4:null
+2:"$Sreact.suspense"
+3:I[42654,["/qwik-benchmark/_next/static/chunks/babff0e7418ab052.js","/qwik-benchmark/_next/static/chunks/3ecbb78a8ff87549.js","/qwik-benchmark/_next/static/chunks/b7786bc204f070d9.js","/qwik-benchmark/_next/static/chunks/2ee232ed1e88c469.js"],"TasksPageClient"]
+15:I[75049,["/qwik-benchmark/_next/static/chunks/d2c13bb33c4fcd54.js","/qwik-benchmark/_next/static/chunks/c21188132e0e0d48.js"],"OutletBoundary"]
+4:Te22,# Qwik City CSV Report & Export Endpoint
+
+## Background
+You are extending a pre-scaffolded Qwik City application that tracks expense transactions stored in a local SQLite database. The finance team needs a report page that can be filtered, plus a download feature that streams the currently-filtered rows as a spec-compliant CSV file.
+
+A working Qwik City project already exists with all dependencies installed, and the SQLite database is already seeded. Your job is to implement the report page and the CSV export endpoint. Everything runs locally; no external services are involved.
+
+## Project & Data
+- Project path: `/home/user/qwik-app`
+- SQLite database file: `/home/user/qwik-app/data/reports.db` (already created and seeded; do NOT recreate or reseed it).
+- The database driver `better-sqlite3` is already installed and available.
+- Table `transactions` has exactly these columns:
+  - `id` (INTEGER, primary key)
+  - `date` (TEXT, formatted `YYYY-MM-DD`)
+  - `category` (TEXT)
+  - `description` (TEXT)
+  - `amount` (REAL)
+
+## Requirements
+Implement two routes in the Qwik City app:
+
+1. A report page at `/reports` that:
+   - Reads the current transactions from the SQLite database on the server (server-only) and renders them in the initial server-rendered HTML.
+   - Honors three optional URL query parameters used as filters, combined with logical AND:
+     - `from`: keep rows whose `date` is greater than or equal to this value (inclusive).
+     - `to`: keep rows whose `date` is less than or equal to this value (inclusive).
+     - `category`: keep rows whose `category` matches this value exactly (case-sensitive).
+   - Renders each matching row's `description` text into the HTML.
+   - Shows a link with the visible text `Download CSV` whose `href` points at the export endpoint below and carries the exact same `from`, `to`, and `category` filter values that are currently applied.
+
+2. A CSV export endpoint at `/reports/export` (an HTTP GET handler) that:
+   - Applies the same `from`, `to`, and `category` query-parameter filters, with identical semantics as the page.
+   - Returns the filtered rows as a downloadable CSV file.
+
+## Implementation Hints
+- Use a Qwik City `onGet` request handler for the export route so you fully control the HTTP response (headers and body).
+- Keep all database access inside server-only boundaries (route loaders and request handlers) so no database module leaks into the client bundle.
+- The response for the export endpoint must include these headers:
+  - `Content-Type` whose value contains `text/csv`.
+  - `Content-Disposition` set to attachment form and containing a filename that ends in `.csv` (use the filename `transactions.csv`).
+- The CSV body must follow RFC 4180:
+  - The first line is a header row with exactly these column names in this order: `id,date,category,description,amount`.
+  - One record per matching transaction, ordered by `id` ascending.
+  - Records are separated by CRLF (`\r\n`).
+  - Any field containing a comma, a double quote, or a newline must be enclosed in double quotes, and any double quote inside such a field must be escaped by doubling it (`"` becomes `""`).
+  - The `amount` field is written as its plain numeric value (e.g. `12.5`, `40`, `100`).
+- Start command: `npm run dev`
+- Port: 5173
+- Routes:
+  - `GET /reports` (also accepts `from`, `to`, `category` query params): returns status 200 and an HTML page containing the filtered transaction descriptions and a `Download CSV` link.
+  - `GET /reports/export` (also accepts `from`, `to`, `category` query params): returns status 200, a CSV attachment as described above.
+
+5:Tcbc,# Image Upload Gallery with Qwik City
+
+## Background
+You are building a self-contained image upload gallery using the **Qwik** framework and its meta-framework **Qwik City**. A pre-scaffolded, dependency-installed Qwik City application (the `empty` starter) is available at `/home/user/qwik-gallery`. Your job is to implement the gallery feature on the site's index route (`/`).
+
+The application must let a visitor upload an image through an HTML form. The upload is processed **entirely on the server** by a Qwik City form action, which validates the file and stores it on the local filesystem. A server-side loader reads the stored files back from disk and renders them as a gallery grid. Everything runs locally: there are no databases, cloud storage, or external services.
+
+## Requirements
+- On the index route (`/`), render a page that contains:
+  - An upload `<Form>` wired to a Qwik City `routeAction$` that accepts a single image file.
+  - A gallery section that displays every previously uploaded image.
+- Handle the upload on the server with a `routeAction$` that receives the `multipart/form-data` submission and persists the uploaded file to a local uploads directory using Node's `fs/promises` API.
+- List the stored files with a `routeLoader$` that reads the uploads directory on the server and passes the file list to the component for rendering.
+- Validate every upload on the server and reject invalid files **without storing them**, returning a field-level error that is shown on the page.
+- Keep all server-only filesystem code inside server boundaries so it never leaks into the client bundle; the production build must compile cleanly.
+
+## Implementation Hints
+- Use Qwik City's `routeLoader$` for server-side listing and `routeAction$` (with the `<Form>` component) for the upload; keep `fs`/`path` imports and usage confined to these server-only functions so the optimizer does not drag Node modules into the browser bundle.
+- An uploaded file arrives as a web `File`/`Blob`; read its bytes (e.g. via `arrayBuffer()`) and write them to disk with `fs/promises`.
+- Validate the MIME type/extension and byte size server-side, and surface rejections through the action's failure/field-error mechanism.
+- Project path: `/home/user/qwik-gallery`
+- Implement the feature on the index route file `src/routes/index.tsx`.
+- The file `<input type="file">` element must use the field name `image`.
+- Store uploaded files in the directory `public/uploads` (create it if it does not exist), preserving the uploaded file's name. Because files in `public/` are served from the site root, a stored file named `foo.png` is reachable at the URL path `/uploads/foo.png`.
+- Accept only image uploads with one of these extensions/types: `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`. Reject anything else.
+- Reject any upload larger than 2 MiB (2097152 bytes). Rejected uploads (wrong type or too large) must NOT be written anywhere under `public/uploads`.
+- The gallery must render each stored image as an `<img>` element whose `src` attribute is exactly `/uploads/<filename>`.
+- Start command (long-running app): `npm run dev -- --port 3000 --host 0.0.0.0`
+- Port: `3000`
+- The production build command `npm run build` must complete successfully (exit code 0).
+
+6:Te13,# Infinite-Scroll Feed with Qwik City
+
+## Background
+You are building a social-style content feed with the **Qwik** framework and **Qwik City** meta-framework. The feed must render its first page on the server (no client JavaScript needed to see the initial content) and then progressively load more content on the client as the user scrolls, using cursor-based pagination backed by a **local SQLite** database. All data must come from the local database through server-only code; the browser must never talk to any external service.
+
+## Requirements
+- Build a Qwik City application whose home route (`/`) renders a scrollable feed.
+- Persist the feed content in a **local SQLite** database file inside the project. Seed it with **exactly 47 posts**: for every integer `N` from 1 to 47 there must be a post whose title is exactly `Post #N`. Each post also has some body text.
+- The feed is ordered by ascending post id and paginated with a **page size of 10** (so the pages contain 10, 10, 10, 10, then the final 7 posts).
+- The **initial page** (the first 10 posts, `Post #1` .. `Post #10`) must be produced on the server with `routeLoader$` and be present in the server-rendered HTML.
+- Loading of every subsequent page must be performed by a **`server$()` RPC** call that accepts a cursor (the id of the last item already loaded) and returns the next page of posts plus whether more posts remain. The database access must live only inside server code so that no database/Node-only module leaks into the client bundle.
+- On the client, use an `IntersectionObserver` created inside `useVisibleTask$` that watches a sentinel element at the bottom of the list. When the sentinel becomes visible, fetch the next page via the `server$()` function and append the new posts into a `useStore` list. Stop requesting once the server reports there are no more posts.
+- While a page is being fetched, show a loading indicator. When all posts have been loaded, show an end-of-feed indicator and stop observing.
+
+## Implementation Hints
+- Scaffold a Qwik City app (for example with `npm create qwik@latest empty <dir>`), then add a local SQLite driver such as `better-sqlite3`.
+- Keep all SQLite imports and queries inside `routeLoader$` / `server$()` (or a `*.server.ts` module) so the optimizer does not pull server-only modules into the browser bundle.
+- Remember that `server$()` receives the `RequestEvent` via `this`, can accept arguments, and returns any Qwik-serializable value.
+- Accumulate loaded posts in a `useStore` so newly fetched pages are appended reactively; `IntersectionObserver` and other browser-only APIs belong in `useVisibleTask$`.
+- Project path: /home/user/qwik-app
+- Start command: npm run dev -- --port 3000 --host
+- Port: 3000
+- Route: `/` renders the feed.
+- DOM contract that will be checked (attach these exact hooks):
+  - Every rendered feed post is an element carrying the attribute `data-testid="feed-item"`, and its visible text contains the post title (e.g. `Post #1`).
+  - A loading indicator element carries `data-testid="feed-loading"` and is present in the DOM only while a page is being fetched.
+  - An end-of-feed indicator element carries `data-testid="feed-end"` and appears only after the last post has been loaded; its visible text must contain the phrase `End of feed`.
+  - A sentinel element carrying `data-testid="feed-sentinel"` sits at the bottom of the list and is what the `IntersectionObserver` watches.
+- The feed must never render duplicate posts, and after scrolling to the very bottom all 47 posts (`Post #1` .. `Post #47`) must be present exactly once.
+
+7:T10c1,# Qwik City Kanban Board with Drag-and-Drop Reordering and SQLite Persistence
+
+## Background
+Build a Kanban board application using Qwik City (the Qwik meta-framework). The board has three fixed columns — `todo`, `doing`, and `done` — each holding an ordered list of cards. Users move cards between columns and reorder them within a column using native HTML5 drag-and-drop. Every move is persisted to a local SQLite database so that the exact column and ordering survive a full page reload. The board is server-rendered from the database on every request.
+
+## Requirements
+- Render a board page at `/` with three columns (`todo`, `doing`, `done`), each showing its cards in persisted order.
+- Cards must be movable between columns and reorderable within a column via native HTML5 drag-and-drop (wired with `useStore` and `onDragStart$` / `onDragOver$` / `onDrop$`).
+- Persist every move to a local SQLite database, maintaining a stable, contiguous 0-based `position` index within each column.
+- Server-render the board from the database using `routeLoader$` so ordering is correct after a reload (resumability / rehydration).
+- Expose JSON HTTP endpoints for reading the board, applying a move, and resetting to the initial seed.
+- Seed the database with the initial board state below when it is empty.
+
+## Data model
+Each card has: a stable integer `id`, a `title` (string), a `column` (`todo` | `doing` | `done`), and a `position` (0-based integer, contiguous within its column, ascending = top-to-bottom).
+
+Initial seed (order top-to-bottom within each column):
+- `todo`: id 1 "Design landing page", id 2 "Write unit tests", id 3 "Set up CI"
+- `doing`: id 4 "Implement auth", id 5 "Refactor store"
+- `done`: id 6 "Project scaffolding"
+
+## Implementation Hints
+- Use a Qwik City project. Keep all SQLite access strictly server-side (inside `routeLoader$` and server endpoints) so no database module leaks into the client bundle. `better-sqlite3` is a good local, container-friendly driver.
+- Use `routeLoader$` to load the board from SQLite and server-render the columns; wire the drag-and-drop interactions on the client with `useStore` and `onDragStart$` / `onDragOver$` / `onDrop$`, calling the move endpoint to persist.
+- When a card is moved, remove it from its source column and insert it into the target column at the target index, then re-number `position` values in every affected column so they stay contiguous (0..n-1) and ordering is preserved. Clamp an out-of-range target index to the end of the column.
+
+- Project path: /home/user/qwik-app
+- Start command: `npm run dev -- --port 3000 --host 0.0.0.0`
+- Port: 3000
+
+- Board page:
+  - `GET /` returns server-rendered HTML. Each column container element must carry the attribute `data-column` with value `todo`, `doing`, or `done`. Each card element must carry `data-card-id="<id>"`, be draggable (have the `draggable` attribute), and display the card's title text. Cards must appear in persisted (position ascending) order within their column.
+
+- HTTP JSON endpoints (requests and responses use `application/json`):
+  - `GET /api/board`: returns status 200 and the current board:
+    ```json
+    {
+      "todo":  [{ "id": number, "title": string, "position": number }],
+      "doing": [{ "id": number, "title": string, "position": number }],
+      "done":  [{ "id": number, "title": string, "position": number }]
+    }
+    ```
+    Within each column, objects are ordered by `position` ascending, and `position` values are contiguous starting at 0.
+  - `POST /api/move`: accepts a move, persists it, then returns status 200 with the full updated board (same shape as `GET /api/board`).
+    ```json
+    // Request
+    { "cardId": number, "toColumn": "todo" | "doing" | "done", "toIndex": number }
+    ```
+    - Insert the card into `toColumn` at position `toIndex`; if `toIndex` is greater than the number of cards in the target column, append it at the end; a negative `toIndex` is treated as 0.
+    - If `cardId` does not exist, return status 404. If `toColumn` is not one of the three valid columns, or if required fields are missing/invalid, return status 400.
+  - `POST /api/reset`: restores the database to the exact initial seed above and returns status 200 with the seeded board (same shape as `GET /api/board`).
+
+8:Tb97,# Markdown Notes Manager (Qwik City + SQLite)
+
+## Background
+Build a full-stack **Markdown Notes** manager using the **Qwik** framework and its meta-framework **Qwik City**. Notes are stored in a local SQLite database, written in Markdown, and rendered as sanitized HTML on the server. All server-side data loading and mutations must go through Qwik City's server primitives (`routeLoader$` and `routeAction$`), and all data must be persisted locally — the app must never call any external network service at runtime.
+
+## Requirements
+- A notes list page at `/notes` that:
+  - Loads and displays all existing notes (server-side, via a `routeLoader$`), showing each note's title as a link to its detail page.
+  - Provides a form to **create** a new note (title + Markdown content).
+  - Provides a way to **delete** each note from the list.
+- A note detail page at `/notes/[id]` that loads a single note server-side and renders its Markdown content as **sanitized HTML** (headings, lists, emphasis, etc. must render as real HTML elements; dangerous content such as `<script>` tags must be stripped and must not appear in the output).
+- An edit page at `/notes/[id]/edit` that loads the existing note into an editable form and **updates** it.
+- Create, update, and delete must each be implemented as separate server-side `routeAction$` handlers with **`zod$` validation**.
+- Data is persisted in a local SQLite database using `better-sqlite3`; notes survive across separate HTTP requests.
+
+## Implementation Hints
+- Scaffold a Qwik City app (the `empty` starter includes routing) and use directory-based routing for the three routes.
+- Do all database access and Markdown-to-HTML conversion strictly inside server-only boundaries (`routeLoader$` / `routeAction$`) so that native/server modules never leak into the client bundle.
+- Use a locally-installed Markdown library to convert Markdown to HTML and a sanitizer to strip unsafe HTML before rendering it (Qwik supports the `dangerouslySetInnerHTML` prop).
+- Use `zod$` schemas so that submissions with a blank title or empty content are rejected without writing to the database, and the form is re-rendered (retaining the user's input) with an error indication.
+- After a successful create the note must appear on `/notes`; after a successful update the new values must be reflected; after a delete the note must be gone from `/notes`.
+- Requesting a note detail page for an id that does not exist must respond with HTTP status 404.
+- Project path: /home/user/qwik-notes
+- Start command: `npm run dev -- --port 5173 --host 127.0.0.1`
+- Port: 5173
+- Routes:
+  - `GET /notes`: list page (title links point to `/notes/<id>`), a create form, and a delete control per note.
+  - `GET /notes/<id>`: detail page rendering the note's title and its Markdown content as sanitized HTML; returns status 404 for an unknown id.
+  - `GET /notes/<id>/edit`: edit page pre-filled with the note's current title and Markdown content.
+
+9:Tfdd,# Nested Comment Threads with Qwik City and SQLite
+
+## Background
+Build a threaded (nested reply) comment system using Qwik City backed by a local SQLite database. Any comment can be replied to at any depth, forming an arbitrarily deep tree. The server loads the entire comment tree and the UI renders it recursively, with the ability to collapse/expand any subtree and to add replies to any comment.
+
+## Requirements
+- Render all comments as a nested tree on the page at route `/`.
+- Persist comments in a local SQLite database. Each comment has: an id, an optional parent id (null for top-level comments), an author, a body, and a creation timestamp.
+- Use a `routeLoader$` to load the full set of comments on the server and render them as an arbitrarily deep nested tree using a recursive Qwik component.
+- Each comment displays its author, its body, and the total number of nested replies (all descendants).
+- Each comment that has at least one reply provides a control to collapse/expand its subtree.
+- Provide a reply form on each comment that adds a child reply to that comment, plus a top-level form that adds a new root comment.
+- Use a `routeAction$` together with `zod$` validation to add replies. Both author and body are required (non-empty); invalid submissions must be rejected with a visible error and must not be persisted.
+
+## Implementation Hints
+- Keep all database access inside server-only boundaries (`routeLoader$` / `routeAction$`); never let SQLite modules leak into client bundles.
+- Loading the whole tree with a recursive SQL query (a recursive CTE) or building the tree in memory are both acceptable — what matters is that nesting and reply counts are correct.
+- A recursive Qwik component is the natural way to render an arbitrarily deep tree, and Qwik's fine-grained reactivity (e.g. `useSignal`) fits the per-subtree collapse state.
+- Use a local SQLite driver such as `better-sqlite3`; no external database or network service may be used.
+- Project path: /home/user/qwik-comments
+- The SQLite database file must be located at /home/user/qwik-comments/comments.db and must contain a table named `comments` with these exact columns: `id` (integer primary key, auto-increment), `parent_id` (integer, nullable, referencing `comments.id`, null for top-level comments), `author` (text), `body` (text), and `created_at` (text or integer timestamp).
+- Seed the database when it is empty with exactly these four comments, preserving the parent/child relationships:
+  - author "alice", body "Welcome to the thread" (top-level)
+  - author "bob", body "Thanks alice!" (reply to alice)
+  - author "carol", body "Agreed, great start" (reply to bob)
+  - author "dave", body "Separate top-level thought" (top-level)
+- Start command: npm run dev -- --port 3000 (the app must be reachable at http://localhost:3000)
+- Port: 3000
+- Rendering contract (the verifier depends on these):
+  - Each rendered comment element must carry the attributes `data-comment-id="<id>"` and `data-depth="<n>"`, where top-level comments have depth 0 and each nested level increases depth by 1.
+  - Each comment must expose its total descendant reply count via an element carrying the attribute `data-reply-count="<count>"`, counting all nested replies (not only direct children).
+  - Child comments must be rendered nested within their parent comment's DOM subtree.
+  - Each comment that has at least one reply must render a toggle control carrying the attribute `data-testid="toggle-<id>"` that hides its descendant subtree when collapsed and shows it again when expanded.
+  - Each comment must render a reply form containing a text input named `author` and a text input (or textarea) named `body`; submitting it adds a reply whose parent is that comment.
+  - Adding a reply must persist the new row to the SQLite database, and after submission the new comment must appear nested under the correct parent with updated reply counts.
+  - A submission with an empty author or empty body must be rejected (a validation error is shown) and must not create a new row.
+
+a:Tfa9,# Qwik City Documentation Site with Nested Layouts & Auto Breadcrumbs
+
+## Background
+You are building a self-contained documentation browser using the **Qwik** framework and its meta-framework **Qwik City**. The site organizes docs into categories and pages using a multi-level nested routing structure. Each level has its own `layout.tsx`, and a breadcrumb trail plus a sidebar navigation are generated automatically from the current route rather than being hardcoded per page.
+
+A pre-scaffolded Qwik City project already exists at the project path. It boots and builds as-is. A local data module has already been placed in the project and must be the single source of truth for all category/page titles — do NOT hardcode titles or fetch anything over the network.
+
+## Provided Data Source
+The file `src/data/docs.ts` is already present and exports a `categories` array with this shape:
+
+```ts
+export interface DocPage { slug: string; title: string; body: string; }
+export interface DocCategory { slug: string; title: string; pages: DocPage[]; }
+export const categories: DocCategory[];
+```
+
+Human-readable titles differ from the URL slugs (e.g. the slug `getting-started` has the title `Getting Started`). All breadcrumb and sidebar labels must be the resolved `title` values from this module, never the raw slugs.
+
+## Requirements
+- Implement a multi-level nested route tree under `/docs`:
+  - `/docs` — lists all categories.
+  - `/docs/[category]` — lists the pages in that category.
+  - `/docs/[category]/[slug]` — renders a single page's title and body.
+- Use **nested `layout.tsx` files** with `<Slot />` so shared UI (breadcrumb bar + sidebar) wraps every `/docs` route.
+- Render an **automatically generated breadcrumb trail** derived from the current route segments and params. The trail always begins with a `Docs` crumb linking to `/docs`, followed by the category title, then the page title, depending on how deep the current route is. The final crumb represents the current page.
+- Render a **sidebar navigation** listing every category as a link to its `/docs/<category>` route. The link matching the currently active category must be marked as the active route.
+- Resolve all segment titles on the server from `src/data/docs.ts`, and use `useLocation` to read the current route.
+- Handle **404**: requesting an unknown category or an unknown page slug must respond with HTTP status `404`.
+
+## Implementation Hints
+- Use `routeLoader$` (server side) to resolve titles from the local data module, and `useLocation()` to read the current path/params. Use `requestEvent.fail(404, ...)` (or an equivalent that sets the response status) to produce a 404 for unknown segments.
+- Compose the breadcrumb and sidebar in the nested layouts using `<Slot />`; do not copy them into every page.
+- Keep the data import server-only friendly (it is plain JSON-serializable data, so it can be resolved inside loaders).
+- Project path: /home/user/qwik-docs
+- The provided data module lives at /home/user/qwik-docs/src/data/docs.ts and must not be modified in a way that removes or renames existing categories/pages.
+- Start command: npm run preview (the production preview server MUST listen on host 0.0.0.0 and port 3000).
+- Port: 3000
+- Routes and observable output shape:
+  - The breadcrumb trail MUST be rendered inside a `<nav>` element carrying the attribute `aria-label="breadcrumb"`. Crumbs appear in hierarchical order and the labels are the resolved human titles.
+  - The sidebar MUST be rendered inside a `<nav>` element carrying the attribute `aria-label="sidebar"`, containing one link per category (href `/docs/<category-slug>`) labeled with the category title.
+  - The sidebar link for the currently active category MUST carry the attribute `aria-current="page"`.
+  - `/docs/[category]/[slug]` MUST render the page's `title` and its `body` text.
+  - Unknown category (e.g. `/docs/does-not-exist`) or unknown slug (e.g. `/docs/<valid-category>/does-not-exist`) MUST return HTTP status 404.
+
+b:T1076,# Live Metrics Dashboard with Qwik City
+
+## Background
+You are building a real-time server metrics dashboard using the [Qwik](https://qwik.dev/) framework and Qwik City. The app must expose a **local** JSON endpoint that returns server-generated statistics, and a component that displays those statistics and automatically polls the endpoint for fresh data on an interval. Everything runs locally; the app must never call any external service or network host.
+
+A Qwik City project has already been scaffolded at the project path. Your job is to implement the metrics endpoint and the dashboard component.
+
+## Requirements
+1. **Local metrics endpoint** at route `/api/metrics` implemented as a Qwik City endpoint using an exported `onGet` `RequestHandler`. It returns a JSON body (HTTP 200) describing current server stats.
+   - The server keeps an **in-memory counter** that increases by exactly 1 on every GET request to this endpoint. The first ever request returns a counter value of `1`.
+   - All metric values are derived **deterministically** from this counter so that the endpoint is reproducible given the same counter value (do not use `Math.random`).
+2. **Dashboard component** rendered at the site root route `/` that:
+   - Uses `useResource$()` together with the `<Resource>` component to fetch `/api/metrics` and render distinct **pending**, **resolved**, and **rejected** UI (all three `onPending`, `onResolved`, and `onRejected` handlers must be provided).
+   - Uses a `useVisibleTask$()` timer that automatically re-triggers the resource to poll for fresh data on a fixed interval, and cleans up the timer with the task `cleanup` callback.
+   - Provides a **manual refresh** control that immediately re-fetches fresh data.
+   - Provides a **pause/resume** control that stops and restarts the automatic polling. When paused, the automatic timer must not fetch new data; when resumed, polling continues.
+
+## Implementation Hints
+- Keep all server-only state (the counter) in module scope inside the endpoint file so it persists across requests within a single server process.
+- To re-trigger a `useResource$` from a timer or a button, `track()` a reactive signal (for example a "tick" counter) inside the resource and change that signal to force a re-fetch.
+- Register the interval inside `useVisibleTask$()` and clear it inside the `cleanup()` callback so no timers leak; gate the interval on the pause/resume state.
+- The dashboard renders during SSR, so the resolved metrics appear in the initial server-rendered HTML.
+- Project path: /home/user/qwik-app
+- Start command: `npm run dev -- --port 3000 --host 127.0.0.1`
+- Port: 3000
+- The dashboard page is served at `GET /` and the endpoint at `GET /api/metrics`.
+
+### Endpoint response shape
+`GET /api/metrics` must return HTTP 200 with `Content-Type: application/json` and exactly these keys:
+```json
+{
+  "requestCount": number,
+  "cpu": number,
+  "memory": number,
+  "activeUsers": number,
+  "timestamp": number
+}
+```
+Where, using `n` = the current value of the in-memory counter after incrementing it for this request:
+- `requestCount` = `n`
+- `cpu` = `(n * 7) % 100`
+- `memory` = `(n * 13) % 100`
+- `activeUsers` = `(n * 3) % 250`
+- `timestamp` = the current time in milliseconds (`Date.now()`)
+
+### Dashboard DOM requirements
+The automated checks locate elements by `data-testid`. The resolved dashboard must render these attributes:
+- The container/heading area includes the visible text `Live Metrics Dashboard`.
+- An element with `data-testid="metric-request-count"` whose text content contains the current `requestCount` value.
+- An element with `data-testid="metric-cpu"` whose text content contains the current `cpu` value.
+- An element with `data-testid="metric-memory"` whose text content contains the current `memory` value.
+- An element with `data-testid="metric-active-users"` whose text content contains the current `activeUsers` value.
+- A button with `data-testid="refresh-button"` that manually re-fetches data.
+- A button with `data-testid="toggle-button"` that pauses/resumes automatic polling.
+- The automatic polling interval must be **2000 milliseconds** (poll every 2 seconds) so timing-based checks behave predictably.
+
+c:Tf06,# Rate-Limited JSON API with Qwik City
+
+## Background
+You are building an abuse-protection layer for a public JSON API using **Qwik City** (the meta-framework built on Qwik). A pre-scaffolded, empty Qwik City project already exists at `/home/user/qwik-app` (dependencies installed, dev server working). Your job is to add a JSON endpoint that is protected by an in-memory, per-client rate limiter implemented as shared route middleware, plus a demo page that reports how much quota a client has left.
+
+## Requirements
+- Add a JSON API endpoint at route `/api/data` that handles both `GET` and `POST` requests and returns application/json.
+- Protect every request under `/api/` with a **shared `onRequest` middleware defined in a layout** (not inline in the endpoint file). The middleware must enforce the limiter for all routes below it.
+- The limiter must be an **in-memory** limiter (token-bucket or sliding-window style) keyed by the **client IP**, allowing at most **5 requests per rolling 5-second window per IP**. No external service, database, or network access may be used; all state lives in process memory.
+- On every `/api/data` response (both allowed and blocked), set these response headers: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset`.
+- When a client exceeds the limit, respond with HTTP **429** and a JSON body, and include a `Retry-After` header. The middleware must stop the chain so the endpoint handler does not run for blocked requests.
+- Add a demo page at route `/status` (a rendered HTML component route, NOT under `/api/`) that displays the current remaining quota and the limit for the requesting client, and that does **not** consume any quota when viewed.
+
+## Implementation Hints
+- Use a Qwik City `layout.tsx` under `src/routes/api/` and export an `onRequest` `RequestHandler` from it; the endpoint at `src/routes/api/data/index.ts` should export `onGet` and `onPost` handlers.
+- Keep the limiter state in a single shared server-side module (a plain `Map` in module scope) that is imported by both the middleware and the `/status` route so they observe the same counters. Use `sharedMap` to pass the computed remaining count from the middleware to the endpoint handlers if convenient.
+- Resolve the client IP from the `X-Forwarded-For` request header when present (use the first address in the comma-separated list); otherwise fall back to the connection's client IP. Rate limiting must be strictly per-IP: one IP being blocked must not affect a different IP.
+- Consuming/counting a request must happen exactly once per HTTP request in the middleware. The `/status` page must only read (peek) the limiter state, never increment it.
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev -- --host 127.0.0.1 --port 8787`
+- Port: `8787`
+- API + route contract:
+  - `GET /api/data` and `POST /api/data` (when allowed): return status `200` with a JSON object that includes at least the keys `method` (the string `"GET"` or `"POST"`) and `remaining` (a number equal to the requests still allowed for that IP in the current window after counting the current request). Response headers must include `X-RateLimit-Limit` (value `5`), `X-RateLimit-Remaining` (the same number as `remaining`, as a string), and `X-RateLimit-Reset` (a non-negative integer number of seconds until the window resets).
+  - When the per-IP limit is exceeded: return status `429` with a JSON body containing an `error` key, with `X-RateLimit-Remaining` equal to `0`, a `Retry-After` header set to a positive integer number of seconds, and the same `X-RateLimit-*` headers present.
+  - `GET /status`: return an HTML page whose text contains `Limit: 5` and `Remaining: <n>` where `<n>` is the current remaining quota for the requesting client IP. Viewing this page must not change any client's remaining quota.
+
+d:Tfd7,# Qwik City Blog Backed by Local SQLite (Prisma)
+
+## Background
+You are building a small, self-contained blog with the Qwik framework and its meta-framework Qwik City. All data is stored in a **local SQLite database** accessed through **Prisma**. The application must never depend on any external network service at runtime; everything runs locally inside the container.
+
+A base Qwik City project has already been scaffolded and its dependencies (including `@builder.io/qwik`, `@builder.io/qwik-city`, `prisma`, and `@prisma/client`) are already installed at the project path. Your job is to implement the blog features on top of it.
+
+## Requirements
+- Model blog posts in a local SQLite database using Prisma. A post has a title, a body/content, and a creation timestamp.
+- The home page (`/`) must load **all** posts on the server with a `routeLoader$` and render them, showing newest posts first. Each listed post must link to its own detail page at `/posts/<id>`.
+- The home page must include a progressive-enhancement `<Form>` bound to a `routeAction$` that creates a new post. Validate the submitted data on the server with `zod$`. The form fields are named `title` and `content`.
+- A dynamic route `/posts/[id]` must use a `routeLoader$` to fetch a single post by its id and render its title and content. If the post does not exist, the route must respond with HTTP status `404`.
+- Server-only database code (the Prisma client and any query helpers) must **NOT** be bundled into the client. A production client build must not contain any Prisma or SQLite driver references.
+- The database must be seeded with the exact three posts listed below before the app is used.
+
+## Seed Data (must exist in the database)
+Insert these three posts (in this order, so they receive ids 1, 2, 3):
+1. title: `Welcome to Qwik`, content: `Qwik delivers instant-loading web applications through resumability.`
+2. title: `Understanding Resumability`, content: `Resumability lets the app pause on the server and resume on the client without hydration.`
+3. title: `Server-Side Data with routeLoader`, content: `routeLoader fetches data on the server before rendering the route.`
+
+## Implementation Hints
+- Project path: `/home/user/qwik-blog`
+- Keep all Prisma access inside server-only boundaries (`routeLoader$`, `routeAction$`, `server$`, or a dedicated `*.server.ts` module). Importing native/DB modules at a place reachable from client code will drag them into the client bundle and must be avoided.
+- Use `zod$` to require a non-empty `title` (at least 3 characters) and a non-empty `content` (at least 10 characters). Submissions that fail validation must NOT create a post; a valid submission must persist the new post to SQLite so it appears on the home page afterward.
+- Use the Prisma `Post` model with the default table name (`Post`) so posts persist in the local SQLite file. The SQLite database file must live inside the project (Prisma default `DATABASE_URL="file:./dev.db"`, i.e. `/home/user/qwik-blog/prisma/dev.db`).
+- The newly created post must be reachable at `/posts/<id>` using the id assigned by the database.
+- Start command (the app must serve server-side rendering, run route loaders/actions, and listen on port 3000): `npm run dev -- --port 3000 --host 127.0.0.1`
+- Port: 3000
+- Routes and behavior that will be checked:
+  - `GET /` returns status 200 and HTML containing every post title, newest first, with a hyperlink to `/posts/<id>` for each post.
+  - `GET /posts/<id>` returns status 200 and HTML containing that post's title and content for an existing post, and status 404 for a non-existent id.
+  - The home page contains a `<form>` (rendered by Qwik City's `<Form>`) with text inputs named `title` and `content` that submits to the create `routeAction$` and works as a normal HTML form POST (progressive enhancement, no client JS required).
+- A production client build (`npm run build`) must succeed, and the generated client assets under `dist/` must not contain the strings `PrismaClient`, `@prisma/client`, or `better-sqlite3`.
+
+e:Tfda,# Full-Text Document Search with Qwik City and SQLite FTS5
+
+## Background
+You are building a server-rendered full-text search page with the Qwik City meta-framework. The search must run entirely locally against a **SQLite FTS5 virtual table** accessed through the `better-sqlite3` driver. Everything runs inside the container with no external services, APIs, or network access.
+
+## Requirements
+- Create a Qwik City application whose home route (`/`) is a full-text search page.
+- Persist a document corpus in a local SQLite database and index it with an **FTS5 virtual table** so it can be searched with the `MATCH` operator.
+- Seed the database with exactly these 8 documents (each has a `title` and a `body`):
+  1. `Introduction to SQLite` | `SQLite is a lightweight embedded database engine used in many applications.`
+  2. `Full Text Search with FTS5` | `The FTS5 extension enables fast full text search over documents using an inverted index.`
+  3. `Getting Started with Qwik` | `Qwik is a resumable web framework that delivers instant loading web applications.`
+  4. `Reactive State in Qwik` | `Use signals and stores to manage reactive state inside Qwik components.`
+  5. `Building REST APIs` | `Design clean REST endpoints to serve JSON data to client applications.`
+  6. `Database Indexing Basics` | `Indexes speed up query performance in relational databases like SQLite and Postgres.`
+  7. `Server Side Rendering` | `Server side rendering improves performance and search engine visibility for web applications.`
+  8. `Web Performance Tips` | `Reduce JavaScript to improve web performance and loading speed for users.`
+- The search term is read from the URL query parameter `q`. When `q` is present and non-empty, run an FTS5 `MATCH` query on the server and render the ranked results.
+- Results must be ranked by relevance (best match first) using FTS5's BM25 ranking, and each result must display a 1-based rank position, the document title, and a body snippet in which the matched term(s) are wrapped in `<mark>` HTML tags (use FTS5 `highlight()` or `snippet()`).
+- Show the total number of matches, handle the no-results state, and handle the empty-query state.
+- The search box must be debounced on the client and update the `q` URL query parameter as the user types.
+
+## Implementation Hints
+- Query parameters are available inside a `routeLoader$` via the `RequestEvent` API (e.g. `requestEvent.query`). Keep all `better-sqlite3` and `node:` imports strictly inside server-only boundaries (`routeLoader$`) so they never leak into the client bundle.
+- Create the FTS5 table with `CREATE VIRTUAL TABLE ... USING fts5(title, body)` and query it with `... WHERE <table> MATCH ? ORDER BY rank`. `rank`/`bm25()` returns lower values for better matches.
+- To render highlighted snippet HTML produced by FTS5 inside JSX, you will need to render raw HTML (e.g. `dangerouslySetInnerHTML`).
+- The FTS5 tokenizer is case-insensitive, so a query like `qwik` matches the text `Qwik`.
+- Ensure the database is seeded before the app serves requests (an auto-seed on startup or a separate seed step are both fine), and make seeding idempotent so restarts do not duplicate rows.
+- Rendered output requirements (checked by the tests):
+  - Display the total match count as visible text of the form `<count> results` (always use the word `results`, e.g. `2 results`).
+  - When `q` is non-empty but there are no matches, render visible text containing `No results found`.
+  - When `q` is missing or empty, do not run a search and render visible text containing `Enter a search term`.
+  - Each matching result's snippet must contain at least one `<mark>...</mark>` element around the matched term.
+- Project path: /home/user/qwik-fts-search
+- The app must be served over SSR (so the route loader executes on the server) and listen on all interfaces on port 3000.
+- Start command: `npm run dev -- --port 3000 --host 0.0.0.0`
+- Search page route: GET `http://localhost:3000/?q=<term>` returns an HTML page containing the rendered search results as described above.
+
+f:T106d,# Qwik City Live Shared Counter over Server-Sent Events
+
+## Background
+You are building a real-time "live shared counter" widget for a Qwik City application. The application keeps a single shared integer counter in server memory. Every connected browser subscribes to a Server-Sent Events (SSE) stream and sees the counter change in real time. Any client can increment or decrement the shared counter, and the new value must be pushed to **every** currently connected subscriber (not just the client that made the change).
+
+Everything must run locally with no external services: the pub/sub broker is an in-memory data structure inside the running server process, and the SSE stream and mutation endpoint are plain Qwik City endpoints.
+
+## Requirements
+- Maintain one shared, in-memory integer counter for the whole server process (initial value `0`).
+- Provide an SSE endpoint that streams the current counter value to each connected client. On connection it must immediately emit the current value, and thereafter emit the new value every time the counter changes.
+- Provide a mutation endpoint that adjusts the shared counter by a signed delta and broadcasts the resulting value to **all** currently connected SSE subscribers.
+- Provide a plain endpoint that returns the current counter value as JSON.
+- Render a home-page component that subscribes to the SSE stream from the browser, stores the latest value in reactive state, displays it, and unsubscribes when the component is destroyed. The subscription must be established with a browser `EventSource` created inside a client-only visible task, and the stream connection must be closed during cleanup.
+- Multiple simultaneous SSE connections must all receive every broadcast update.
+
+## Implementation Hints
+- Use a Qwik City endpoint (`onGet`) with `requestEvent.getWritableStream()` to produce the `text/event-stream` response, and keep a shared registry (e.g. a `Set` of stream writers) in a server-only module so a single counter/subscriber list is shared across requests in the process.
+- Use another endpoint (`onPost`) to mutate the shared counter and fan the new value out to every registered subscriber. Parse the JSON body with `requestEvent.parseBody()`.
+- Keep the mutable state and broadcast logic in a module that is only ever imported by server endpoints so it is never dragged into the client bundle.
+- Use `useVisibleTask$` for the browser-only `EventSource` subscription, store the value in a `useSignal`, and close the `EventSource` inside the task `cleanup` callback.
+- Remove a subscriber's writer from the registry when its connection aborts (`requestEvent.signal`).
+
+### Hard requirements (must match exactly)
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev -- --port 3000 --host 0.0.0.0` (the Qwik City SSR dev server; a single persistent Node process so the in-memory counter and subscriber registry are shared across all requests). Port: `3000`.
+- The home page (`GET /`) must render an element with `id="counter-value"` whose text content is the current counter value (a number). This element must update live in the browser as the counter changes.
+- SSE stream endpoint: `GET /api/counter/stream`
+  - Response `Content-Type` header must start with `text/event-stream`.
+  - Each message must be a standard SSE data frame terminated by a blank line, where the data payload is JSON of the form `{"count": <integer>}` (i.e. a line `data: {"count": <integer>}` followed by an empty line).
+  - Immediately after connecting, the endpoint must emit one frame carrying the current counter value.
+- Mutation endpoint: `POST /api/counter`
+  - Request body: JSON `{ "delta": <integer> }` (delta may be negative).
+  - It must apply the delta to the shared counter, broadcast the new value to all connected SSE subscribers, and respond with status `200` and JSON body `{ "count": <integer> }` containing the updated value.
+- Current-value endpoint: `GET /api/counter` must respond with status `200` and JSON body `{ "count": <integer> }` containing the current value.
+- The counter is shared process-wide: a mutation from one client must be observable by every other client (via SSE) and via `GET /api/counter`.
+
+10:T1208,# Tag-Filterable Article Listing with Qwik City and SQLite (Many-to-Many)
+
+## Background
+Build a server-rendered, tag-filterable article listing for a small blog using the **Qwik** framework (Qwik City meta-framework). Articles and tags have a **many-to-many** relationship stored in a **local SQLite** database through a join table. All data loading happens on the server via a `routeLoader$`, and the active tag filters are driven entirely by the page URL's query string so filtered pages are shareable and server-rendered.
+
+Everything must run locally. No external APIs, cloud services, or network access to external hosts are allowed at runtime.
+
+## Requirements
+- Create a Qwik City application backed by a local SQLite database file.
+- Model a many-to-many relationship between articles and tags using three tables: `articles`, `tags`, and a join table `article_tags`.
+- Seed the database with exactly the data specified below (idempotently — re-running setup must not duplicate rows).
+- Implement an article listing route at `/articles` whose data is produced by a `routeLoader$`. The loader must:
+  - Read zero or more selected tags from the URL query string (repeated `tag` query parameter, e.g. `/articles?tag=javascript&tag=qwik`).
+  - Return the set of articles that are tagged with **ALL** of the selected tags (AND filtering). With no `tag` parameter, return all articles.
+  - Compute **tag facet counts**: for every tag, the number of articles **in the current filtered result set** that carry that tag.
+- Render the listing UI so a user can toggle multiple tags on/off, with the active tag selection reflected in the URL query string; show the currently active filters; and link every listed article to its detail page at `/articles/<slug>`.
+- Implement an article detail route at `/articles/<slug>` that shows the article title and lists all of that article's tags. Unknown slugs must respond with HTTP 404.
+
+## Implementation Hints
+- Use a `routeLoader$` for all server-side data access; keep the SQLite driver strictly inside server-only boundaries so no database module leaks into the client bundle.
+- A local embedded SQLite library (for example `better-sqlite3`) is a good fit; the database is a plain file on disk.
+- In a `routeLoader$`, the selected tags can be read from the request event's URL query string; use `useLocation()` / `useNavigate()` (or `<Link>`) in components to reflect toggles back into the URL.
+- AND filtering across a join table can be done by grouping matches per article and requiring the match count to equal the number of selected tags.
+- Project path: /home/user/qwik-app
+- Start command: npm run preview
+- Port: 3000 (the server must listen on 0.0.0.0:3000)
+- The app is server-rendered; all checks below are performed against the HTML returned by the server (no client-side JavaScript execution is required for verification), so the required data MUST be present in the server-rendered HTML.
+
+### Database schema (required)
+- `articles`: at least `id` (integer primary key), `slug` (unique text), `title` (text).
+- `tags`: at least `id` (integer primary key), `name` (unique text).
+- `article_tags`: join table with `article_id` and `tag_id` referencing the two tables above.
+
+### Seed data (required, exact)
+Tags: `javascript`, `typescript`, `qwik`, `css`, `performance`.
+
+Articles (slug — title — tags):
+- `intro-to-qwik` — "Intro to Qwik" — javascript, qwik
+- `typescript-basics` — "TypeScript Basics" — javascript, typescript
+- `qwik-with-typescript` — "Qwik with TypeScript" — javascript, typescript, qwik
+- `css-grid-guide` — "CSS Grid Guide" — css
+- `web-performance-tips` — "Web Performance Tips" — javascript, performance
+- `qwik-performance` — "Qwik Performance" — qwik, performance
+
+### Required output shape (server-rendered HTML)
+So the results are machine-checkable, render these stable hooks in the HTML:
+- On `/articles`, render one element per matching article carrying the attribute `data-article="<slug>"`, and inside/near it an anchor whose `href` is `/articles/<slug>`.
+- On `/articles`, render one facet element per tag carrying both `data-facet="<tag-name>"` and `data-count="<integer>"`, where the integer is the facet count for that tag over the current filtered result set.
+- On `/articles`, for every currently selected tag render an element carrying the attribute `data-active-tag="<tag-name>"`.
+- When the filter matches no articles, render zero `data-article` elements (an empty state is fine).
+- On `/articles/<slug>`, render the article title and one element per tag carrying `data-tag="<tag-name>"`.
+
+11:T1070,# Flash-Free Theme & Locale Preferences with Qwik City Middleware
+
+## Background
+You are building a small Qwik City (Qwik meta-framework) application that lets a visitor choose a color **theme** (`light` or `dark`) and a UI **language / locale** (`en` or `es`). Both preferences must be persisted in **cookies** and resolved **on the server during SSR**, so that the very first HTML the server returns already reflects the correct theme and translated text — with **no client-side flash** and without requiring any JavaScript to run in the browser.
+
+A scaffolded, dependency-installed Qwik City project already exists at the project path. Your job is to implement the preference feature end-to-end.
+
+## Requirements
+- A shared route **middleware** (an `onRequest` handler in the root `layout.tsx`) must read the `theme` and `locale` cookies on every request, resolve them to valid values (falling back to the defaults when a cookie is missing or invalid), and make the resolved values available to the rest of the request.
+- A **`routeLoader$`** in the root layout must expose the resolved `{ theme, locale }` for the current request, and the layout must publish them through a Qwik **Context** (`createContextId` + `useContextProvider`) so any descendant component can consume them with `useContext`.
+- The home page (`/`) must render its user-facing text by looking up keys in a **local, in-repo translation dictionary** (a plain object/JSON in the source tree). No network calls, no third-party i18n service.
+- A **`routeAction$`** (submitted via the Qwik City `<Form>` component) must persist the chosen `theme` and `locale` into cookies so the choice survives across requests.
+- The `<html>` element of every server-rendered response must carry a `data-theme` attribute (`light`/`dark`) and a `lang` attribute (`en`/`es`) that match the resolved preferences on the **first** server response.
+
+## Implementation Hints
+- Qwik City's `onRequest` middleware, `routeLoader$`, and `routeAction$` all receive the `RequestEvent`, which exposes `cookie.get(...)` / `cookie.set(...)`. Use `sharedMap` to pass request-scoped data from the middleware to the loader. Calling the request event's `locale(...)` sets the request locale, which the SSR entry can read via `serverData.locale`.
+- The only way to set attributes on the `<html>` container element is through `containerAttributes` in `src/entry.ssr.tsx`. The render options expose `serverData` (including `serverData.requestHeaders` and `serverData.locale`), which you can use to compute `data-theme` and `lang` before rendering. Remember to keep the existing `...opts.containerAttributes` so routing still works.
+- Keep server-only preference logic inside the middleware/loader/action boundaries so nothing leaks into the client bundle, and consume the shared Context for rendering translated copy.
+- Cookie names are exactly `theme` and `locale`. Valid values: `theme` ∈ {`light`, `dark`}, `locale` ∈ {`en`, `es`}. Defaults when absent/invalid: `theme=light`, `locale=en`. Persist the cookies with `path=/` so they apply to every route.
+- The local dictionary must provide at least these keys, with exactly these values, and the home page must render both the `title` and the `greeting` for the resolved locale somewhere in the page HTML:
+  - `en`: `title` = `Preferences`, `greeting` = `Hello`
+  - `es`: `title` = `Preferencias`, `greeting` = `Hola`
+- The preference `<Form>` must submit two fields named exactly `theme` and `locale` to your `routeAction$`.
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev -- --port 3000 --host 0.0.0.0`
+- Port: `3000`
+- Routes / behavior to expose:
+  - `GET /`: server-renders the home page. The `<html>` tag includes `data-theme="<theme>"` and `lang="<locale>"` matching the request cookies (defaults `light`/`en` when no cookies are sent). The page body includes the `title` and `greeting` strings for the resolved locale, and contains the preference `<Form>`.
+  - The `<Form>`'s `routeAction$` accepts a POST with form fields `theme` and `locale`; on success it sets the `theme` and `locale` cookies (with `path=/`) to the submitted values so subsequent requests reflect the new preferences.
+
+0:{"buildId":"wY02znbkPcxf-aQnLnR-a","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-background text-foreground font-sans selection:bg-primary/20","children":[["$","div",null,{"className":"fixed inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#2a2a2a_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-40"}],["$","$2",null,{"fallback":["$","div",null,{"className":"container mx-auto py-8 text-center","children":"Loading tasks..."}],"children":["$","$L3",null,{"tasksData":[{"taskName":"csv-export-endpoint","instruction":"$4","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"csv-export-endpoint__PctxHFX","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":668.498,"latency_breakdown":{"env_setup":196.317,"agent_setup":5.548,"agent_exec":374.819,"verifier":63.155},"taskName":"csv-export-endpoint","exec_duration":374.819},{"job_name":"2026-07-17__22-21-48","trial_name":"csv-export-endpoint__ENnVALM","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":436.738,"latency_breakdown":{"env_setup":4.96,"agent_setup":5.44,"agent_exec":304.546,"verifier":92.671},"taskName":"csv-export-endpoint","exec_duration":304.546},{"job_name":"2026-07-17__22-40-26","trial_name":"csv-export-endpoint__ngwWcmu","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":256.867,"latency_breakdown":{"env_setup":5.697,"agent_setup":5.539,"agent_exec":120.69,"verifier":95.28},"taskName":"csv-export-endpoint","exec_duration":120.69},{"job_name":"2026-07-17__22-55-43","trial_name":"csv-export-endpoint__3K9F44U","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":359.479,"latency_breakdown":{"env_setup":5.554,"agent_setup":5.522,"agent_exec":245.953,"verifier":72.073},"taskName":"csv-export-endpoint","exec_duration":245.953}]},{"taskName":"file-upload-gallery","instruction":"$5","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"file-upload-gallery__gAdQAck","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":393.446,"latency_breakdown":{"env_setup":69.149,"agent_setup":5.535,"agent_exec":271.266,"verifier":16.602},"taskName":"file-upload-gallery","exec_duration":271.266},{"job_name":"2026-07-17__22-21-48","trial_name":"file-upload-gallery__4UudHtZ","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":563.416,"latency_breakdown":{"env_setup":5.383,"agent_setup":5.531,"agent_exec":508.88,"verifier":17.753},"taskName":"file-upload-gallery","exec_duration":508.88},{"job_name":"2026-07-17__22-40-26","trial_name":"file-upload-gallery__nQHpJFR","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":400.686,"latency_breakdown":{"env_setup":5.034,"agent_setup":5.417,"agent_exec":330.626,"verifier":25.596},"taskName":"file-upload-gallery","exec_duration":330.626},{"job_name":"2026-07-17__22-55-43","trial_name":"file-upload-gallery__YnmsFAK","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":357.818,"latency_breakdown":{"env_setup":4.321,"agent_setup":5.473,"agent_exec":288.816,"verifier":17.751},"taskName":"file-upload-gallery","exec_duration":288.816}]},{"taskName":"infinite-scroll-feed","instruction":"$6","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"infinite-scroll-feed__9FNHEUS","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":750.297,"latency_breakdown":{"env_setup":86.385,"agent_setup":5.647,"agent_exec":419.525,"verifier":199.581},"taskName":"infinite-scroll-feed","exec_duration":419.525},{"job_name":"2026-07-17__22-21-48","trial_name":"infinite-scroll-feed__ZBihv2a","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":904.574,"latency_breakdown":{"env_setup":4.889,"agent_setup":5.481,"agent_exec":603.506,"verifier":247.167},"taskName":"infinite-scroll-feed","exec_duration":603.506},{"job_name":"2026-07-17__22-40-26","trial_name":"infinite-scroll-feed__72qtP9h","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":815.729,"latency_breakdown":{"env_setup":4.448,"agent_setup":5.62,"agent_exec":603.508,"verifier":173.487},"taskName":"infinite-scroll-feed","exec_duration":603.508},{"job_name":"2026-07-17__22-55-43","trial_name":"infinite-scroll-feed__UwbxJno","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":685.93,"latency_breakdown":{"env_setup":4.483,"agent_setup":5.573,"agent_exec":409.906,"verifier":238.258},"taskName":"infinite-scroll-feed","exec_duration":409.906}]},{"taskName":"kanban-board-reorder","instruction":"$7","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"kanban-board-reorder__DgzSUZo","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":436.815,"latency_breakdown":{"env_setup":57.605,"agent_setup":5.568,"agent_exec":332.052,"verifier":9.064},"taskName":"kanban-board-reorder","exec_duration":332.052},{"job_name":"2026-07-17__22-21-48","trial_name":"kanban-board-reorder__5aRSefn","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":551.66,"latency_breakdown":{"env_setup":5.439,"agent_setup":5.53,"agent_exec":490.686,"verifier":15.612},"taskName":"kanban-board-reorder","exec_duration":490.686},{"job_name":"2026-07-17__22-40-26","trial_name":"kanban-board-reorder__m5Gau6V","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":516.425,"latency_breakdown":{"env_setup":4.852,"agent_setup":5.565,"agent_exec":247.563,"verifier":247.578},"taskName":"kanban-board-reorder","exec_duration":247.563},{"job_name":"2026-07-17__22-55-43","trial_name":"kanban-board-reorder__rnDtXG4","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":401.224,"latency_breakdown":{"env_setup":4.437,"agent_setup":5.643,"agent_exec":336.233,"verifier":29.158},"taskName":"kanban-board-reorder","exec_duration":336.233}]},{"taskName":"markdown-notes-crud","instruction":"$8","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"markdown-notes-crud__xHEJ48T","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":1118.725,"latency_breakdown":{"env_setup":75.254,"agent_setup":6.091,"agent_exec":509.953,"verifier":484.025},"taskName":"markdown-notes-crud","exec_duration":509.953},{"job_name":"2026-07-17__22-21-48","trial_name":"markdown-notes-crud__TbPyiSe","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":1100.272,"latency_breakdown":{"env_setup":4.677,"agent_setup":6.108,"agent_exec":603.799,"verifier":398.906},"taskName":"markdown-notes-crud","exec_duration":603.799},{"job_name":"2026-07-17__22-40-26","trial_name":"markdown-notes-crud__xqquGTk","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":899.514,"latency_breakdown":{"env_setup":5.035,"agent_setup":5.863,"agent_exec":426.504,"verifier":423.974},"taskName":"markdown-notes-crud","exec_duration":426.504},{"job_name":"2026-07-17__22-55-43","trial_name":"markdown-notes-crud__WQ5cDko","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":846.948,"latency_breakdown":{"env_setup":4.445,"agent_setup":6.03,"agent_exec":493.217,"verifier":309.889},"taskName":"markdown-notes-crud","exec_duration":493.217}]},{"taskName":"nested-comment-threads","instruction":"$9","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"nested-comment-threads__6eyRbEv","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":834.305,"latency_breakdown":{"env_setup":74.956,"agent_setup":5.52,"agent_exec":401.417,"verifier":301.726},"taskName":"nested-comment-threads","exec_duration":401.417},{"job_name":"2026-07-17__22-21-48","trial_name":"nested-comment-threads__MMA2oa7","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":983.764,"latency_breakdown":{"env_setup":4.324,"agent_setup":5.594,"agent_exec":603.543,"verifier":346.864},"taskName":"nested-comment-threads","exec_duration":603.543},{"job_name":"2026-07-17__22-40-26","trial_name":"nested-comment-threads__hBgZwCF","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":707.483,"latency_breakdown":{"env_setup":4.431,"agent_setup":5.604,"agent_exec":299.236,"verifier":364.693},"taskName":"nested-comment-threads","exec_duration":299.236},{"job_name":"2026-07-17__22-55-43","trial_name":"nested-comment-threads__Md9cmjB","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":964.224,"latency_breakdown":{"env_setup":4.445,"agent_setup":5.758,"agent_exec":581.494,"verifier":338.087},"taskName":"nested-comment-threads","exec_duration":581.494}]},{"taskName":"nested-layout-breadcrumbs","instruction":"$a","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"nested-layout-breadcrumbs__Nw79wd3","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":513.848,"latency_breakdown":{"env_setup":68.134,"agent_setup":6.952,"agent_exec":369.125,"verifier":33.403},"taskName":"nested-layout-breadcrumbs","exec_duration":369.125},{"job_name":"2026-07-17__22-21-48","trial_name":"nested-layout-breadcrumbs__XApA2gm","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":611.084,"latency_breakdown":{"env_setup":5.368,"agent_setup":7.408,"agent_exec":530.709,"verifier":34.47},"taskName":"nested-layout-breadcrumbs","exec_duration":530.709},{"job_name":"2026-07-17__22-40-26","trial_name":"nested-layout-breadcrumbs__wDQ8Bzj","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":497.199,"latency_breakdown":{"env_setup":5.507,"agent_setup":7.292,"agent_exec":415.141,"verifier":31.022},"taskName":"nested-layout-breadcrumbs","exec_duration":415.141},{"job_name":"2026-07-17__22-55-43","trial_name":"nested-layout-breadcrumbs__FNznPFG","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":570.705,"latency_breakdown":{"env_setup":4.94,"agent_setup":7.674,"agent_exec":494.296,"verifier":23.852},"taskName":"nested-layout-breadcrumbs","exec_duration":494.296}]},{"taskName":"polling-dashboard-resource","instruction":"$b","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"polling-dashboard-resource__LQgiaAy","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":636.387,"latency_breakdown":{"env_setup":97.715,"agent_setup":5.54,"agent_exec":358.414,"verifier":126.997},"taskName":"polling-dashboard-resource","exec_duration":358.414},{"job_name":"2026-07-17__22-21-48","trial_name":"polling-dashboard-resource__iEmc4zy","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":519.135,"latency_breakdown":{"env_setup":4.668,"agent_setup":5.489,"agent_exec":346.147,"verifier":135.084},"taskName":"polling-dashboard-resource","exec_duration":346.147},{"job_name":"2026-07-17__22-40-26","trial_name":"polling-dashboard-resource__4jce775","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":473.449,"latency_breakdown":{"env_setup":5.131,"agent_setup":5.487,"agent_exec":290.819,"verifier":135.151},"taskName":"polling-dashboard-resource","exec_duration":290.819},{"job_name":"2026-07-17__22-55-43","trial_name":"polling-dashboard-resource__NCGXibz","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":535.797,"latency_breakdown":{"env_setup":4.802,"agent_setup":5.587,"agent_exec":345.35,"verifier":142.517},"taskName":"polling-dashboard-resource","exec_duration":345.35}]},{"taskName":"rate-limited-endpoint","instruction":"$c","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"rate-limited-endpoint__Q2FJD5b","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":479.234,"latency_breakdown":{"env_setup":67.18,"agent_setup":5.581,"agent_exec":357.952,"verifier":22.41},"taskName":"rate-limited-endpoint","exec_duration":357.952},{"job_name":"2026-07-17__22-21-48","trial_name":"rate-limited-endpoint__bvsDz66","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":619.49,"latency_breakdown":{"env_setup":5.148,"agent_setup":5.654,"agent_exec":549.148,"verifier":17.332},"taskName":"rate-limited-endpoint","exec_duration":549.148},{"job_name":"2026-07-17__22-40-26","trial_name":"rate-limited-endpoint__wJm34FS","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":400.717,"latency_breakdown":{"env_setup":4.515,"agent_setup":5.629,"agent_exec":334.24,"verifier":15.198},"taskName":"rate-limited-endpoint","exec_duration":334.24},{"job_name":"2026-07-17__22-55-43","trial_name":"rate-limited-endpoint__4uvhGWo","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":422.304,"latency_breakdown":{"env_setup":4.575,"agent_setup":5.562,"agent_exec":342.771,"verifier":36.382},"taskName":"rate-limited-endpoint","exec_duration":342.771}]},{"taskName":"sqlite-blog-prisma","instruction":"$d","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sqlite-blog-prisma__ZucFof3","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":533.214,"latency_breakdown":{"env_setup":76.368,"agent_setup":5.42,"agent_exec":359.088,"verifier":23.948},"taskName":"sqlite-blog-prisma","exec_duration":359.088},{"job_name":"2026-07-17__22-21-48","trial_name":"sqlite-blog-prisma__bsZrCR2","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":734.246,"latency_breakdown":{"env_setup":4.394,"agent_setup":5.454,"agent_exec":603.512,"verifier":21.642},"taskName":"sqlite-blog-prisma","exec_duration":603.512},{"job_name":"2026-07-17__22-40-26","trial_name":"sqlite-blog-prisma__z6khYKo","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":274.367,"latency_breakdown":{"env_setup":4.477,"agent_setup":5.552,"agent_exec":196.835,"verifier":20.185},"taskName":"sqlite-blog-prisma","exec_duration":196.835},{"job_name":"2026-07-17__22-55-43","trial_name":"sqlite-blog-prisma__sYbseCH","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":496.777,"latency_breakdown":{"env_setup":4.295,"agent_setup":5.534,"agent_exec":410.071,"verifier":19.033},"taskName":"sqlite-blog-prisma","exec_duration":410.071}]},{"taskName":"sqlite-fts5-search","instruction":"$e","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sqlite-fts5-search__zLRwFpo","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":335.773,"latency_breakdown":{"env_setup":56.845,"agent_setup":5.565,"agent_exec":225.167,"verifier":17.869},"taskName":"sqlite-fts5-search","exec_duration":225.167},{"job_name":"2026-07-17__22-21-48","trial_name":"sqlite-fts5-search__Beeg6zm","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":711.297,"latency_breakdown":{"env_setup":4.738,"agent_setup":5.567,"agent_exec":603.457,"verifier":57.655},"taskName":"sqlite-fts5-search","exec_duration":603.457},{"job_name":"2026-07-17__22-40-26","trial_name":"sqlite-fts5-search__JLk85Jn","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":476.498,"latency_breakdown":{"env_setup":4.484,"agent_setup":5.605,"agent_exec":413.763,"verifier":26.454},"taskName":"sqlite-fts5-search","exec_duration":413.763},{"job_name":"2026-07-17__22-55-43","trial_name":"sqlite-fts5-search__yEuEmmh","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":421.742,"latency_breakdown":{"env_setup":5.375,"agent_setup":5.578,"agent_exec":339.177,"verifier":36.106},"taskName":"sqlite-fts5-search","exec_duration":339.177}]},{"taskName":"sse-live-counter","instruction":"$f","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sse-live-counter__CJtNgNy","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":1002.478,"latency_breakdown":{"env_setup":86.523,"agent_setup":5.861,"agent_exec":421.753,"verifier":429.17},"taskName":"sse-live-counter","exec_duration":421.753},{"job_name":"2026-07-17__22-21-48","trial_name":"sse-live-counter__R7tZeqy","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":904.06,"latency_breakdown":{"env_setup":5.088,"agent_setup":6.526,"agent_exec":425.686,"verifier":434.421},"taskName":"sse-live-counter","exec_duration":425.686},{"job_name":"2026-07-17__22-40-26","trial_name":"sse-live-counter__7sXy5cJ","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":791.007,"latency_breakdown":{"env_setup":4.977,"agent_setup":5.747,"agent_exec":297.429,"verifier":438.221},"taskName":"sse-live-counter","exec_duration":297.429},{"job_name":"2026-07-17__22-55-43","trial_name":"sse-live-counter__STyFafC","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":846.889,"latency_breakdown":{"env_setup":5.049,"agent_setup":5.787,"agent_exec":346.589,"verifier":445.734},"taskName":"sse-live-counter","exec_duration":346.589}]},{"taskName":"tag-filter-blog-relations","instruction":"$10","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"tag-filter-blog-relations__rPP7Z3K","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":738.003,"latency_breakdown":{"env_setup":57.004,"agent_setup":5.736,"agent_exec":603.679,"verifier":34.209},"taskName":"tag-filter-blog-relations","exec_duration":603.679},{"job_name":"2026-07-17__22-21-48","trial_name":"tag-filter-blog-relations__uAvxZkZ","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":440.998,"latency_breakdown":{"env_setup":9.669,"agent_setup":5.732,"agent_exec":337.387,"verifier":42.665},"taskName":"tag-filter-blog-relations","exec_duration":337.387},{"job_name":"2026-07-17__22-40-26","trial_name":"tag-filter-blog-relations__9oXhLyh","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":340.852,"latency_breakdown":{"env_setup":4.955,"agent_setup":5.786,"agent_exec":265.494,"verifier":31.067},"taskName":"tag-filter-blog-relations","exec_duration":265.494},{"job_name":"2026-07-17__22-55-43","trial_name":"tag-filter-blog-relations__smcPEou","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":639.663,"latency_breakdown":{"env_setup":4.608,"agent_setup":6.245,"agent_exec":558.485,"verifier":36.568},"taskName":"tag-filter-blog-relations","exec_duration":558.485}]},{"taskName":"theme-i18n-middleware","instruction":"$11","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"theme-i18n-middleware__QtSLwpV","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":366.142,"latency_breakdown":{"env_setup":67.142,"agent_setup":5.578,"agent_exec":258.497,"verifier":8.96},"taskName":"theme-i18n-middleware","exec_duration":258.497},{"job_name":"2026-07-17__22-21-48","trial_name":"theme-i18n-middleware__RQLzz9e","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":715.986,"latency_breakdown":{"env_setup":4.825,"agent_setup":5.633,"agent_exec":603.503,"verifier":47.212},"taskName":"theme-i18n-middleware","exec_duration":603.503},{"job_name":"2026-07-17__22-40-26","trial_name":"theme-i18n-middleware__yFSTJNF","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":498.765,"latency_breakdown":{"env_setup":4.688,"agent_setup":5.594,"agent_exec":432.738,"verifier":9.153},"taskName":"theme-i18n-middleware","exec_duration":432.738},{"job_name":"2026-07-17__22-55-43","trial_name":"theme-i18n-middleware__zgkjBWf","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":332.519,"latency_breakdown":{"env_setup":4.822,"agent_setup":5.613,"agent_exec":275.669,"verifier":15.252},"taskName":"theme-i18n-middleware","exec_duration":275.669}]}]}]}]]}],["$L12","$L13"],"$L14"]}],"loading":null,"isPartial":false}
+12:["$","script","script-0",{"src":"/qwik-benchmark/_next/static/chunks/b7786bc204f070d9.js","async":true}]
+13:["$","script","script-1",{"src":"/qwik-benchmark/_next/static/chunks/2ee232ed1e88c469.js","async":true}]
+14:["$","$L15",null,{"children":["$","$2",null,{"name":"Next.MetadataOutlet","children":"$@16"}]}]
+16:null
