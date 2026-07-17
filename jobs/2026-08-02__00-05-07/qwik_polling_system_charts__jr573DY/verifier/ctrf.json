@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T16:15:43.936713+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785600869928,
+            "stop": 1785600943936
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_get_poll_pages",
+                "status": "passed",
+                "duration": 1877,
+                "start": 1785600870016,
+                "stop": 1785600871893,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vote_api_validation",
+                "status": "passed",
+                "duration": 14,
+                "start": 1785600871893,
+                "stop": 1785600871907,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vote_flow_and_rate_limiting",
+                "status": "passed",
+                "duration": 16,
+                "start": 1785600871907,
+                "stop": 1785600871923,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_concurrency",
+                "status": "passed",
+                "duration": 81,
+                "start": 1785600871924,
+                "stop": 1785600872005,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_browser_ui_verification",
+                "status": "passed",
+                "duration": 71931,
+                "start": 1785600872005,
+                "stop": 1785600943936,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

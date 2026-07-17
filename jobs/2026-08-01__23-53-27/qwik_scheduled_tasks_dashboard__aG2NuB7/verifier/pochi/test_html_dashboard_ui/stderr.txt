@@ -1,0 +1,401 @@
+[37m2026-08-01 16:02:47.552[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:443052[39m[0m[0m[1m[37m	PochiConfigManager[39m[22m[0m[0m	Failed to load config file
+
+[97m[101m[1m Error [22m[49m[39m[0m[0m ENOENT: no such file or directory, open '/root/.pochi/config.jsonc', ENOENT, /root/.pochi/config.jsonc, open, -2, 443057, 38, 443057, 38, /$bunfs/root/pochi[0m[0m
+error stack:
+  • [33m[39m[0m[0m	[0m[0m
+	[37m[39m[0m[0m
+  • [33mpochi[39m[0m[0m	load[0m[0m
+	[37m/$bunfs/root/pochi:443057[39m[0m[0m
+  • [33mpochi[39m[0m[0m	new PochiConfigFile[0m[0m
+	[37m/$bunfs/root/pochi:443052[39m[0m[0m
+  • [33mpochi[39m[0m[0m	new PochiConfigManager[0m[0m
+	[37m/$bunfs/root/pochi:443174[39m[0m[0m
+  • [33mpochi[39m[0m[0m	[0m[0m
+	[37m/$bunfs/root/pochi:443295[39m[0m[0m[0m[0m
+[37m2026-08-01 16:02:47.782[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	pochi v0.6.20
+[37m2026-08-01 16:02:48.334[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:532913[39m[0m[0m[1m[37m	loadAgents[39m[22m[0m[0m	Loaded 6 custom agents (6 valid, 0 invalid)
+[37m2026-08-01 16:02:48.442[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:532914[39m[0m[0m[1m[37m	loadSkills[39m[22m[0m[0m	Loaded 3 skills (3 valid, 0 invalid)
+[37m2026-08-01 16:02:48.462[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:443306[39m[0m[0m[1m[37m	PochiVendor[39m[22m[0m[0m	JWT is expiring or missing, fetching a new one
+[37m2026-08-01 16:02:49.640[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:419194[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	MCP servers configuration changed via signal:
+[37m2026-08-01 16:02:49.640[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:419306[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	Build MCPHub Status
+[37m2026-08-01 16:02:49.771[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Starting task runner...
+[37m2026-08-01 16:02:49.887[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: null, new: # System Instructions
+[37m2026-08-01 16:03:01.275[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: null, new: You are a software tester assigned to verify a test case using the agent-browser.
+[37m2026-08-01 16:03:14.232[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: You are a software tester assigned to verify a test case using the agent-browser., new: Verify task dashboard and execution logs on the tasks page
+[37m2026-08-01 16:03:22.605[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:531541[39m[0m[0m[1m[37m	newTask[39m[22m[0m[0m	Browser stream webSocket connected.
+[37m2026-08-01 16:03:29.165[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 0: 1785600209.164
+[37m2026-08-01 16:03:29.169[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 1: 1785600209.169
+[37m2026-08-01 16:03:29.177[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 2: 1785600209.176
+[37m2026-08-01 16:03:29.233[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 3: 1785600209.232
+[37m2026-08-01 16:03:29.244[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 4: 1785600209.243
+[37m2026-08-01 16:03:29.251[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 5: 1785600209.251
+[37m2026-08-01 16:03:29.259[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 6: 1785600209.259
+[37m2026-08-01 16:03:29.276[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 7: 1785600209.275
+[37m2026-08-01 16:03:29.294[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 8: 1785600209.293
+[37m2026-08-01 16:03:29.342[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 9: 1785600209.342
+[37m2026-08-01 16:03:29.350[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 10: 1785600209.349
+[37m2026-08-01 16:03:29.359[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 11: 1785600209.358
+[37m2026-08-01 16:03:29.375[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 12: 1785600209.375
+[37m2026-08-01 16:03:29.394[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 13: 1785600209.393
+[37m2026-08-01 16:03:29.439[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 14: 1785600209.439
+[37m2026-08-01 16:03:29.445[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 15: 1785600209.445
+[37m2026-08-01 16:03:29.459[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 16: 1785600209.458
+[37m2026-08-01 16:03:29.475[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 17: 1785600209.475
+[37m2026-08-01 16:03:29.492[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 18: 1785600209.492
+[37m2026-08-01 16:03:29.535[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 19: 1785600209.535
+[37m2026-08-01 16:03:29.543[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 20: 1785600209.543
+[37m2026-08-01 16:03:29.559[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 21: 1785600209.559
+[37m2026-08-01 16:03:29.575[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 22: 1785600209.575
+[37m2026-08-01 16:03:29.592[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 23: 1785600209.591
+[37m2026-08-01 16:03:29.632[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 24: 1785600209.608
+[37m2026-08-01 16:03:29.643[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 25: 1785600209.643
+[37m2026-08-01 16:03:29.659[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 26: 1785600209.658
+[37m2026-08-01 16:03:29.676[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 27: 1785600209.675
+[37m2026-08-01 16:03:29.692[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 28: 1785600209.691
+[37m2026-08-01 16:03:29.708[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 29: 1785600209.708
+[37m2026-08-01 16:03:29.740[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 30: 1785600209.739
+[37m2026-08-01 16:03:29.746[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 31: 1785600209.745
+[37m2026-08-01 16:03:29.760[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 32: 1785600209.758
+[37m2026-08-01 16:03:29.777[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 33: 1785600209.776
+[37m2026-08-01 16:03:29.793[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 34: 1785600209.792
+[37m2026-08-01 16:03:29.834[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 35: 1785600209.832
+[37m2026-08-01 16:03:29.840[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 36: 1785600209.839
+[37m2026-08-01 16:03:29.845[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 37: 1785600209.845
+[37m2026-08-01 16:03:29.859[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 38: 1785600209.858
+[37m2026-08-01 16:03:29.875[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 39: 1785600209.875
+[37m2026-08-01 16:03:29.892[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 40: 1785600209.892
+[37m2026-08-01 16:03:29.935[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 41: 1785600209.935
+[37m2026-08-01 16:03:29.946[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 42: 1785600209.945
+[37m2026-08-01 16:03:29.950[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 43: 1785600209.949
+[37m2026-08-01 16:03:29.959[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 44: 1785600209.958
+[37m2026-08-01 16:03:29.975[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 45: 1785600209.975
+[37m2026-08-01 16:03:30.034[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 46: 1785600210.034
+[37m2026-08-01 16:03:30.043[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 47: 1785600210.043
+[37m2026-08-01 16:03:30.049[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 48: 1785600210.049
+[37m2026-08-01 16:03:30.059[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 49: 1785600210.059
+[37m2026-08-01 16:03:30.076[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 50: 1785600210.075
+[37m2026-08-01 16:03:30.139[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 51: 1785600210.139
+[37m2026-08-01 16:03:30.145[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 52: 1785600210.144
+[37m2026-08-01 16:03:30.159[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 53: 1785600210.159
+[37m2026-08-01 16:03:30.175[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 54: 1785600210.175
+[37m2026-08-01 16:03:30.237[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 55: 1785600210.236
+[37m2026-08-01 16:03:30.243[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 56: 1785600210.243
+[37m2026-08-01 16:03:30.258[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 57: 1785600210.258
+[37m2026-08-01 16:03:30.275[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 58: 1785600210.274
+[37m2026-08-01 16:03:30.292[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 59: 1785600210.291
+[37m2026-08-01 16:03:30.337[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 60: 1785600210.336
+[37m2026-08-01 16:03:30.345[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 61: 1785600210.344
+[37m2026-08-01 16:03:30.351[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 62: 1785600210.351
+[37m2026-08-01 16:03:30.359[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 63: 1785600210.359
+[37m2026-08-01 16:03:30.376[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 64: 1785600210.376
+[37m2026-08-01 16:03:30.433[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 65: 1785600210.431
+[37m2026-08-01 16:03:30.443[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 66: 1785600210.442
+[37m2026-08-01 16:03:30.458[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 67: 1785600210.458
+[37m2026-08-01 16:03:30.485[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 68: 1785600210.484
+[37m2026-08-01 16:03:30.546[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 69: 1785600210.537
+[37m2026-08-01 16:03:30.547[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 70: 1785600210.546
+[37m2026-08-01 16:03:30.548[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 71: 1785600210.547
+[37m2026-08-01 16:03:30.637[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 72: 1785600210.636
+[37m2026-08-01 16:03:30.650[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 73: 1785600210.644
+[37m2026-08-01 16:03:30.651[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 74: 1785600210.65
+[37m2026-08-01 16:03:30.658[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 75: 1785600210.658
+[37m2026-08-01 16:03:30.677[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 76: 1785600210.676
+[37m2026-08-01 16:03:30.739[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 77: 1785600210.738
+[37m2026-08-01 16:03:30.744[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 78: 1785600210.744
+[37m2026-08-01 16:03:30.758[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 79: 1785600210.758
+[37m2026-08-01 16:03:30.775[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 80: 1785600210.774
+[37m2026-08-01 16:03:30.791[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 81: 1785600210.791
+[37m2026-08-01 16:03:30.808[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 82: 1785600210.808
+[37m2026-08-01 16:03:30.843[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 83: 1785600210.843
+[37m2026-08-01 16:03:30.849[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 84: 1785600210.848
+[37m2026-08-01 16:03:30.859[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 85: 1785600210.858
+[37m2026-08-01 16:03:30.875[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 86: 1785600210.874
+[37m2026-08-01 16:03:30.891[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 87: 1785600210.891
+[37m2026-08-01 16:03:30.933[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 88: 1785600210.932
+[37m2026-08-01 16:03:30.944[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 89: 1785600210.943
+[37m2026-08-01 16:03:30.948[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 90: 1785600210.947
+[37m2026-08-01 16:03:30.959[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 91: 1785600210.958
+[37m2026-08-01 16:03:30.976[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 92: 1785600210.976
+[37m2026-08-01 16:03:30.992[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 93: 1785600210.991
+[37m2026-08-01 16:03:31.042[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 94: 1785600211.042
+[37m2026-08-01 16:03:31.049[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 95: 1785600211.048
+[37m2026-08-01 16:03:31.058[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 96: 1785600211.058
+[37m2026-08-01 16:03:31.076[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 97: 1785600211.075
+[37m2026-08-01 16:03:31.133[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 98: 1785600211.132
+[37m2026-08-01 16:03:31.144[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 99: 1785600211.144
+[37m2026-08-01 16:03:31.150[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 100: 1785600211.148
+[37m2026-08-01 16:03:31.160[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 101: 1785600211.16
+[37m2026-08-01 16:03:31.185[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 102: 1785600211.183
+[37m2026-08-01 16:03:31.233[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 103: 1785600211.231
+[37m2026-08-01 16:03:31.243[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 104: 1785600211.243
+[37m2026-08-01 16:03:31.250[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 105: 1785600211.25
+[37m2026-08-01 16:03:31.258[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 106: 1785600211.258
+[37m2026-08-01 16:03:31.276[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 107: 1785600211.274
+[37m2026-08-01 16:03:31.294[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 108: 1785600211.291
+[37m2026-08-01 16:03:31.342[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 109: 1785600211.341
+[37m2026-08-01 16:03:31.349[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 110: 1785600211.347
+[37m2026-08-01 16:03:31.358[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 111: 1785600211.358
+[37m2026-08-01 16:03:31.375[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 112: 1785600211.374
+[37m2026-08-01 16:03:31.392[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 113: 1785600211.391
+[37m2026-08-01 16:03:31.432[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 114: 1785600211.431
+[37m2026-08-01 16:03:31.443[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 115: 1785600211.443
+[37m2026-08-01 16:03:31.454[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 116: 1785600211.45
+[37m2026-08-01 16:03:31.467[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 117: 1785600211.461
+[37m2026-08-01 16:03:31.488[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 118: 1785600211.478
+[37m2026-08-01 16:03:31.532[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 119: 1785600211.53
+[37m2026-08-01 16:03:31.544[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 120: 1785600211.543
+[37m2026-08-01 16:03:31.549[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 121: 1785600211.549
+[37m2026-08-01 16:03:31.561[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 122: 1785600211.558
+[37m2026-08-01 16:03:31.577[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 123: 1785600211.574
+[37m2026-08-01 16:03:31.593[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 124: 1785600211.591
+[37m2026-08-01 16:03:31.636[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 125: 1785600211.635
+[37m2026-08-01 16:03:31.644[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 126: 1785600211.643
+[37m2026-08-01 16:03:31.658[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 127: 1785600211.658
+[37m2026-08-01 16:03:31.676[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 128: 1785600211.675
+[37m2026-08-01 16:03:31.692[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 129: 1785600211.691
+[37m2026-08-01 16:03:31.731[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 130: 1785600211.73
+[37m2026-08-01 16:03:31.742[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 131: 1785600211.741
+[37m2026-08-01 16:03:31.747[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 132: 1785600211.747
+[37m2026-08-01 16:03:31.759[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 133: 1785600211.758
+[37m2026-08-01 16:03:31.781[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 134: 1785600211.774
+[37m2026-08-01 16:03:31.792[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 135: 1785600211.791
+[37m2026-08-01 16:03:31.835[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 136: 1785600211.832
+[37m2026-08-01 16:03:31.843[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 137: 1785600211.841
+[37m2026-08-01 16:03:31.855[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 138: 1785600211.847
+[37m2026-08-01 16:03:31.860[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 139: 1785600211.858
+[37m2026-08-01 16:03:31.875[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 140: 1785600211.874
+[37m2026-08-01 16:03:31.892[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 141: 1785600211.891
+[37m2026-08-01 16:03:31.937[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 142: 1785600211.936
+[37m2026-08-01 16:03:31.943[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 143: 1785600211.943
+[37m2026-08-01 16:03:31.949[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 144: 1785600211.948
+[37m2026-08-01 16:03:31.961[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 145: 1785600211.959
+[37m2026-08-01 16:03:31.976[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 146: 1785600211.974
+[37m2026-08-01 16:03:31.992[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 147: 1785600211.991
+[37m2026-08-01 16:03:32.042[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 148: 1785600212.04
+[37m2026-08-01 16:03:32.048[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 149: 1785600212.046
+[37m2026-08-01 16:03:32.061[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 150: 1785600212.058
+[37m2026-08-01 16:03:32.083[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 151: 1785600212.078
+[37m2026-08-01 16:03:32.135[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 152: 1785600212.134
+[37m2026-08-01 16:03:32.144[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 153: 1785600212.143
+[37m2026-08-01 16:03:32.159[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 154: 1785600212.158
+[37m2026-08-01 16:03:32.176[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 155: 1785600212.175
+[37m2026-08-01 16:03:32.239[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 156: 1785600212.237
+[37m2026-08-01 16:03:32.246[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 157: 1785600212.243
+[37m2026-08-01 16:03:32.260[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 158: 1785600212.258
+[37m2026-08-01 16:03:32.277[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 159: 1785600212.275
+[37m2026-08-01 16:03:32.293[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 160: 1785600212.292
+[37m2026-08-01 16:03:32.332[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 161: 1785600212.33
+[37m2026-08-01 16:03:32.349[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 162: 1785600212.344
+[37m2026-08-01 16:03:32.353[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 163: 1785600212.351
+[37m2026-08-01 16:03:32.360[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 164: 1785600212.359
+[37m2026-08-01 16:03:32.376[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 165: 1785600212.375
+[37m2026-08-01 16:03:32.393[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 166: 1785600212.391
+[37m2026-08-01 16:03:32.449[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 167: 1785600212.445
+[37m2026-08-01 16:03:32.456[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 168: 1785600212.455
+[37m2026-08-01 16:03:32.460[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 169: 1785600212.46
+[37m2026-08-01 16:03:32.475[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 170: 1785600212.475
+[37m2026-08-01 16:03:32.540[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 171: 1785600212.537
+[37m2026-08-01 16:03:32.546[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 172: 1785600212.544
+[37m2026-08-01 16:03:32.563[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 173: 1785600212.562
+[37m2026-08-01 16:03:32.645[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 174: 1785600212.643
+[37m2026-08-01 16:03:32.645[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 174: 1785600212.643
+[37m2026-08-01 16:03:32.732[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 176: 1785600212.73
+[37m2026-08-01 16:03:32.736[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 177: 1785600212.734
+[37m2026-08-01 16:03:32.746[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 178: 1785600212.744
+[37m2026-08-01 16:03:32.753[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 179: 1785600212.752
+[37m2026-08-01 16:03:32.759[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 180: 1785600212.758
+[37m2026-08-01 16:03:32.775[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 181: 1785600212.775
+[37m2026-08-01 16:03:32.842[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 182: 1785600212.84
+[37m2026-08-01 16:03:32.849[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 183: 1785600212.846
+[37m2026-08-01 16:03:32.858[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 184: 1785600212.858
+[37m2026-08-01 16:03:32.875[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 185: 1785600212.875
+[37m2026-08-01 16:03:32.892[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 186: 1785600212.891
+[37m2026-08-01 16:03:32.937[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 187: 1785600212.937
+[37m2026-08-01 16:03:32.944[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 188: 1785600212.944
+[37m2026-08-01 16:03:32.951[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 189: 1785600212.951
+[37m2026-08-01 16:03:32.959[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 190: 1785600212.959
+[37m2026-08-01 16:03:32.976[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 191: 1785600212.976
+[37m2026-08-01 16:03:33.032[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 192: 1785600213.031
+[37m2026-08-01 16:03:33.043[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 193: 1785600213.043
+[37m2026-08-01 16:03:33.050[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 194: 1785600213.05
+[37m2026-08-01 16:03:33.059[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 195: 1785600213.058
+[37m2026-08-01 16:03:33.075[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 196: 1785600213.075
+[37m2026-08-01 16:03:33.092[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 197: 1785600213.092
+[37m2026-08-01 16:03:33.139[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 198: 1785600213.138
+[37m2026-08-01 16:03:33.144[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 199: 1785600213.144
+[37m2026-08-01 16:03:33.159[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 200: 1785600213.159
+[37m2026-08-01 16:03:33.176[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 201: 1785600213.175
+[37m2026-08-01 16:03:33.233[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 202: 1785600213.233
+[37m2026-08-01 16:03:33.243[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 203: 1785600213.243
+[37m2026-08-01 16:03:33.251[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 204: 1785600213.251
+[37m2026-08-01 16:03:33.258[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 205: 1785600213.258
+[37m2026-08-01 16:03:33.276[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 206: 1785600213.275
+[37m2026-08-01 16:03:33.292[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 207: 1785600213.292
+[37m2026-08-01 16:03:33.340[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 208: 1785600213.34
+[37m2026-08-01 16:03:33.345[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 209: 1785600213.345
+[37m2026-08-01 16:03:33.360[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 210: 1785600213.359
+[37m2026-08-01 16:03:33.376[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 211: 1785600213.375
+[37m2026-08-01 16:03:33.392[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 212: 1785600213.392
+[37m2026-08-01 16:03:33.435[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 213: 1785600213.435
+[37m2026-08-01 16:03:33.444[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 214: 1785600213.443
+[37m2026-08-01 16:03:33.449[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 215: 1785600213.449
+[37m2026-08-01 16:03:33.459[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 216: 1785600213.458
+[37m2026-08-01 16:03:33.475[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 217: 1785600213.475
+[37m2026-08-01 16:03:33.536[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 218: 1785600213.536
+[37m2026-08-01 16:03:33.543[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 219: 1785600213.542
+[37m2026-08-01 16:03:33.548[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 220: 1785600213.548
+[37m2026-08-01 16:03:33.558[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 221: 1785600213.558
+[37m2026-08-01 16:03:33.575[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 222: 1785600213.575
+[37m2026-08-01 16:03:33.592[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 223: 1785600213.591
+[37m2026-08-01 16:03:33.638[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 224: 1785600213.638
+[37m2026-08-01 16:03:33.648[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 225: 1785600213.646
+[37m2026-08-01 16:03:33.650[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 226: 1785600213.65
+[37m2026-08-01 16:03:33.659[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 227: 1785600213.659
+[37m2026-08-01 16:03:33.675[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 228: 1785600213.675
+[37m2026-08-01 16:03:33.734[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 229: 1785600213.734
+[37m2026-08-01 16:03:33.743[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 230: 1785600213.742
+[37m2026-08-01 16:03:33.749[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 231: 1785600213.748
+[37m2026-08-01 16:03:33.758[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 232: 1785600213.758
+[37m2026-08-01 16:03:33.775[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 233: 1785600213.774
+[37m2026-08-01 16:03:33.792[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 234: 1785600213.791
+[37m2026-08-01 16:03:33.838[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 235: 1785600213.838
+[37m2026-08-01 16:03:33.845[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 236: 1785600213.845
+[37m2026-08-01 16:03:33.858[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 237: 1785600213.858
+[37m2026-08-01 16:03:33.875[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 238: 1785600213.875
+[37m2026-08-01 16:03:33.892[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 239: 1785600213.891
+[37m2026-08-01 16:03:33.933[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 240: 1785600213.933
+[37m2026-08-01 16:03:33.942[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 241: 1785600213.942
+[37m2026-08-01 16:03:33.952[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 242: 1785600213.949
+[37m2026-08-01 16:03:33.958[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 243: 1785600213.958
+[37m2026-08-01 16:03:33.976[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 244: 1785600213.975
+[37m2026-08-01 16:03:33.991[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 245: 1785600213.991
+[37m2026-08-01 16:03:34.041[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 246: 1785600214.041
+[37m2026-08-01 16:03:34.047[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 247: 1785600214.046
+[37m2026-08-01 16:03:34.058[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 248: 1785600214.058
+[37m2026-08-01 16:03:34.075[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 249: 1785600214.074
+[37m2026-08-01 16:03:34.091[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 250: 1785600214.091
+[37m2026-08-01 16:03:34.132[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 251: 1785600214.131
+[37m2026-08-01 16:03:34.142[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 252: 1785600214.141
+[37m2026-08-01 16:03:34.149[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 253: 1785600214.147
+[37m2026-08-01 16:03:34.158[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 254: 1785600214.158
+[37m2026-08-01 16:03:34.262[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 255: 1785600214.236
+[37m2026-08-01 16:03:34.265[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 255: 1785600214.259
+[37m2026-08-01 16:03:34.267[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 257: 1785600214.267
+[37m2026-08-01 16:03:34.277[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 258: 1785600214.276
+[37m2026-08-01 16:03:34.292[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 259: 1785600214.292
+[37m2026-08-01 16:03:34.344[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 260: 1785600214.344
+[37m2026-08-01 16:03:34.350[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 261: 1785600214.35
+[37m2026-08-01 16:03:34.359[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 262: 1785600214.359
+[37m2026-08-01 16:03:34.376[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 263: 1785600214.375
+[37m2026-08-01 16:03:34.392[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 264: 1785600214.392
+[37m2026-08-01 16:03:34.443[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 265: 1785600214.442
+[37m2026-08-01 16:03:34.449[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 266: 1785600214.448
+[37m2026-08-01 16:03:34.461[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 267: 1785600214.458
+[37m2026-08-01 16:03:34.477[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 268: 1785600214.477
+[37m2026-08-01 16:03:34.493[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 269: 1785600214.493
+[37m2026-08-01 16:03:34.509[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 270: 1785600214.509
+[37m2026-08-01 16:03:34.543[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 271: 1785600214.543
+[37m2026-08-01 16:03:34.549[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 272: 1785600214.548
+[37m2026-08-01 16:03:34.558[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 273: 1785600214.558
+[37m2026-08-01 16:03:34.575[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 274: 1785600214.575
+[37m2026-08-01 16:03:34.592[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 275: 1785600214.591
+[37m2026-08-01 16:03:34.633[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 276: 1785600214.632
+[37m2026-08-01 16:03:34.643[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 277: 1785600214.642
+[37m2026-08-01 16:03:34.650[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 278: 1785600214.65
+[37m2026-08-01 16:03:34.658[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 279: 1785600214.658
+[37m2026-08-01 16:03:34.675[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 280: 1785600214.674
+[37m2026-08-01 16:03:34.691[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 281: 1785600214.691
+[37m2026-08-01 16:03:34.736[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 282: 1785600214.736
+[37m2026-08-01 16:03:34.743[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 283: 1785600214.742
+[37m2026-08-01 16:03:34.749[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 284: 1785600214.748
+[37m2026-08-01 16:03:34.758[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 285: 1785600214.758
+[37m2026-08-01 16:03:34.775[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 286: 1785600214.774
+[37m2026-08-01 16:03:34.792[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 287: 1785600214.791
+[37m2026-08-01 16:03:34.836[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 288: 1785600214.836
+[37m2026-08-01 16:03:34.843[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 289: 1785600214.843
+[37m2026-08-01 16:03:34.848[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 290: 1785600214.848
+[37m2026-08-01 16:03:34.858[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 291: 1785600214.858
+[37m2026-08-01 16:03:34.875[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 292: 1785600214.874
+[37m2026-08-01 16:03:34.891[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 293: 1785600214.891
+[37m2026-08-01 16:03:34.940[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 294: 1785600214.94
+[37m2026-08-01 16:03:34.946[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 295: 1785600214.945
+[37m2026-08-01 16:03:34.958[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 296: 1785600214.958
+[37m2026-08-01 16:03:34.975[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 297: 1785600214.974
+[37m2026-08-01 16:03:34.991[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 298: 1785600214.991
+[37m2026-08-01 16:03:35.008[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 299: 1785600215.008
+[37m2026-08-01 16:03:35.040[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 300: 1785600215.039
+[37m2026-08-01 16:03:35.045[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 301: 1785600215.045
+[37m2026-08-01 16:03:35.058[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 302: 1785600215.058
+[37m2026-08-01 16:03:35.076[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 303: 1785600215.075
+[37m2026-08-01 16:03:35.091[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 304: 1785600215.091
+[37m2026-08-01 16:03:35.135[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 305: 1785600215.135
+[37m2026-08-01 16:03:35.143[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 306: 1785600215.142
+[37m2026-08-01 16:03:35.158[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 307: 1785600215.158
+[37m2026-08-01 16:03:35.178[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	Saved frame 308: 1785600215.177
+[37m2026-08-01 16:03:38.502[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112627[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] start: ffmpeg -safe 0 -f concat -i /tmp/pochi-mjpeg2mp4-f334yz/frames.ffconcat -y -vcodec libx264 -filter:v scale=854:480:force_original_aspect_ratio=decrease,pad=854:480:(ow-iw)/2:(oh-ih)/2:color=black -pix_fmt yuv420p -movflags +faststart -preset veryfast -crf 23 -an -f mp4 /tmp/pochi-browser-agent-video-dfc196f8-da12-4283-868c-dc9a24320ad3.mp4
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   built with gcc 13 (Ubuntu 13.2.0-23ubuntu3)
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   configuration: --prefix=/usr --extra-version=3ubuntu5 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --disable-omx --enable-gnutls --enable-libaom --enable-libass --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libglslang --enable-libgme --enable-libgsm --enable-libharfbuzz --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-openal --enable-opencl --enable-opengl --disable-sndio --enable-libvpl --disable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-ladspa --enable-libbluray --enable-libjack --enable-libpulse --enable-librabbitmq --enable-librist --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libx264 --enable-libzmq --enable-libzvbi --enable-lv2 --enable-sdl2 --enable-libplacebo --enable-librav1e --enable-pocketsphinx --enable-librsvg --enable-libjxl --enable-shared
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libavutil      58. 29.100 / 58. 29.100
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libavcodec     60. 31.102 / 60. 31.102
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libavformat    60. 16.100 / 60. 16.100
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libavdevice    60.  3.100 / 60.  3.100
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libavfilter     9. 12.100 /  9. 12.100
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libswscale      7.  5.100 /  7.  5.100
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libswresample   4. 12.100 /  4. 12.100
+[37m2026-08-01 16:03:38.570[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   libpostproc    57.  3.100 / 57.  3.100
+[37m2026-08-01 16:03:38.571[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: Input #0, concat, from '/tmp/pochi-mjpeg2mp4-f334yz/frames.ffconcat':
+[37m2026-08-01 16:03:38.571[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   Duration: N/A, start: 0.000000, bitrate: N/A
+[37m2026-08-01 16:03:38.571[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   Stream #0:0: Video: mjpeg (Baseline), yuvj420p(pc, bt470bg/unknown/unknown), 1280x720 [SAR 1:1 DAR 16:9], 25 fps, 25 tbr, 25 tbn
+[37m2026-08-01 16:03:38.571[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: Stream mapping:
+[37m2026-08-01 16:03:38.571[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   Stream #0:0 -> #0:0 (mjpeg (native) -> h264 (libx264))
+[37m2026-08-01 16:03:38.571[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: Press [q] to stop, [?] for help
+[37m2026-08-01 16:03:38.574[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [swscaler @ 0x56ba885d6f00] deprecated pixel format used, make sure you did set range correctly
+[37m2026-08-01 16:03:38.584[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:     Last message repeated 1 times
+[37m2026-08-01 16:03:38.584[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [swscaler @ 0x56ba8890fc00] deprecated pixel format used, make sure you did set range correctly
+[37m2026-08-01 16:03:38.592[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:     Last message repeated 1 times
+[37m2026-08-01 16:03:38.592[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] using SAR=2560/2559
+[37m2026-08-01 16:03:38.593[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2 AVX512
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] profile High, level 3.0, 4:2:0, 8-bit
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] 264 - core 164 r3108 31e19f9 - H.264/MPEG-4 AVC codec - Copyleft 2003-2023 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=15 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=crf mbtree=1 crf=23.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: Output #0, mp4, to '/tmp/pochi-browser-agent-video-dfc196f8-da12-4283-868c-dc9a24320ad3.mp4':
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   Metadata:
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:     encoder         : Lavf60.16.100
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:   Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, bt470bg/unknown/unknown, progressive), 854x480 [SAR 2560:2559 DAR 13664:7677], q=2-31, 25 fps, 12800 tbn
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:     Metadata:
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:       encoder         : Lavc60.31.102 libx264
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:     Side data:
+[37m2026-08-01 16:03:38.595[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:       cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+[37m2026-08-01 16:03:38.596[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: frame=    0 fps=0.0 q=0.0 size=       0kB time=N/A bitrate=N/A speed=N/A    
+[37m2026-08-01 16:03:39.132[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: frame=   25 fps=0.0 q=28.0 size=       0kB time=00:00:00.92 bitrate=   0.4kbits/s dup=0 drop=50 speed=1.84x    
+[37m2026-08-01 16:03:39.449[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [mjpeg @ 0x56ba88591680] EOI missing, emulating
+[37m2026-08-01 16:03:39.454[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:     Last message repeated 1 times
+[37m2026-08-01 16:03:39.455[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [mjpeg @ 0x56ba88592380] EOI missing, emulating
+[37m2026-08-01 16:03:39.633[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr:     Last message repeated 1 times
+[37m2026-08-01 16:03:39.633[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: frame=   75 fps= 71 q=28.0 size=       0kB time=00:00:02.92 bitrate=   0.1kbits/s dup=0 drop=99 speed=2.76x    
+[37m2026-08-01 16:03:40.140[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: frame=  146 fps= 94 q=28.0 size=       0kB time=00:00:05.76 bitrate=   0.1kbits/s dup=21 drop=155 speed=3.69x    
+[37m2026-08-01 16:03:40.144[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [mp4 @ 0x56ba88592b00] Starting second pass: moving the moov atom to the beginning of the file
+[37m2026-08-01 16:03:40.144[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [out#0/mp4 @ 0x56ba88593400] video:26kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 11.009546%
+[37m2026-08-01 16:03:40.144[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: frame=  176 fps=112 q=-1.0 Lsize=      29kB time=00:00:06.92 bitrate=  34.8kbits/s dup=21 drop=155 speed= 4.4x    
+[37m2026-08-01 16:03:40.230[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] frame I:1     Avg QP:19.16  size: 20568
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] frame P:44    Avg QP:23.49  size:    65
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] frame B:131   Avg QP:17.19  size:    23
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] consecutive B-frames:  0.6%  0.0%  1.7% 97.7%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] mb I  I16..4: 73.2%  1.4% 25.4%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] mb P  I16..4:  0.0%  0.0%  0.0%  P16..4:  0.2%  0.0%  0.0%  0.0%  0.0%    skip:99.7%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] mb B  I16..4:  0.0%  0.0%  0.0%  B16..8:  0.0%  0.0%  0.0%  direct: 0.0%  skip:100.0%  L0:50.0% L1:30.6% BI:19.4%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] 8x8 transform intra:1.4% inter:7.1%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] coded y,uvDC,uvAC intra: 20.4% 19.4% 17.0% inter: 0.0% 0.0% 0.0%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] i16 v,h,dc,p: 34% 61%  5%  0%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 13% 42% 35%  1%  1%  0%  0%  1%  7%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 27% 39% 16%  2%  3%  3%  5%  2%  4%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] i8c dc,h,v,p: 66% 23% 11%  1%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] Weighted P-Frames: Y:0.0% UV:0.0%
+[37m2026-08-01 16:03:40.231[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: [libx264 @ 0x56ba885ad800] kb/s:30.05
+[37m2026-08-01 16:03:40.244[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:112666[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] stderr: 
+[37m2026-08-01 16:03:40.245[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mevents:98[39m[0m[0m[1m[37m	MjpegToMp4[39m[22m[0m[0m	[ffmpeg] end
+[37m2026-08-01 16:03:42.226[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/root/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: # System Instructions, new: Verify the tasks dashboard page renders active tasks and execution logs
+[37m2026-08-01 16:03:43.731[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Task runner finished successfully.
+[37m2026-08-01 16:03:43.731[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutting down...
+[37m2026-08-01 16:03:43.743[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutdown completed. Process will exit.
+[37m2026-08-01 16:03:43.743[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Process exiting with code 0

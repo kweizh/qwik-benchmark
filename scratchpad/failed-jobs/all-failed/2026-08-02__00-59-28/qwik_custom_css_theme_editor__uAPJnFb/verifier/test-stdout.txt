@@ -1,0 +1,130 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 6 items
+
+../tests/test_final_state.py FF.FF.                                      [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_default_theme_no_cookie _________________________
+
+start_app = None
+
+    def test_default_theme_no_cookie(start_app):
+        """
+        Verify that when no cookie is present, the default theme is applied.
+        """
+        response = requests.get(f"{BASE_URL}/theme")
+        assert response.status_code == 200, f"Expected status 200, got {response.status_code}"
+    
+        html = response.text
+        variables = parse_css_variables(html)
+    
+>       assert variables is not None, "Could not find <style id=\"theme-variables\"> tag in the HTML response."
+E       AssertionError: Could not find <style id="theme-variables"> tag in the HTML response.
+E       assert None is not None
+
+/tests/test_final_state.py:104: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'qwik_app' started pid=1872
+qwik_app process startup detected
+=== [STARTED] Captured qwik_app logs ===
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 611 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+=========================================
+____________________________ test_theme_with_cookie ____________________________
+
+start_app = None
+
+    def test_theme_with_cookie(start_app):
+        """
+        Verify that the theme values are correctly parsed from the user_theme cookie and applied during SSR.
+        """
+        theme_data = {
+            "primaryColor": "#ff5722",
+            "fontSize": "20px",
+            "borderRadius": "12px"
+        }
+        cookie_value = urllib.parse.quote(json.dumps(theme_data))
+        cookies = {"user_theme": cookie_value}
+    
+        response = requests.get(f"{BASE_URL}/theme", cookies=cookies)
+        assert response.status_code == 200, f"Expected status 200, got {response.status_code}"
+    
+        html = response.text
+        variables = parse_css_variables(html)
+    
+>       assert variables is not None, "Could not find <style id=\"theme-variables\"> tag in the HTML response."
+E       AssertionError: Could not find <style id="theme-variables"> tag in the HTML response.
+E       assert None is not None
+
+/tests/test_final_state.py:132: AssertionError
+________________________ test_theme_submission_success _________________________
+
+start_app = None
+
+    def test_theme_submission_success(start_app):
+        """
+        Verify that submitting valid values saves them to the user_theme cookie and redirects back to /theme.
+        """
+        data = {
+            "primaryColor": "#00ff00",
+            "fontSize": "18px",
+            "borderRadius": "8px"
+        }
+    
+        response = requests.post(f"{BASE_URL}/theme", data=data, allow_redirects=False)
+    
+        # Expect redirect
+>       assert response.status_code in [302, 303], f"Expected redirect status 302 or 303, got {response.status_code}"
+E       AssertionError: Expected redirect status 302 or 303, got 301
+E       assert 301 in [302, 303]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:181: AssertionError
+___________________ test_theme_submission_validation_errors ____________________
+
+start_app = None
+
+    def test_theme_submission_validation_errors(start_app):
+        """
+        Verify server-side validation rejects invalid values and returns 400 Bad Request with custom error messages.
+        """
+        # 1. Invalid primaryColor
+        invalid_color_data = {
+            "primaryColor": "red",  # invalid hex
+            "fontSize": "18px",
+            "borderRadius": "8px"
+        }
+        response = requests.post(f"{BASE_URL}/theme", data=invalid_color_data, allow_redirects=False)
+>       assert response.status_code == 400, f"Expected status 400 for invalid primaryColor, got {response.status_code}"
+E       AssertionError: Expected status 400 for invalid primaryColor, got 301
+E       assert 301 == 400
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:217: AssertionError
+==================================== PASSES ====================================
+--------------------------- Captured stdout teardown ---------------------------
+=== [TEARDOWN] Captured qwik_app logs ===
+
+  🚧 Please note that development mode is slower than production.
+
+=========================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_theme_form_populated
+PASSED ../tests/test_final_state.py::test_theme_reset
+FAILED ../tests/test_final_state.py::test_default_theme_no_cookie - Assertion...
+FAILED ../tests/test_final_state.py::test_theme_with_cookie - AssertionError:...
+FAILED ../tests/test_final_state.py::test_theme_submission_success - Assertio...
+FAILED ../tests/test_final_state.py::test_theme_submission_validation_errors
+========================= 4 failed, 2 passed in 1.89s ==========================

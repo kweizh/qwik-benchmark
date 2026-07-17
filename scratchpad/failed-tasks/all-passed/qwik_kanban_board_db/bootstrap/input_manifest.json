@@ -1,0 +1,6 @@
+{
+  "library_name": "Qwik",
+  "task_name": "qwik_kanban_board_db",
+  "research_plan_path": "plan.md",
+  "output_dir": "scratchpad/pending-tasks"
+}

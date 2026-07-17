@@ -1,0 +1,111 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 7 items
+
+../tests/test_final_state.py .F.FF..                                     [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_api_ping_logged _____________________________
+
+start_app = None
+
+    def test_api_ping_logged(start_app):
+        """Verify that requests to /api/ping are logged with correct details."""
+        response = requests.get(f"{BASE_URL}/api/ping")
+        assert response.status_code == 200, "Failed to load /api/ping"
+        assert response.json() == {"ping": "pong"}, f"Unexpected response from /api/ping: {response.text}"
+    
+        # Verify database log entry
+>       assert os.path.exists(DB_PATH), "Database file activity.db was not created."
+E       AssertionError: Database file activity.db was not created.
+E       assert False
+E        +  where False = <function exists at 0x7ec29d58b560>('/home/user/qwik-app/activity.db')
+E        +    where <function exists at 0x7ec29d58b560> = <module 'posixpath' (frozen)>.exists
+E        +      where <module 'posixpath' (frozen)> = os.path
+
+/tests/test_final_state.py:127: AssertionError
+________________________ test_api_slow_timing_accuracy _________________________
+
+start_app = None
+
+    def test_api_slow_timing_accuracy(start_app):
+        """Verify that the slow endpoint delays properly and the duration logged is accurate."""
+        delay_ms = 350
+        start_time = time.time()
+        response = requests.get(f"{BASE_URL}/api/slow?delay={delay_ms}")
+        end_time = time.time()
+    
+        assert response.status_code == 200, "Failed to load /api/slow"
+>       assert response.json() == {"delayed": true, "delay": delay_ms}, f"Unexpected response: {response.text}"
+E       NameError: name 'true' is not defined
+
+/tests/test_final_state.py:172: NameError
+___________________________ test_admin_activity_json ___________________________
+
+start_app = None
+
+    def test_admin_activity_json(start_app):
+        """Verify the JSON representation of the activity page."""
+        response = requests.get(f"{BASE_URL}/admin/activity?format=json")
+        assert response.status_code == 200, "Failed to load /admin/activity?format=json"
+    
+        data = response.json()
+        assert "total_requests" in data, "JSON response missing 'total_requests'"
+        assert "average_duration_ms" in data, "JSON response missing 'average_duration_ms'"
+        assert "logs" in data, "JSON response missing 'logs'"
+    
+        logs = data["logs"]
+        assert isinstance(logs, list), "'logs' must be a list"
+        assert len(logs) > 0, "'logs' list should not be empty"
+    
+        # Verify logs order (descending by timestamp)
+        timestamps = [log["timestamp"] for log in logs]
+        sorted_timestamps = sorted(timestamps, reverse=True)
+        assert timestamps == sorted_timestamps, "Logs are not sorted descending by timestamp"
+    
+        # Verify metrics calculation
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT COUNT(*), AVG(duration_ms) FROM ActivityLog")
+            db_count, db_avg = cursor.fetchone()
+>           assert data["total_requests"] == db_count, f"Expected total_requests {db_count}, got {data['total_requests']}"
+E           AssertionError: Expected total_requests 4, got 3
+E           assert 3 == 4
+
+/tests/test_final_state.py:217: AssertionError
+==================================== PASSES ====================================
+_________________________ test_public_page_not_logged __________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_app' started pid=2594
+qwik_app process startup detected
+============================== [STARTED] Captured logs ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 565 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+====================================================================================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN] Captured logs ==============================
+
+  🚧 Please note that development mode is slower than production.
+
+====================================================================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_public_page_not_logged
+PASSED ../tests/test_final_state.py::test_admin_dashboard_logged
+PASSED ../tests/test_final_state.py::test_admin_activity_html
+PASSED ../tests/test_final_state.py::test_concurrency_robustness
+FAILED ../tests/test_final_state.py::test_api_ping_logged - AssertionError: D...
+FAILED ../tests/test_final_state.py::test_api_slow_timing_accuracy - NameErro...
+FAILED ../tests/test_final_state.py::test_admin_activity_json - AssertionErro...
+========================= 3 failed, 4 passed in 55.15s =========================

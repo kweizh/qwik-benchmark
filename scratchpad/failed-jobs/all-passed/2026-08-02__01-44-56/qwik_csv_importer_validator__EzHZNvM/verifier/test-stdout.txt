@@ -1,0 +1,36 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 4 items
+
+../tests/test_final_state.py ....                                        [100%]
+
+==================================== PASSES ====================================
+________________________ test_get_users_initially_empty ________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'qwik_app' started pid=1262
+qwik_app process startup detected
+=== [STARTED] Captured qwik_app logfile ===
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 491 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+==================================================
+--------------------------- Captured stdout teardown ---------------------------
+=== [TEARDOWN] Captured qwik_app logfile ===
+
+==================================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_get_users_initially_empty
+PASSED ../tests/test_final_state.py::test_post_import_valid_csv
+PASSED ../tests/test_final_state.py::test_post_import_invalid_csv_atomicity
+PASSED ../tests/test_final_state.py::test_post_import_empty_name
+============================== 4 passed in 1.15s ===============================

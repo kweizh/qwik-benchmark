@@ -1,0 +1,129 @@
+[37m2026-08-01 17:45:13.982[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	pochi v0.6.20
+[37m2026-08-01 17:45:14.026[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	PochiConfigManager[39m[22m[0m[0m	add workspace config: /root/.pochi/config.jsonc
+[37m2026-08-01 17:45:14.240[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	BuiltInBundle[39m[22m[0m[0m	Materializing 16 built-in files to /tmp/pochi-builtin-ef402bc2bbe8f440
+[37m2026-08-01 17:45:14.453[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:532913[39m[0m[0m[1m[37m	loadAgents[39m[22m[0m[0m	Loaded 6 custom agents (6 valid, 0 invalid)
+[37m2026-08-01 17:45:14.556[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:532914[39m[0m[0m[1m[37m	loadSkills[39m[22m[0m[0m	Loaded 3 skills (3 valid, 0 invalid)
+[37m2026-08-01 17:45:14.654[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:443306[39m[0m[0m[1m[37m	PochiVendor[39m[22m[0m[0m	JWT is expiring or missing, fetching a new one
+[37m2026-08-01 17:45:16.333[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:419194[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	MCP servers configuration changed via signal:
+[37m2026-08-01 17:45:16.334[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:419306[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	Build MCPHub Status
+[37m2026-08-01 17:45:16.541[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Starting task runner...
+[37m2026-08-01 17:45:16.764[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: null, new: # Qwik Polling System with Dynamic SVG Charts
+[37m2026-08-01 17:45:25.095[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531016[39m[0m[0m[1m[37m	listFiles[39m[22m[0m[0m	handling listFile with dirPath /home/user/qwik-app and recursive [33mtrue[39m
+[37m2026-08-01 17:45:25.356[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:463969[39m[0m[0m[1m[37m	ignoreWalk[39m[22m[0m[0m	MaxScanItems (10000) reached or exceeded. Halting traversal.
+[37m2026-08-01 17:45:27.774[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531016[39m[0m[0m[1m[37m	listFiles[39m[22m[0m[0m	handling listFile with dirPath /home/user/qwik-app/src/routes and recursive [33mtrue[39m
+[37m2026-08-01 17:45:30.263[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: # Qwik Polling System with Dynamic SVG Charts, new: Build a Qwik polling system with dynamic SVG charts and rate limiting
+[37m2026-08-01 17:45:30.827[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/package.json" resolvedPath="/home/user/qwik-app/package.json" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 17:45:30.828[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 17:45:30.830[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/package.json" mtime=1785604321707 contentLen=1474
+[37m2026-08-01 17:45:34.798[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-app sqlite [90mundefined[39m
+[37m2026-08-01 17:45:34.799[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'sqlite'[39m,
+  [32m'/home/user/qwik-app'[39m
+]
+[37m2026-08-01 17:45:35.269[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37m/$bunfs/pochi:463782[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	Failed to parse rg JSON output line: {"type":"match","data":{"path":{"text":"/home/user/qwik-app/poll.db"},"lines":{"bytes":"gSEFBxcfHwGCEXRhYmxldm90ZXNfbG9ndm90ZXNfbG9nBkNSRUFURSBUQUJMRSB2b3Rlc19sb2cgKGlkIElOVEVHRVIgUFJJTUFSWSBLRVkgQVVUT0lOQ1JFTUVOVCwgcG9sbF9pZCBURVhUIE5PVCBOVUxMLCBpcCBURVhUIE5PVCBOVUxMLCB0aW1lc3RhbXAgSU5URUdFUiBOT1QgTlVMTClQBAYXKysBWXRhYmxlc3FsaXRlX3NlcXVlbmNlc3FsaXRlX3NlcXVlbmNlBUNSRUFURSBUQUJMRSBzcWxpdGVfc2VxdWVuY2UobmFtZSxzZXEpgU8DBxcbGwGCdXRhYmxlb3B0aW9uc29wdGlvbnMEQ1JFQVRFIFRBQkxFIG9wdGlvbnMgKGlkIElOVEVHRVIgUFJJTUFSWSBLRVkgQVVUT0lOQ1JFTUVOVCwgcG9sbF9pZCBURVhUIE5PVCBOVUxMLCB0ZXh0IFRFWFQgTk9UIE5VTEwsIHZvdGVzIElOVEVHRVIgTk9UIE5VTEwgREVGQVVMVCAwLCBGT1JFSUdOIEtFWSAocG9sbF9pZCkgUkVGRVJFTkNFUyBwb2xscyhpZCkpVwEHFxcXAYENdGFibGVwb2xsc3BvbGxzAkNSRUFURSBUQUJMRSBwb2xscyAoaWQgVEVYVCBQUklNQVJZIEtFWSwgcXVlc3Rpb24gVEVYVCBOT1QgTlVMTCkpAgYXPRcBCg=="},"line_number":3455,"absolute_offset":3500,"submatches":[{"match":{"text":"sqlite"},"start":177,"end":183},{"match":{"text":"sqlite"},"start":192,"end":198},{"match":{"text":"sqlite"},"start":221,"end":227}]}}
+
+[97m[101m[1m TypeError [22m[49m[39m[0m[0m undefined is not an object (evaluating 'matchData.lines.text.replace'), 463741, 36, 463741, 36, /$bunfs/root/pochi[0m[0m
+error stack:
+  • [33mpochi[39m[0m[0m	parseRipgrepLine[0m[0m
+	[37m/$bunfs/pochi:463741[39m[0m[0m
+  • [33mpochi[39m[0m[0m	processLine[0m[0m
+	[37m/$bunfs/pochi:463782[39m[0m[0m
+  • [33mpochi[39m[0m[0m	<anonymous>[0m[0m
+	[37m/$bunfs/pochi:463813[39m[0m[0m
+  • [33mevents[39m[0m[0m	emit[0m[0m
+	[37mevents:95[39m[0m[0m
+  • [33mreadable[39m[0m[0m	addChunk[0m[0m
+	[37mstreams/readable:264[39m[0m[0m
+  • [33mreadable[39m[0m[0m	readableAddChunkPushByteMode[0m[0m
+	[37mstreams/readable:242[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	handleNumberResult[0m[0m
+	[37mstreams/native-readable:69[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	<anonymous>[0m[0m
+	[37mstreams/native-readable:43[39m[0m[0m
+  • [33mnative[39m[0m[0m	processTicksAndRejections[0m[0m
+	[37mnative:7[39m[0m[0m[0m[0m
+[37m2026-08-01 17:45:35.280[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37m/$bunfs/pochi:463782[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	Failed to parse rg JSON output line: {"type":"match","data":{"path":{"text":"/home/user/qwik-app/node_modules/better-sqlite3/prebuilds/win32-x64.node"},"lines":{"bytes":"SIt0JDiNS/+Lw0yNHbhd9f9I/8iJTCQwSIlEJFBIunNxbGl0ZTNfTIl8JEhJiRdMi9BIhcB4F2aQQw+2BBY8L3QMPFx0CP/JSYPqAXnrjUEBugMK"},"line_number":72675,"absolute_offset":693815,"submatches":[{"match":{"text":"sqlite"},"start":31,"end":37}]}}
+
+[97m[101m[1m TypeError [22m[49m[39m[0m[0m undefined is not an object (evaluating 'matchData.lines.text.replace'), 463741, 36, 463741, 36, /$bunfs/root/pochi[0m[0m
+error stack:
+  • [33mpochi[39m[0m[0m	parseRipgrepLine[0m[0m
+	[37m/$bunfs/pochi:463741[39m[0m[0m
+  • [33mpochi[39m[0m[0m	processLine[0m[0m
+	[37m/$bunfs/pochi:463782[39m[0m[0m
+  • [33mpochi[39m[0m[0m	<anonymous>[0m[0m
+	[37m/$bunfs/pochi:463813[39m[0m[0m
+  • [33mevents[39m[0m[0m	emit[0m[0m
+	[37mevents:95[39m[0m[0m
+  • [33mreadable[39m[0m[0m	addChunk[0m[0m
+	[37mstreams/readable:264[39m[0m[0m
+  • [33mreadable[39m[0m[0m	readableAddChunkPushByteMode[0m[0m
+	[37mstreams/readable:242[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	handleArrayBufferViewResult[0m[0m
+	[37mstreams/native-readable:79[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	<anonymous>[0m[0m
+	[37mstreams/native-readable:43[39m[0m[0m
+  • [33mnative[39m[0m[0m	processTicksAndRejections[0m[0m
+	[37mnative:7[39m[0m[0m[0m[0m
+[37m2026-08-01 17:45:35.280[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37m/$bunfs/pochi:463782[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	Failed to parse rg JSON output line: {"type":"match","data":{"path":{"text":"/home/user/qwik-app/node_modules/better-sqlite3/prebuilds/win32-x64.node"},"lines":{"bytes":"SYvNZkOJRDkESYtFWP/QSIvYSIXAdSpIi0QkUEyNHWtc9f+LTCQw/8dIunNxbGl0ZTNfg/8CD4y1/v//6YQK"},"line_number":72702,"absolute_offset":694130,"submatches":[{"match":{"text":"sqlite"},"start":43,"end":49}]}}
+
+[97m[101m[1m TypeError [22m[49m[39m[0m[0m undefined is not an object (evaluating 'matchData.lines.text.replace'), 463741, 36, 463741, 36, /$bunfs/root/pochi[0m[0m
+error stack:
+  • [33mpochi[39m[0m[0m	parseRipgrepLine[0m[0m
+	[37m/$bunfs/pochi:463741[39m[0m[0m
+  • [33mpochi[39m[0m[0m	processLine[0m[0m
+	[37m/$bunfs/pochi:463782[39m[0m[0m
+  • [33mpochi[39m[0m[0m	<anonymous>[0m[0m
+	[37m/$bunfs/pochi:463813[39m[0m[0m
+  • [33mevents[39m[0m[0m	emit[0m[0m
+	[37mevents:95[39m[0m[0m
+  • [33mreadable[39m[0m[0m	addChunk[0m[0m
+	[37mstreams/readable:264[39m[0m[0m
+  • [33mreadable[39m[0m[0m	readableAddChunkPushByteMode[0m[0m
+	[37mstreams/readable:242[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	handleArrayBufferViewResult[0m[0m
+	[37mstreams/native-readable:79[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	<anonymous>[0m[0m
+	[37mstreams/native-readable:43[39m[0m[0m
+  • [33mnative[39m[0m[0m	processTicksAndRejections[0m[0m
+	[37mnative:7[39m[0m[0m[0m[0m
+[37m2026-08-01 17:45:35.281[39m[0m[0m	[31m[1mERROR[22m[39m[0m[0m	[37m/$bunfs/pochi:463782[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	Failed to parse rg JSON output line: {"type":"match","data":{"path":{"text":"/home/user/qwik-app/node_modules/better-sqlite3/prebuilds/win32-arm64.node"},"lines":{"bytes":"kf4rQPn7c0Sp+WtDqfdjQqn1W0Gp81PGqMADX9ZzcWxpdGUzX/NTvan1WwGp93sCqfQDCg=="},"line_number":105836,"absolute_offset":736123,"submatches":[{"match":{"text":"sqlite"},"start":29,"end":35}]}}
+
+[97m[101m[1m TypeError [22m[49m[39m[0m[0m undefined is not an object (evaluating 'matchData.lines.text.replace'), 463741, 36, 463741, 36, /$bunfs/root/pochi[0m[0m
+error stack:
+  • [33mpochi[39m[0m[0m	parseRipgrepLine[0m[0m
+	[37m/$bunfs/pochi:463741[39m[0m[0m
+  • [33mpochi[39m[0m[0m	processLine[0m[0m
+	[37m/$bunfs/pochi:463782[39m[0m[0m
+  • [33mpochi[39m[0m[0m	<anonymous>[0m[0m
+	[37m/$bunfs/pochi:463813[39m[0m[0m
+  • [33mevents[39m[0m[0m	emit[0m[0m
+	[37mevents:95[39m[0m[0m
+  • [33mreadable[39m[0m[0m	addChunk[0m[0m
+	[37mstreams/readable:264[39m[0m[0m
+  • [33mreadable[39m[0m[0m	readableAddChunkPushByteMode[0m[0m
+	[37mstreams/readable:242[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	handleArrayBufferViewResult[0m[0m
+	[37mstreams/native-readable:79[39m[0m[0m
+  • [33mnative-readable[39m[0m[0m	<anonymous>[0m[0m
+	[37mstreams/native-readable:43[39m[0m[0m
+  • [33mnative[39m[0m[0m	processTicksAndRejections[0m[0m
+	[37mnative:7[39m[0m[0m[0m[0m
+[37m2026-08-01 17:45:37.740[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/src/routes/index.tsx" resolvedPath="/home/user/qwik-app/src/routes/index.tsx" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 17:45:37.740[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 17:45:37.742[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/src/routes/index.tsx" mtime=1785604307023 contentLen=474
+[37m2026-08-01 17:46:37.153[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/src/global.css" resolvedPath="/home/user/qwik-app/src/global.css" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 17:46:37.153[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 17:46:37.156[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/src/global.css" mtime=1785604307023 contentLen=0
+[37m2026-08-01 17:47:40.279[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/vite.config.ts" resolvedPath="/home/user/qwik-app/vite.config.ts" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 17:47:40.280[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 17:47:40.286[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/vite.config.ts" mtime=1785604307021 contentLen=3974
+[37m2026-08-01 17:48:04.932[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:532496[39m[0m[0m[1m[37m	tool-result-persistence[39m[22m[0m[0m	Persisted field "output" for executeCommand(S4Cl6X0iTtJvmwLC): 54581 chars -> /root/.pochi/tasks/f7a046bc-84a7-47ed-b473-61a60e254722/tool-results/executeCommand-S4Cl6X0iTtJvmwLC-output.log
+[37m2026-08-01 17:50:25.409[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Task runner finished successfully.
+[37m2026-08-01 17:50:25.410[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutting down...
+[37m2026-08-01 17:50:25.473[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutdown completed. Process will exit.
+[37m2026-08-01 17:50:25.474[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Process exiting with code 0

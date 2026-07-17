@@ -1,0 +1,19 @@
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.gallery-item {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  width: 220px;
+  text-align: center;
+}
+
+.gallery-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}

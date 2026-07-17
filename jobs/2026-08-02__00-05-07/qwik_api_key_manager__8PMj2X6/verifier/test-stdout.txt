@@ -1,0 +1,40 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 5 items
+
+../tests/test_final_state.py .....                                       [100%]
+
+==================================== PASSES ====================================
+_____________________ test_api_key_lifecycle_and_security ______________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'qwik_app' started pid=2432
+qwik_app process startup detected
+============================== [STARTED: Begin] Captured qwik_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 532 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] Captured qwik_app logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured qwik_app logfile ==============================
+(skipped 9 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [TEARDOWN: End  ] Captured qwik_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_sqlite_database_exists
+PASSED ../tests/test_final_state.py::test_sqlite_table_schema
+PASSED ../tests/test_final_state.py::test_api_key_lifecycle_and_security
+PASSED ../tests/test_final_state.py::test_concurrency_and_race_conditions
+PASSED ../tests/test_final_state.py::test_ui_dashboard
+========================= 5 passed in 62.75s (0:01:02) =========================

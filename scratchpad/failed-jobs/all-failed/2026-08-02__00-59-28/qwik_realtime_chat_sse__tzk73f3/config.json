@@ -1,0 +1,23 @@
+{
+    "task": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/qwik_realtime_chat_sse",
+        "source": "pending-tasks"
+    },
+    "trial_name": "qwik_realtime_chat_sse__tzk73f3",
+    "trials_dir": "jobs/2026-08-02__00-59-28",
+    "agent": {
+        "name": "agents.pochi:Pochi",
+        "model_name": "deepseek/deepseek-4-pro",
+        "env": {
+            "POCHI_API_KEY": "${POCHI_API_KEY}"
+        }
+    },
+    "environment": {
+        "type": "daytona",
+        "override_memory_mb": 1024
+    },
+    "artifacts": [
+        "/home/user"
+    ],
+    "job_id": "96af7168-d5a2-480c-a45a-b35ce7eb3e8d"
+}

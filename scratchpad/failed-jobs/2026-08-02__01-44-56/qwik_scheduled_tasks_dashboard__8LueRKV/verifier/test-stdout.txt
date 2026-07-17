@@ -1,0 +1,48 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 2 items
+
+../../../tests/test_final_state.py ..                                    [100%]
+
+==================================== PASSES ====================================
+____________________ test_api_crud_and_background_execution ____________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'start_app' started pid=2788
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 446 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+Error in background runner poll: TypeError: Cannot read properties of undefined (reading 'prepare')
+    at pollAndRunTasks (/home/user/qwik-app/src/lib/runner.ts:36:54)
+    at startRunner (/home/user/qwik-app/src/lib/runner.ts:65:5)
+    at eval (/home/user/qwik-app/src/lib/runner.ts:74:1)
+    at async ESModulesEvaluator.runInlinedModule (file:///home/user/qwik-app/node_modules/vite/dist/node/module-runner.js:913:3)
+    at async SSRCompatModuleRunner.directRequest (file:///home/user/qwik-app/node_modules/vite/dist/node/module-runner.js:1146:59)
+    at async SSRCompatModuleRunner.directRequest (file:///home/user/qwik-app/node_modules/vite/dist/node/chunks/config.js:15111:22)
+    at async SSRCompatModuleRunner.cachedRequest (file:///home/user/qwik-app/node_modules/vite/dist/node/module-runner.js:1053:73)
+    at async eval (/home/user/qwik-app/src/lib/db.ts:5:31)
+    at async ESModulesEvaluator.runInlinedModule (file:///home/user/qwik-app/node_modules/vite/dist/node/module-runner.js:913:3)
+    at async SSRCompatModuleRunner.directRequest (file:///home/user/qwik-app/node_modules/vite/dist/node/module-runner.js:1146:59)
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+(skipped 20 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../../../tests/test_final_state.py::test_api_crud_and_background_execution
+PASSED ../../../tests/test_final_state.py::test_html_dashboard_ui
+========================= 2 passed in 79.78s (0:01:19) =========================

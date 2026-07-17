@@ -1,0 +1,98 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 4 items
+
+../tests/test_final_state.py FF..                                        [100%]
+
+=================================== FAILURES ===================================
+________________________ test_rate_limiting_and_headers ________________________
+
+start_app = None
+
+    def test_rate_limiting_and_headers(start_app):
+        # To avoid boundary issues, if we are extremely close to the end of a 10s window (e.g. within 1.5 seconds),
+        # sleep until the next window starts so our test runs fully inside a single window.
+        now = time.time()
+        time_in_window = now % 10
+        if time_in_window > 8.5:
+            sleep_time = 10.5 - time_in_window
+            print(f"Close to window boundary ({time_in_window:.2f}s). Sleeping for {sleep_time:.2f}s to align window.")
+            time.sleep(sleep_time)
+    
+        # 1. Send first request
+        url = f"{BASE_URL}/api/data"
+        resp = requests.get(url)
+        assert resp.status_code == 200, f"Expected 200 OK on first request, got {resp.status_code}"
+        assert resp.json() == {"data": "Success"}, f"Expected body to be {{'data': 'Success'}}, got {resp.json()}"
+    
+        # Assert headers
+        headers = resp.headers
+        assert "X-RateLimit-Limit" in headers, "Missing X-RateLimit-Limit header"
+        assert "X-RateLimit-Remaining" in headers, "Missing X-RateLimit-Remaining header"
+        assert "X-RateLimit-Reset" in headers, "Missing X-RateLimit-Reset header"
+    
+        assert headers["X-RateLimit-Limit"] == "5", f"Expected X-RateLimit-Limit to be 5, got {headers['X-RateLimit-Limit']}"
+>       assert headers["X-RateLimit-Remaining"] == "4", f"Expected X-RateLimit-Remaining to be 4 on first request, got {headers['X-RateLimit-Remaining']}"
+E       AssertionError: Expected X-RateLimit-Remaining to be 4 on first request, got 3
+E       assert '3' == '4'
+E         - 4
+E         + 3
+
+/tests/test_final_state.py:90: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'start_qwik_app' started pid=1672
+start_qwik_app process startup detected
+============================== [STARTED: Begin] Captured start_qwik_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 595 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] Captured start_qwik_app logfile ==============================
+__________________________ test_debug_store_endpoint ___________________________
+
+start_app = None
+
+    def test_debug_store_endpoint(start_app):
+        # Retrieve current window ID
+        window_id = int(time.time()) // 10
+        debug_url = f"{BASE_URL}/api/debug-store"
+    
+        resp = requests.get(debug_url)
+        assert resp.status_code == 200, f"Expected 200 OK from debug store, got {resp.status_code}"
+    
+        data = resp.json()
+        assert "keys" in data, f"Response JSON missing 'keys' field: {data}"
+    
+        keys = data["keys"]
+        expected_key = f"ratelimit:127.0.0.1:{window_id}"
+        assert expected_key in keys, f"Expected key {expected_key} not found in debug store keys: {keys}"
+>       assert keys[expected_key] == 6, f"Expected count for 127.0.0.1 to be 6, got {keys[expected_key]}"
+E       AssertionError: Expected count for 127.0.0.1 to be 6, got 2
+E       assert 2 == 6
+
+/tests/test_final_state.py:127: AssertionError
+==================================== PASSES ====================================
+________________________ test_window_reset_and_cleanup _________________________
+----------------------------- Captured stdout call -----------------------------
+Sleeping for 7.92s to wait for rate limit reset...
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_qwik_app logfile ==============================
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [TEARDOWN: End  ] Captured start_qwik_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_ip_detection_via_x_forwarded_for
+PASSED ../tests/test_final_state.py::test_window_reset_and_cleanup
+FAILED ../tests/test_final_state.py::test_rate_limiting_and_headers - Asserti...
+FAILED ../tests/test_final_state.py::test_debug_store_endpoint - AssertionErr...
+========================= 2 failed, 2 passed in 9.51s ==========================

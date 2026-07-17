@@ -1,0 +1,160 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 7 items
+
+../tests/test_final_state.py .F.FF.F                                     [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_api_ping_logged _____________________________
+
+start_app = None
+
+    def test_api_ping_logged(start_app):
+        """Verify that requests to /api/ping are logged with correct details."""
+        response = requests.get(f"{BASE_URL}/api/ping")
+        assert response.status_code == 200, "Failed to load /api/ping"
+        assert response.json() == {"ping": "pong"}, f"Unexpected response from /api/ping: {response.text}"
+    
+        # Verify database log entry
+        assert os.path.exists(DB_PATH), "Database file activity.db was not created."
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT * FROM ActivityLog ORDER BY id DESC LIMIT 1")
+            row = cursor.fetchone()
+            assert row is not None, "No log entry found in ActivityLog table."
+>           assert row["path"] == "/api/ping", f"Expected path '/api/ping', got '{row['path']}'"
+E           AssertionError: Expected path '/api/ping', got '/admin/activity'
+E           assert '/admin/activity' == '/api/ping'
+E             - /api/ping
+E             + /admin/activity
+
+/tests/test_final_state.py:134: AssertionError
+________________________ test_api_slow_timing_accuracy _________________________
+
+start_app = None
+
+    def test_api_slow_timing_accuracy(start_app):
+        """Verify that the slow endpoint delays properly and the duration logged is accurate."""
+        delay_ms = 350
+        start_time = time.time()
+        response = requests.get(f"{BASE_URL}/api/slow?delay={delay_ms}")
+        end_time = time.time()
+    
+        assert response.status_code == 200, "Failed to load /api/slow"
+>       assert response.json() == {"delayed": true, "delay": delay_ms}, f"Unexpected response: {response.text}"
+E       NameError: name 'true' is not defined
+
+/tests/test_final_state.py:172: NameError
+___________________________ test_admin_activity_json ___________________________
+
+start_app = None
+
+    def test_admin_activity_json(start_app):
+        """Verify the JSON representation of the activity page."""
+        response = requests.get(f"{BASE_URL}/admin/activity?format=json")
+        assert response.status_code == 200, "Failed to load /admin/activity?format=json"
+    
+        data = response.json()
+        assert "total_requests" in data, "JSON response missing 'total_requests'"
+        assert "average_duration_ms" in data, "JSON response missing 'average_duration_ms'"
+        assert "logs" in data, "JSON response missing 'logs'"
+    
+        logs = data["logs"]
+        assert isinstance(logs, list), "'logs' must be a list"
+        assert len(logs) > 0, "'logs' list should not be empty"
+    
+        # Verify logs order (descending by timestamp)
+        timestamps = [log["timestamp"] for log in logs]
+        sorted_timestamps = sorted(timestamps, reverse=True)
+        assert timestamps == sorted_timestamps, "Logs are not sorted descending by timestamp"
+    
+        # Verify metrics calculation
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT COUNT(*), AVG(duration_ms) FROM ActivityLog")
+            db_count, db_avg = cursor.fetchone()
+>           assert data["total_requests"] == db_count, f"Expected total_requests {db_count}, got {data['total_requests']}"
+E           AssertionError: Expected total_requests 46, got 45
+E           assert 45 == 46
+
+/tests/test_final_state.py:217: AssertionError
+_________________________ test_concurrency_robustness __________________________
+
+start_app = None
+
+    def test_concurrency_robustness(start_app):
+        """Verify that the middleware handles concurrent requests gracefully without database locked errors."""
+        # Get initial count
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT COUNT(*) FROM ActivityLog")
+            initial_count = cursor.fetchone()[0]
+        finally:
+            conn.close()
+    
+        num_requests = 20
+        urls = [f"{BASE_URL}/api/ping" for _ in range(num_requests)]
+    
+        def make_request(url):
+            try:
+                resp = requests.get(url, timeout=10)
+                return resp.status_code
+            except Exception as e:
+                return str(e)
+    
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            results = list(executor.map(make_request, urls))
+    
+        # Assert all requests completed with status 200
+        assert results == [200] * num_requests, f"Some concurrent requests failed: {results}"
+    
+        # Verify that exactly num_requests new entries were logged
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT COUNT(*) FROM ActivityLog")
+            final_count = cursor.fetchone()[0]
+>           assert final_count == initial_count + num_requests, \
+                f"Expected {initial_count + num_requests} logs, but got {final_count}. Some logs were lost."
+E               AssertionError: Expected 67 logs, but got 55. Some logs were lost.
+E               assert 55 == (47 + 20)
+
+/tests/test_final_state.py:279: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN] Captured logs ==============================
+
+  🚧 Please note that development mode is slower than production.
+
+====================================================================================
+==================================== PASSES ====================================
+_________________________ test_public_page_not_logged __________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_app' started pid=2730
+qwik_app process startup detected
+============================== [STARTED] Captured logs ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 518 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+====================================================================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_public_page_not_logged
+PASSED ../tests/test_final_state.py::test_admin_dashboard_logged
+PASSED ../tests/test_final_state.py::test_admin_activity_html
+FAILED ../tests/test_final_state.py::test_api_ping_logged - AssertionError: E...
+FAILED ../tests/test_final_state.py::test_api_slow_timing_accuracy - NameErro...
+FAILED ../tests/test_final_state.py::test_admin_activity_json - AssertionErro...
+FAILED ../tests/test_final_state.py::test_concurrency_robustness - AssertionE...
+==================== 4 failed, 3 passed in 60.70s (0:01:00) ====================

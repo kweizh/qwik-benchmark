@@ -1,0 +1,10 @@
+{
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome": "Bienvenue sur votre tableau de bord, {name}!"
+  },
+  "profile": {
+    "title": "Profil de l'utilisateur",
+    "email_label": "Adresse e-mail"
+  }
+}

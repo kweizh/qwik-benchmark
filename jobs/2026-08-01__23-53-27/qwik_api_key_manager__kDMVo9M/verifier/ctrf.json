@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T16:01:40.473603+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785600027100,
+            "stop": 1785600100473
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_sqlite_database_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1785600027181,
+                "stop": 1785600027182,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sqlite_table_schema",
+                "status": "passed",
+                "duration": 2,
+                "start": 1785600027182,
+                "stop": 1785600027184,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_api_key_lifecycle_and_security",
+                "status": "passed",
+                "duration": 1460,
+                "start": 1785600027184,
+                "stop": 1785600028644,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_concurrency_and_race_conditions",
+                "status": "passed",
+                "duration": 78,
+                "start": 1785600028645,
+                "stop": 1785600028723,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_ui_dashboard",
+                "status": "passed",
+                "duration": 71749,
+                "start": 1785600028724,
+                "stop": 1785600100473,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

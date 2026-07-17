@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /bootstrap
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 4 items
+
+../bootstrap/test_initial_state.py::test_node_and_npm_available PASSED
+../bootstrap/test_initial_state.py::test_project_directory_exists PASSED
+../bootstrap/test_initial_state.py::test_package_json_exists FAILED
+../bootstrap/test_initial_state.py::test_translation_files_exist PASSED
+
+=================================== FAILURES ===================================
+___________________________ test_package_json_exists ___________________________
+
+    def test_package_json_exists():
+        package_json_path = os.path.join(PROJECT_DIR, "package.json")
+        assert os.path.isfile(package_json_path), f"{package_json_path} does not exist."
+    
+        with open(package_json_path, "r") as f:
+            data = json.load(f)
+>       assert "@builder.io/qwik" in data.get("dependencies", {}), "Qwik dependency is missing in package.json."
+E       AssertionError: Qwik dependency is missing in package.json.
+E       assert '@builder.io/qwik' in {}
+E        +  where {} = <built-in method get of dict object at 0x701a04496e40>('dependencies', {})
+E        +    where <built-in method get of dict object at 0x701a04496e40> = {'description': 'Blank project with routing included', 'devDependencies': {'@builder.io/qwik': '^1.20.0', '@builder.io/qwik-city': '^1.20.0', '@eslint/js': '^9', '@types/node': '20.19.0', ...}, 'engines': {'node': '^18.17.0 || ^20.3.0 || >=21.0.0'}, 'engines-annotation': 'Mostly required by sharp which needs a Node-API v9 compatible runtime', ...}.get
+
+/bootstrap/test_initial_state.py:21: AssertionError
+=========================== short test summary info ============================
+FAILED ../bootstrap/test_initial_state.py::test_package_json_exists - Asserti...
+========================= 1 failed, 3 passed in 0.02s ==========================
+pytest-xprocess reminder::Be sure to terminate the started process by running 'pytest --xkill' if you have not explicitly done so in your fixture with 'xprocess.getinfo(<process_name>).terminate()'.

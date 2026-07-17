@@ -1,0 +1,39 @@
+{
+    "schema_version": 1,
+    "task": {
+        "name": "qwik_kanban_board_db",
+        "type": "local",
+        "digest": "sha256:4b6bccc044bf25be05ee63c9df41b7538b25ce64af228993f600f3e1da745f16",
+        "source": "pending-tasks",
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/qwik_kanban_board_db"
+    },
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent": {
+        "name": "agents.pochi:Pochi",
+        "model_name": "google/gemini-3.5-flash",
+        "skills": [],
+        "resume_trajectory": false,
+        "extra_allowed_hosts": [],
+        "kwargs": {},
+        "env": {
+            "POCHI_API_KEY": "${POCHI_API_KEY}"
+        },
+        "mcp_servers": []
+    },
+    "skills": [],
+    "environment": {
+        "type": "daytona",
+        "force_build": false,
+        "delete": true,
+        "cpu_enforcement_policy": "auto",
+        "memory_enforcement_policy": "auto",
+        "override_memory_mb": 1024,
+        "extra_docker_compose": [],
+        "kwargs": {},
+        "extra_allowed_hosts": []
+    },
+    "verifier": {
+        "disable": false
+    }
+}

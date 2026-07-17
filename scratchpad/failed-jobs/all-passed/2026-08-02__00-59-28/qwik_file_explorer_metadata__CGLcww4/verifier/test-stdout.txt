@@ -1,0 +1,42 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 8 items
+
+../tests/test_final_state.py ........                                    [100%]
+
+==================================== PASSES ====================================
+__________________________ test_01_initial_empty_list __________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'qwik_app' started pid=1934
+qwik_app process startup detected
+============================== [STARTED] Captured qwik_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 593 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End] ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN] Captured qwik_app logfile ==============================
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [TEARDOWN: End] ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_01_initial_empty_list
+PASSED ../tests/test_final_state.py::test_02_upload_file
+PASSED ../tests/test_final_state.py::test_03_list_with_uploaded_file
+PASSED ../tests/test_final_state.py::test_04_files_page_ui
+PASSED ../tests/test_final_state.py::test_05_delete_file
+PASSED ../tests/test_final_state.py::test_06_delete_non_existent
+PASSED ../tests/test_final_state.py::test_07_upload_invalid
+PASSED ../tests/test_final_state.py::test_08_delete_missing_physical_file
+============================== 8 passed in 58.34s ==============================

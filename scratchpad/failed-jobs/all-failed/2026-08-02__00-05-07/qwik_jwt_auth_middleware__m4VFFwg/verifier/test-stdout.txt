@@ -1,0 +1,71 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 4 items
+
+../tests/test_final_state.py ...F                                        [100%]
+
+=================================== FAILURES ===================================
+_________________ test_login_valid_credentials_and_admin_flow __________________
+
+start_app = None
+
+    def test_login_valid_credentials_and_admin_flow(start_app):
+        """
+        Verify the complete login, access authorized admin, and logout flow.
+        """
+        login_url = f"{BASE_URL}/login"
+        payload = {"username": "admin", "password": "password123"}
+    
+        # 1. Login with valid credentials
+        response = requests.post(login_url, json=payload, allow_redirects=False)
+        assert response.status_code == 302, f"Expected redirect status 302 on successful login, got {response.status_code}"
+    
+        location = response.headers.get("Location", "")
+        assert location.endswith("/admin/dashboard") or "/admin/dashboard" in location, f"Expected redirect to /admin/dashboard, got {location}"
+    
+        jwt_cookie = response.cookies.get("jwt_token")
+        assert jwt_cookie is not None, "Expected 'jwt_token' cookie to be set in response"
+    
+        # 2. Access /admin/dashboard with the valid JWT token
+        admin_url = f"{BASE_URL}/admin/dashboard"
+        cookies = {"jwt_token": jwt_cookie}
+        admin_response = requests.get(admin_url, cookies=cookies, allow_redirects=False)
+    
+        assert admin_response.status_code == 200, f"Expected status 200 for authorized access, got {admin_response.status_code}"
+>       assert "Welcome to the Admin Dashboard, admin!" in admin_response.text, "Expected dashboard welcome text in response"
+E       AssertionError: Expected dashboard welcome text in response
+E       assert 'Welcome to the Admin Dashboard, admin!' in '<!DOCTYPE html><html lang="en-us" q:route="/admin/dashboard" q:container="paused" q:version="1.20.0" q:render="ssr-de...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n'
+E        +  where '<!DOCTYPE html><html lang="en-us" q:route="/admin/dashboard" q:container="paused" q:version="1.20.0" q:render="ssr-de...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n' = <Response [200]>.text
+
+/tests/test_final_state.py:151: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured qwik_app logfile ==============================
+(skipped 9 already-printed lines)
+
+============================== [TEARDOWN: End  ] Captured qwik_app logfile ==============================
+==================================== PASSES ====================================
+________________________ test_unauthorized_admin_access ________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_app' started pid=1321
+qwik_app process startup detected
+============================== [STARTED: Begin] Captured qwik_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 508 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] Captured qwik_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_unauthorized_admin_access
+PASSED ../tests/test_final_state.py::test_invalid_jwt_admin_access
+PASSED ../tests/test_final_state.py::test_login_invalid_credentials
+FAILED ../tests/test_final_state.py::test_login_valid_credentials_and_admin_flow
+========================= 1 failed, 3 passed in 1.66s ==========================

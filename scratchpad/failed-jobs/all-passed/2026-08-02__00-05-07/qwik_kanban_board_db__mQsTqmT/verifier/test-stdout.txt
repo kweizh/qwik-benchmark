@@ -1,0 +1,22 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 6 items
+
+../tests/test_final_state.py ......                                      [100%]
+
+==================================== PASSES ====================================
+_________________________ test_01_initial_state_empty __________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_app' started pid=2006
+qwik_app process startup detected
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_01_initial_state_empty
+PASSED ../tests/test_final_state.py::test_02_add_tasks
+PASSED ../tests/test_final_state.py::test_03_move_task_to_another_column
+PASSED ../tests/test_final_state.py::test_04_move_task_within_column
+PASSED ../tests/test_final_state.py::test_05_validation_and_error_handling
+PASSED ../tests/test_final_state.py::test_06_ui_rendering
+============================== 6 passed in 1.81s ===============================

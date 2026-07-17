@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T17:35:44.960023+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 4,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785605743057,
+            "stop": 1785605744959
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_database_initial_state",
+                "status": "passed",
+                "duration": 1,
+                "start": 1785605743192,
+                "stop": 1785605743193,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unauthorized_route",
+                "status": "passed",
+                "duration": 1631,
+                "start": 1785605743193,
+                "stop": 1785605744824,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unauthenticated_access",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 51,
+                "start": 1785605744824,
+                "stop": 1785605744875,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_unauthenticated_access(start_app):\n        \"\"\"Verify unauthenticated access to `/profile` and `/admin/users` is rejected or redirected.\"\"\"\n        # Profile\n        resp_profile = requests.get(f\"{BASE_URL}/profile\", allow_redirects=False)\n>       assert resp_profile.status_code in [403, 302, 307, 308], \\\n            f\"Expected 403 or redirect for unauthenticated /profile, got {resp_profile.status_code}\"\nE       AssertionError: Expected 403 or redirect for unauthenticated /profile, got 301\nE       assert 301 in [403, 302, 307, 308]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:107: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_profile_access_with_user_role",
+                "status": "passed",
+                "duration": 11,
+                "start": 1785605744876,
+                "stop": 1785605744887,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_admin_users_access_with_user_role",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 28,
+                "start": 1785605744887,
+                "stop": 1785605744915,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_admin_users_access_with_user_role(start_app):\n        \"\"\"Verify that a user with USER role is rejected or redirected from `/admin/users`.\"\"\"\n        cookies = {\"session_email\": \"user@example.com\"}\n        resp = requests.get(f\"{BASE_URL}/admin/users\", cookies=cookies, allow_redirects=False)\n>       assert resp.status_code in [403, 302, 307, 308], \\\n            f\"Expected 403 or redirect for unauthorized access, got {resp.status_code}\"\nE       AssertionError: Expected 403 or redirect for unauthorized access, got 301\nE       assert 301 in [403, 302, 307, 308]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:136: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_admin_users_access_with_admin_role",
+                "status": "passed",
+                "duration": 14,
+                "start": 1785605744915,
+                "stop": 1785605744929,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_role_update_and_authorization",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 29,
+                "start": 1785605744930,
+                "stop": 1785605744959,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_role_update_and_authorization(start_app):\n        \"\"\"\n        Verify that an ADMIN can update a user's role via the routeAction$,\n        and that a non-ADMIN cannot perform this action.\n        \"\"\"\n        # 1. Attempt update as non-ADMIN (user@example.com) -> should fail\n        cookies_user = {\"session_email\": \"user@example.com\"}\n    \n        # First get the action ID from the admin page (since the user cannot access `/admin/users` to get the action ID,\n        # we can retrieve it using the admin's session first).\n        cookies_admin = {\"session_email\": \"admin@example.com\"}\n        resp_admin_page = requests.get(f\"{BASE_URL}/admin/users\", cookies=cookies_admin)\n        assert resp_admin_page.status_code == 200\n    \n        soup = BeautifulSoup(resp_admin_page.text, \"html.parser\")\n        qaction_input = soup.find(\"input\", {\"name\": \"_qaction\"})\n>       assert qaction_input is not None, \"Could not find Qwik routeAction ID (_qaction) in form\"\nE       AssertionError: Could not find Qwik routeAction ID (_qaction) in form\nE       assert None is not None\n\n/tests/test_final_state.py:168: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

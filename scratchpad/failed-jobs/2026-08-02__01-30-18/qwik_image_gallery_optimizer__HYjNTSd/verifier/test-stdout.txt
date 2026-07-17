@@ -1,0 +1,35 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 1 item
+
+../tests/test_final_state.py .                                           [100%]
+
+==================================== PASSES ====================================
+___________________________ test_image_gallery_flow ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_qwik_app$ npm run dev -- --host 127.0.0.1
+process 'start_qwik_app' started pid=2306
+start_qwik_app process startup detected
+============================== [STARTED: Begin] Captured start_qwik_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 543 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] Captured start_qwik_app logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_qwik_app logfile ==============================
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [TEARDOWN: End  ] Captured start_qwik_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_image_gallery_flow
+========================= 1 passed in 60.52s (0:01:00) =========================

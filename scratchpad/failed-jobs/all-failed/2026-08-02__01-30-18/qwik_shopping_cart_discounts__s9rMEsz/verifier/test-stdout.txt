@@ -1,0 +1,766 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 9 items
+
+../tests/test_final_state.py FEEEEEEEE                                   [100%]
+
+==================================== ERRORS ====================================
+____________________ ERROR at setup of test_api_empty_cart _____________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --host 127.0.0.1
+process 'qwik_app' started pid=1498
+=== [FAILED] App Logs ===
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 525 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+  🚧 Please note that development mode is slower than production.
+
+========================
+___________________ ERROR at setup of test_api_cart_updates ____________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+__________________ ERROR at setup of test_api_coupon_percent ___________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+________________ ERROR at setup of test_api_coupon_invalidation ________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+__________________ ERROR at setup of test_api_invalid_coupon ___________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+___________________ ERROR at setup of test_api_coupon_fixed ____________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+____________________ ERROR at setup of test_api_coupon_bogo ____________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+_____________________ ERROR at setup of test_ui_html_page ______________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7126e661ede0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application using xprocess and confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 120
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Check if the port is open and accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Try to hit the cart API to ensure the server is fully ready
+                    resp = requests.get(f"{BASE_URL}/api/cart", timeout=5)
+                    return resp.status_code == 200
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            printed_log_lines = len(all_lines)
+            print(f"=== [{tag}] App Logs ===")
+            print("".join(new_lines))
+            print("========================")
+    
+        try:
+            xprocess.ensure(Starter.name, Starter)
+            capture_logs("STARTED")
+        except Exception as e:
+            capture_logs("FAILED")
+>           raise e
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/tests/test_final_state.py:60: in start_app
+    xprocess.ensure(Starter.name, Starter)
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7126e661c3e0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 120                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+=================================== FAILURES ===================================
+_________________________ test_database_initialization _________________________
+
+    def test_database_initialization():
+        """
+        Verify that the SQLite database exists and is populated with the correct tables and seed data.
+        """
+        assert os.path.isfile(DB_PATH), f"Database file not found at {DB_PATH}"
+    
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+    
+        # Verify tables exist
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = [row[0] for row in cursor.fetchall()]
+        for expected_table in ["Product", "Coupon", "CartItem", "ActiveCoupon"]:
+            assert expected_table in tables, f"Table '{expected_table}' is missing from the database."
+    
+        # Verify Products are seeded
+        cursor.execute("SELECT id, name, price FROM Product ORDER BY id;")
+        products = cursor.fetchall()
+        expected_products = [
+            (1, "Wireless Mouse", 25.0),
+            (2, "Mechanical Keyboard", 80.0),
+            (3, "USB-C Cable", 10.0)
+        ]
+>       assert len(products) == len(expected_products), f"Expected {len(expected_products)} products, got {len(products)}."
+E       AssertionError: Expected 3 products, got 4.
+E       assert 4 == 3
+E        +  where 4 = len([(1, 'Laptop', 999.99), (2, 'Wireless Mouse', 29.99), (3, 'Mechanical Keyboard', 79.99), (4, 'USB-C Cable', 9.99)])
+E        +  and   3 = len([(1, 'Wireless Mouse', 25.0), (2, 'Mechanical Keyboard', 80.0), (3, 'USB-C Cable', 10.0)])
+
+/tests/test_final_state.py:95: AssertionError
+=========================== short test summary info ============================
+ERROR ../tests/test_final_state.py::test_api_empty_cart - TimeoutError: The p...
+ERROR ../tests/test_final_state.py::test_api_cart_updates - TimeoutError: The...
+ERROR ../tests/test_final_state.py::test_api_coupon_percent - TimeoutError: T...
+ERROR ../tests/test_final_state.py::test_api_coupon_invalidation - TimeoutErr...
+ERROR ../tests/test_final_state.py::test_api_invalid_coupon - TimeoutError: T...
+ERROR ../tests/test_final_state.py::test_api_coupon_fixed - TimeoutError: The...
+ERROR ../tests/test_final_state.py::test_api_coupon_bogo - TimeoutError: The ...
+ERROR ../tests/test_final_state.py::test_ui_html_page - TimeoutError: The pro...
+FAILED ../tests/test_final_state.py::test_database_initialization - Assertion...
+=================== 1 failed, 8 errors in 120.20s (0:02:00) ====================

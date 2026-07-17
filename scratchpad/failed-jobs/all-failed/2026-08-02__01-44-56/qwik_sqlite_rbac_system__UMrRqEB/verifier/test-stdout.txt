@@ -1,0 +1,97 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 7 items
+
+../tests/test_final_state.py ..F.F.F                                     [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_unauthenticated_access __________________________
+
+start_app = None
+
+    def test_unauthenticated_access(start_app):
+        """Verify unauthenticated access to `/profile` and `/admin/users` is rejected or redirected."""
+        # Profile
+        resp_profile = requests.get(f"{BASE_URL}/profile", allow_redirects=False)
+>       assert resp_profile.status_code in [403, 302, 307, 308], \
+            f"Expected 403 or redirect for unauthenticated /profile, got {resp_profile.status_code}"
+E       AssertionError: Expected 403 or redirect for unauthenticated /profile, got 301
+E       assert 301 in [403, 302, 307, 308]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:107: AssertionError
+____________________ test_admin_users_access_with_user_role ____________________
+
+start_app = None
+
+    def test_admin_users_access_with_user_role(start_app):
+        """Verify that a user with USER role is rejected or redirected from `/admin/users`."""
+        cookies = {"session_email": "user@example.com"}
+        resp = requests.get(f"{BASE_URL}/admin/users", cookies=cookies, allow_redirects=False)
+>       assert resp.status_code in [403, 302, 307, 308], \
+            f"Expected 403 or redirect for unauthorized access, got {resp.status_code}"
+E       AssertionError: Expected 403 or redirect for unauthorized access, got 301
+E       assert 301 in [403, 302, 307, 308]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:136: AssertionError
+______________________ test_role_update_and_authorization ______________________
+
+start_app = None
+
+    def test_role_update_and_authorization(start_app):
+        """
+        Verify that an ADMIN can update a user's role via the routeAction$,
+        and that a non-ADMIN cannot perform this action.
+        """
+        # 1. Attempt update as non-ADMIN (user@example.com) -> should fail
+        cookies_user = {"session_email": "user@example.com"}
+    
+        # First get the action ID from the admin page (since the user cannot access `/admin/users` to get the action ID,
+        # we can retrieve it using the admin's session first).
+        cookies_admin = {"session_email": "admin@example.com"}
+        resp_admin_page = requests.get(f"{BASE_URL}/admin/users", cookies=cookies_admin)
+        assert resp_admin_page.status_code == 200
+    
+        soup = BeautifulSoup(resp_admin_page.text, "html.parser")
+        qaction_input = soup.find("input", {"name": "_qaction"})
+>       assert qaction_input is not None, "Could not find Qwik routeAction ID (_qaction) in form"
+E       AssertionError: Could not find Qwik routeAction ID (_qaction) in form
+E       assert None is not None
+
+/tests/test_final_state.py:168: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+=== [TEARDOWN] Captured qwik_app logs ===
+
+=========================================
+==================================== PASSES ====================================
+___________________________ test_unauthorized_route ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_app' started pid=1858
+qwik_app process startup detected
+=== [STARTED] Captured qwik_app logs ===
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 539 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+=========================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_database_initial_state
+PASSED ../tests/test_final_state.py::test_unauthorized_route
+PASSED ../tests/test_final_state.py::test_profile_access_with_user_role
+PASSED ../tests/test_final_state.py::test_admin_users_access_with_admin_role
+FAILED ../tests/test_final_state.py::test_unauthenticated_access - AssertionE...
+FAILED ../tests/test_final_state.py::test_admin_users_access_with_user_role
+FAILED ../tests/test_final_state.py::test_role_update_and_authorization - Ass...
+========================= 3 failed, 4 passed in 1.91s ==========================

@@ -1,0 +1,85 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 6 items
+
+../tests/test_final_state.py ...FF.                                      [100%]
+
+=================================== FAILURES ===================================
+________________________ test_theme_submission_success _________________________
+
+start_app = None
+
+    def test_theme_submission_success(start_app):
+        """
+        Verify that submitting valid values saves them to the user_theme cookie and redirects back to /theme.
+        """
+        data = {
+            "primaryColor": "#00ff00",
+            "fontSize": "18px",
+            "borderRadius": "8px"
+        }
+    
+        response = requests.post(f"{BASE_URL}/theme", data=data, allow_redirects=False)
+    
+        # Expect redirect
+>       assert response.status_code in [302, 303], f"Expected redirect status 302 or 303, got {response.status_code}"
+E       AssertionError: Expected redirect status 302 or 303, got 301
+E       assert 301 in [302, 303]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:181: AssertionError
+___________________ test_theme_submission_validation_errors ____________________
+
+start_app = None
+
+    def test_theme_submission_validation_errors(start_app):
+        """
+        Verify server-side validation rejects invalid values and returns 400 Bad Request with custom error messages.
+        """
+        # 1. Invalid primaryColor
+        invalid_color_data = {
+            "primaryColor": "red",  # invalid hex
+            "fontSize": "18px",
+            "borderRadius": "8px"
+        }
+        response = requests.post(f"{BASE_URL}/theme", data=invalid_color_data, allow_redirects=False)
+>       assert response.status_code == 400, f"Expected status 400 for invalid primaryColor, got {response.status_code}"
+E       AssertionError: Expected status 400 for invalid primaryColor, got 301
+E       assert 301 == 400
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:217: AssertionError
+==================================== PASSES ====================================
+_________________________ test_default_theme_no_cookie _________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'qwik_app' started pid=1345
+qwik_app process startup detected
+=== [STARTED] Captured qwik_app logs ===
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 601 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+=========================================
+--------------------------- Captured stdout teardown ---------------------------
+=== [TEARDOWN] Captured qwik_app logs ===
+
+  🚧 Please note that development mode is slower than production.
+
+=========================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_default_theme_no_cookie
+PASSED ../tests/test_final_state.py::test_theme_with_cookie
+PASSED ../tests/test_final_state.py::test_theme_form_populated
+PASSED ../tests/test_final_state.py::test_theme_reset
+FAILED ../tests/test_final_state.py::test_theme_submission_success - Assertio...
+FAILED ../tests/test_final_state.py::test_theme_submission_validation_errors
+========================= 2 failed, 4 passed in 1.84s ==========================

@@ -1,0 +1,131 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T17:52:26.705032+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 9,
+            "passed": 2,
+            "failed": 7,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785606745115,
+            "stop": 1785606746704
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_database_initialization",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 16,
+                "start": 1785606745231,
+                "stop": 1785606745247,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_database_initialization():\n        \"\"\"\n        Verify that the SQLite database exists and is populated with the correct tables and seed data.\n        \"\"\"\n        assert os.path.isfile(DB_PATH), f\"Database file not found at {DB_PATH}\"\n    \n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n    \n        # Verify tables exist\n        cursor.execute(\"SELECT name FROM sqlite_master WHERE type='table';\")\n        tables = [row[0] for row in cursor.fetchall()]\n        for expected_table in [\"Product\", \"Coupon\", \"CartItem\", \"ActiveCoupon\"]:\n            assert expected_table in tables, f\"Table '{expected_table}' is missing from the database.\"\n    \n        # Verify Products are seeded\n        cursor.execute(\"SELECT id, name, price FROM Product ORDER BY id;\")\n        products = cursor.fetchall()\n        expected_products = [\n            (1, \"Wireless Mouse\", 25.0),\n            (2, \"Mechanical Keyboard\", 80.0),\n            (3, \"USB-C Cable\", 10.0)\n        ]\n>       assert len(products) == len(expected_products), f\"Expected {len(expected_products)} products, got {len(products)}.\"\nE       AssertionError: Expected 3 products, got 5.\nE       assert 5 == 3\nE        +  where 5 = len([(1, 'Laptop', 1000.0), (2, 'Headphones', 100.0), (3, 'Socks', 10.0), (4, 'T-Shirt', 20.0), (5, 'Coffee Mug', 15.0)])\nE        +  and   3 = len([(1, 'Wireless Mouse', 25.0), (2, 'Mechanical Keyboard', 80.0), (3, 'USB-C Cable', 10.0)])\n\n/tests/test_final_state.py:95: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_api_empty_cart",
+                "status": "passed",
+                "duration": 1109,
+                "start": 1785606745247,
+                "stop": 1785606746356,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_api_cart_updates",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 10,
+                "start": 1785606746356,
+                "stop": 1785606746366,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_api_cart_updates(start_app):\n        \"\"\"\n        Verify updating item quantities in the cart.\n        \"\"\"\n        # Add Wireless Mouse x2 (Price: 25.0 each)\n        resp = requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"update\", \"productId\": 1, \"quantity\": 2})\n        assert resp.status_code == 200, f\"Update quantity failed: {resp.text}\"\n        data = resp.json()\n    \n        assert len(data[\"items\"]) == 1, \"Expected 1 item in cart.\"\n        item = data[\"items\"][0]\n        assert item[\"productId\"] == 1\n>       assert item[\"name\"] == \"Wireless Mouse\"\nE       AssertionError: assert 'Laptop' == 'Wireless Mouse'\nE         - Wireless Mouse\nE         + Laptop\n\n/tests/test_final_state.py:154: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_api_coupon_percent",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 8,
+                "start": 1785606746366,
+                "stop": 1785606746374,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_api_coupon_percent(start_app):\n        \"\"\"\n        Verify applying a PERCENT coupon.\n        \"\"\"\n        # Apply PERCENT15 coupon (15% off, minSpend 50.0). Subtotal is 60.0.\n        resp = requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"applyCoupon\", \"code\": \"PERCENT15\"})\n        assert resp.status_code == 200, f\"Apply coupon failed: {resp.text}\"\n        data = resp.json()\n    \n>       assert data[\"coupon\"] is not None, \"Expected coupon to be applied.\"\nE       AssertionError: Expected coupon to be applied.\nE       assert None is not None\n\n/tests/test_final_state.py:187: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_api_coupon_invalidation",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 39,
+                "start": 1785606746374,
+                "stop": 1785606746413,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_api_coupon_invalidation(start_app):\n        \"\"\"\n        Verify that decreasing quantity below minSpend invalidates the coupon.\n        \"\"\"\n        # Decrease Wireless Mouse quantity to 1. Subtotal becomes 1 * 25.0 + 1 * 10.0 = 35.0.\n        # Since 35.0 < minSpend (50.0), PERCENT15 must be invalidated/removed.\n        resp = requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"update\", \"productId\": 1, \"quantity\": 1})\n        assert resp.status_code == 200, f\"Update quantity failed: {resp.text}\"\n        data = resp.json()\n    \n        assert data[\"coupon\"] is None, \"Expected coupon to be invalidated and removed.\"\n>       assert abs(data[\"subtotal\"] - 35.0) < 1e-5\nE       assert 965.0 < 1e-05\nE        +  where 965.0 = abs((1000 - 35.0))\n\n/tests/test_final_state.py:206: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_api_invalid_coupon",
+                "status": "passed",
+                "duration": 3,
+                "start": 1785606746413,
+                "stop": 1785606746416,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_api_coupon_fixed",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 10,
+                "start": 1785606746416,
+                "stop": 1785606746426,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_api_coupon_fixed(start_app):\n        \"\"\"\n        Verify applying a FIXED coupon.\n        \"\"\"\n        # Add Mechanical Keyboard x1 (Price: 80.0). Subtotal is 35.0 + 80.0 = 115.0.\n        resp = requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"update\", \"productId\": 2, \"quantity\": 1})\n        assert resp.status_code == 200, f\"Update quantity failed: {resp.text}\"\n    \n        # Apply FLAT20 coupon ($20 off, minSpend 100.0). Subtotal is 115.0.\n        resp = requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"applyCoupon\", \"code\": \"FLAT20\"})\n        assert resp.status_code == 200, f\"Apply coupon failed: {resp.text}\"\n        data = resp.json()\n    \n>       assert data[\"coupon\"] is not None\nE       assert None is not None\n\n/tests/test_final_state.py:238: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_api_coupon_bogo",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 12,
+                "start": 1785606746426,
+                "stop": 1785606746438,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_api_coupon_bogo(start_app):\n        \"\"\"\n        Verify applying a BOGO coupon.\n        \"\"\"\n        # Clear the cart first\n        requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"clear\"})\n    \n        # Add Mechanical Keyboard x3 (Price: 80.0 each). Subtotal is 240.0.\n        resp = requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"update\", \"productId\": 2, \"quantity\": 3})\n        assert resp.status_code == 200\n    \n        # Apply KEYBOARDSBOGO coupon (BOGO on product ID 2, minSpend 0.0).\n        resp = requests.post(f\"{BASE_URL}/api/cart\", json={\"action\": \"applyCoupon\", \"code\": \"KEYBOARDSBOGO\"})\n        assert resp.status_code == 200, f\"Apply BOGO coupon failed: {resp.text}\"\n        data = resp.json()\n    \n>       assert data[\"coupon\"] is not None\nE       assert None is not None\n\n/tests/test_final_state.py:262: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_ui_html_page",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 266,
+                "start": 1785606746438,
+                "stop": 1785606746704,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_ui_html_page(start_app):\n        \"\"\"\n        Verify that GET /cart renders the correct HTML containing cart details.\n        \"\"\"\n        resp = requests.get(f\"{BASE_URL}/cart\")\n        assert resp.status_code == 200, f\"GET /cart failed: {resp.text}\"\n        html_content = resp.text\n    \n        # The page should show the items and recalculated totals\n>       assert \"Mechanical Keyboard\" in html_content, \"UI page missing item name 'Mechanical Keyboard'\"\nE       AssertionError: UI page missing item name 'Mechanical Keyboard'\nE       assert 'Mechanical Keyboard' in '<!DOCTYPE html><html lang=\"en-us\" q:route=\"/cart/\" q:container=\"paused\" q:version=\"1.20.0\" q:render=\"ssr-dev\" q:base=...istener(\\'resize\\', updateOverlay);\\n    document.addEventListener(\\'scroll\\', updateOverlay);\\n  })();\\n</script>\\n\\n'\n\n/tests/test_final_state.py:279: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,83 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 7 items
+
+../tests/test_final_state.py .F.F...                                     [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_api_ping_logged _____________________________
+
+start_app = None
+
+    def test_api_ping_logged(start_app):
+        """Verify that requests to /api/ping are logged with correct details."""
+        response = requests.get(f"{BASE_URL}/api/ping")
+        assert response.status_code == 200, "Failed to load /api/ping"
+        assert response.json() == {"ping": "pong"}, f"Unexpected response from /api/ping: {response.text}"
+    
+        # Verify database log entry
+        assert os.path.exists(DB_PATH), "Database file activity.db was not created."
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("SELECT * FROM ActivityLog ORDER BY id DESC LIMIT 1")
+            row = cursor.fetchone()
+            assert row is not None, "No log entry found in ActivityLog table."
+>           assert row["path"] == "/api/ping", f"Expected path '/api/ping', got '{row['path']}'"
+E           AssertionError: Expected path '/api/ping', got '/admin/activity/'
+E           assert '/admin/activity/' == '/api/ping'
+E             - /api/ping
+E             + /admin/activity/
+
+/tests/test_final_state.py:134: AssertionError
+________________________ test_api_slow_timing_accuracy _________________________
+
+start_app = None
+
+    def test_api_slow_timing_accuracy(start_app):
+        """Verify that the slow endpoint delays properly and the duration logged is accurate."""
+        delay_ms = 350
+        start_time = time.time()
+        response = requests.get(f"{BASE_URL}/api/slow?delay={delay_ms}")
+        end_time = time.time()
+    
+        assert response.status_code == 200, "Failed to load /api/slow"
+>       assert response.json() == {"delayed": true, "delay": delay_ms}, f"Unexpected response: {response.text}"
+E       NameError: name 'true' is not defined
+
+/tests/test_final_state.py:172: NameError
+==================================== PASSES ====================================
+_________________________ test_public_page_not_logged __________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_app' started pid=1896
+qwik_app process startup detected
+============================== [STARTED] Captured logs ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 567 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+====================================================================================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN] Captured logs ==============================
+
+  🚧 Please note that development mode is slower than production.
+
+====================================================================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_public_page_not_logged
+PASSED ../tests/test_final_state.py::test_admin_dashboard_logged
+PASSED ../tests/test_final_state.py::test_admin_activity_json
+PASSED ../tests/test_final_state.py::test_admin_activity_html
+PASSED ../tests/test_final_state.py::test_concurrency_robustness
+FAILED ../tests/test_final_state.py::test_api_ping_logged - AssertionError: E...
+FAILED ../tests/test_final_state.py::test_api_slow_timing_accuracy - NameErro...
+==================== 2 failed, 5 passed in 65.53s (0:01:05) ====================

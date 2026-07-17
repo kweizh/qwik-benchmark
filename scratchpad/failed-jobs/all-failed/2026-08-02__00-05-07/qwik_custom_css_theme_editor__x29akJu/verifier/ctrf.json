@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T16:15:30.421760+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 3,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785600928702,
+            "stop": 1785600930421
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_default_theme_no_cookie",
+                "status": "passed",
+                "duration": 1545,
+                "start": 1785600928778,
+                "stop": 1785600930323,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_theme_with_cookie",
+                "status": "passed",
+                "duration": 9,
+                "start": 1785600930323,
+                "stop": 1785600930332,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_theme_form_populated",
+                "status": "passed",
+                "duration": 7,
+                "start": 1785600930332,
+                "stop": 1785600930339,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_theme_submission_success",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 19,
+                "start": 1785600930339,
+                "stop": 1785600930358,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_theme_submission_success(start_app):\n        \"\"\"\n        Verify that submitting valid values saves them to the user_theme cookie and redirects back to /theme.\n        \"\"\"\n        data = {\n            \"primaryColor\": \"#00ff00\",\n            \"fontSize\": \"18px\",\n            \"borderRadius\": \"8px\"\n        }\n    \n        response = requests.post(f\"{BASE_URL}/theme\", data=data, allow_redirects=False)\n    \n        # Expect redirect\n>       assert response.status_code in [302, 303], f\"Expected redirect status 302 or 303, got {response.status_code}\"\nE       AssertionError: Expected redirect status 302 or 303, got 301\nE       assert 301 in [302, 303]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:181: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_theme_submission_validation_errors",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 48,
+                "start": 1785600930359,
+                "stop": 1785600930407,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_theme_submission_validation_errors(start_app):\n        \"\"\"\n        Verify server-side validation rejects invalid values and returns 400 Bad Request with custom error messages.\n        \"\"\"\n        # 1. Invalid primaryColor\n        invalid_color_data = {\n            \"primaryColor\": \"red\",  # invalid hex\n            \"fontSize\": \"18px\",\n            \"borderRadius\": \"8px\"\n        }\n        response = requests.post(f\"{BASE_URL}/theme\", data=invalid_color_data, allow_redirects=False)\n>       assert response.status_code == 400, f\"Expected status 400 for invalid primaryColor, got {response.status_code}\"\nE       AssertionError: Expected status 400 for invalid primaryColor, got 301\nE       assert 301 == 400\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:217: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_theme_reset",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 14,
+                "start": 1785600930407,
+                "stop": 1785600930421,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_theme_reset(start_app):\n        \"\"\"\n        Verify that posting to /theme/reset clears the user_theme cookie and redirects to /theme.\n        \"\"\"\n        theme_data = {\n            \"primaryColor\": \"#ff5722\",\n            \"fontSize\": \"20px\",\n            \"borderRadius\": \"12px\"\n        }\n        cookie_value = urllib.parse.quote(json.dumps(theme_data))\n        cookies = {\"user_theme\": cookie_value}\n    \n        response = requests.post(f\"{BASE_URL}/theme/reset\", cookies=cookies, allow_redirects=False)\n    \n        # Expect redirect\n        assert response.status_code in [302, 303], f\"Expected redirect status 302 or 303, got {response.status_code}\"\n    \n        # Verify redirect location\n        location = response.headers.get(\"Location\", \"\")\n>       assert location.endswith(\"/theme\") or location == \"/theme\", f\"Expected redirect to /theme, got {location}\"\nE       AssertionError: Expected redirect to /theme, got /theme/\nE       assert (False or '/theme/' == '/theme'\nE        +  where False = <built-in method endswith of str object at 0x711df4b92370>('/theme')\nE        +    where <built-in method endswith of str object at 0x711df4b92370> = '/theme/'.endswith\nE         - /theme\nE         + /theme/\nE         ?       +)\n\n/tests/test_final_state.py:263: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

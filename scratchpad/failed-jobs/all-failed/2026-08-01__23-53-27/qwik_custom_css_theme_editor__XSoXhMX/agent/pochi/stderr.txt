@@ -1,0 +1,69 @@
+[37m2026-08-01 15:54:41.112[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	pochi v0.6.20
+[37m2026-08-01 15:54:41.117[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	PochiConfigManager[39m[22m[0m[0m	add workspace config: /root/.pochi/config.jsonc
+[37m2026-08-01 15:54:41.397[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	BuiltInBundle[39m[22m[0m[0m	Materializing 16 built-in files to /tmp/pochi-builtin-ef402bc2bbe8f440
+[37m2026-08-01 15:54:41.617[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:532913[39m[0m[0m[1m[37m	loadAgents[39m[22m[0m[0m	Loaded 6 custom agents (6 valid, 0 invalid)
+[37m2026-08-01 15:54:41.701[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:532914[39m[0m[0m[1m[37m	loadSkills[39m[22m[0m[0m	Loaded 3 skills (3 valid, 0 invalid)
+[37m2026-08-01 15:54:41.723[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:443306[39m[0m[0m[1m[37m	PochiVendor[39m[22m[0m[0m	JWT is expiring or missing, fetching a new one
+[37m2026-08-01 15:54:43.216[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:419194[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	MCP servers configuration changed via signal:
+[37m2026-08-01 15:54:43.216[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:419306[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	Build MCPHub Status
+[37m2026-08-01 15:54:43.329[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Starting task runner...
+[37m2026-08-01 15:54:43.440[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: null, new: # Qwik Custom CSS Theme Editor
+[37m2026-08-01 15:54:52.497[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531016[39m[0m[0m[1m[37m	listFiles[39m[22m[0m[0m	handling listFile with dirPath /home/user/qwik-app and recursive [90mundefined[39m
+[37m2026-08-01 15:54:54.590[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531016[39m[0m[0m[1m[37m	listFiles[39m[22m[0m[0m	handling listFile with dirPath /home/user/qwik-app/src and recursive [33mtrue[39m
+[37m2026-08-01 15:54:55.033[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: # Qwik Custom CSS Theme Editor, new: Implement a Qwik Custom CSS Theme Editor
+[37m2026-08-01 15:54:56.843[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/src/root.tsx" resolvedPath="/home/user/qwik-app/src/root.tsx" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 15:54:56.843[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 15:54:56.844[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/src/entry.ssr.tsx" resolvedPath="/home/user/qwik-app/src/entry.ssr.tsx" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 15:54:56.844[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 15:54:56.844[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/src/routes/index.tsx" resolvedPath="/home/user/qwik-app/src/routes/index.tsx" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 15:54:56.844[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 15:54:56.845[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/src/root.tsx" mtime=1785599639699 contentLen=834
+[37m2026-08-01 15:54:56.846[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/src/entry.ssr.tsx" mtime=1785599639697 contentLen=701
+[37m2026-08-01 15:54:56.847[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/src/routes/index.tsx" mtime=1785599639699 contentLen=474
+[37m2026-08-01 15:54:58.663[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/src/components/router-head/router-head.tsx" resolvedPath="/home/user/qwik-app/src/components/router-head/router-head.tsx" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 15:54:58.664[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 15:54:58.664[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/src/components/router-head/router-head.tsx" mtime=1785599639699 contentLen=1203
+[37m2026-08-01 15:55:00.956[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/package.json" resolvedPath="/home/user/qwik-app/package.json" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-08-01 15:55:00.956[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 15:55:00.957[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/package.json" mtime=1785599639699 contentLen=1368
+[37m2026-08-01 15:55:07.158[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531016[39m[0m[0m[1m[37m	listFiles[39m[22m[0m[0m	handling listFile with dirPath /home/user/qwik-app/src/routes and recursive [33mtrue[39m
+[37m2026-08-01 15:55:39.351[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-app serverData [90mundefined[39m
+[37m2026-08-01 15:55:39.351[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'serverData'[39m,
+  [32m'/home/user/qwik-app'[39m
+]
+[37m2026-08-01 15:55:44.605[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-app/node_modules/@builder.io/qwik-city serverData [90mundefined[39m
+[37m2026-08-01 15:55:44.605[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'serverData'[39m,
+  [32m'/home/user/qwik-app/node_modules/@builder.io/qwik-city'[39m
+]
+[37m2026-08-01 15:55:47.210[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.mjs" resolvedPath="/home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.mjs" isVirtual=false cacheExists=true shouldCache=true startLine=1450 endLine=1480
+[37m2026-08-01 15:55:47.211[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-08-01 15:55:47.214[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.mjs" mtime=1785599650089 contentLen=1244
+[37m2026-08-01 15:55:49.553[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-app/node_modules/@builder.io/qwik-city function getQwikCityServerData [90mundefined[39m
+[37m2026-08-01 15:55:49.553[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'function getQwikCityServerData'[39m,
+  [32m'/home/user/qwik-app/node_modules/@builder.io/qwik-city'[39m
+]
+[37m2026-08-01 15:55:52.006[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.mjs" resolvedPath="/home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.mjs" isVirtual=false cacheExists=true shouldCache=true startLine=1020 endLine=1050
+[37m2026-08-01 15:55:52.006[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState={startLine=1450, endLine=1480, timestamp=1785599650089}
+[37m2026-08-01 15:55:52.011[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.mjs" mtime=1785599650089 contentLen=1149
+[37m2026-08-01 15:56:05.941[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:530993[39m[0m[0m[1m[37m	globFiles[39m[22m[0m[0m	handling globFiles with searchPath: /home/user/qwik-app and pattern **/*.spec.*
+[37m2026-08-01 15:56:05.951[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	globFiles[39m[22m[0m[0m	Found 0 files matching pattern **/*.spec.*
+[37m2026-08-01 15:56:08.512[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:530993[39m[0m[0m[1m[37m	globFiles[39m[22m[0m[0m	handling globFiles with searchPath: /home/user/qwik-app and pattern **/*.test.*
+[37m2026-08-01 15:56:08.520[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	globFiles[39m[22m[0m[0m	Found 0 files matching pattern **/*.test.*

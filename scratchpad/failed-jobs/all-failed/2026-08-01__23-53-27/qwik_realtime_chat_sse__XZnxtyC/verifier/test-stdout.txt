@@ -1,0 +1,187 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 6 items
+
+../tests/test_final_state.py ..F...                                      [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_sse_headers_and_initial_stream ______________________
+
+self = <urllib3.response.HTTPResponse object at 0x7046a95c9720>
+
+    @contextmanager
+    def _error_catcher(self) -> typing.Generator[None]:
+        """
+        Catch low-level python exceptions, instead re-raising urllib3
+        variants, so that low-level exceptions are not leaked in the
+        high-level api.
+    
+        On exit, release the connection back to the pool.
+        """
+        clean_exit = False
+    
+        try:
+            try:
+>               yield
+
+/usr/local/lib/python3.12/dist-packages/urllib3/response.py:905: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/urllib3/response.py:1430: in read_chunked
+    self._update_chunk_length()
+/usr/local/lib/python3.12/dist-packages/urllib3/response.py:1343: in _update_chunk_length
+    line = self._fp.fp.readline()  # type: ignore[union-attr]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.SocketIO object at 0x7046a95ca680>
+b = <memory at 0x7046a95d8880>
+
+    def readinto(self, b):
+        """Read up to len(b) bytes into the writable buffer *b* and return
+        the number of bytes read.  If the socket is non-blocking and no bytes
+        are available, None is returned.
+    
+        If *b* is non-empty, a 0 return value indicates that the connection
+        was shutdown at the other end.
+        """
+        self._checkClosed()
+        self._checkReadable()
+        if self._timeout_occurred:
+            raise OSError("cannot read from timed out object")
+        while True:
+            try:
+>               return self._sock.recv_into(b)
+E               TimeoutError: timed out
+
+/usr/lib/python3.12/socket.py:707: TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+    def generate() -> Generator[bytes, None, None]:
+        # Special case for urllib3.
+        if hasattr(self.raw, "stream"):
+            try:
+>               yield from self.raw.stream(chunk_size, decode_content=True)
+
+/usr/local/lib/python3.12/dist-packages/requests/models.py:937: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/urllib3/response.py:1260: in stream
+    yield from self.read_chunked(amt, decode_content=decode_content)
+/usr/local/lib/python3.12/dist-packages/urllib3/response.py:1407: in read_chunked
+    with self._error_catcher():
+/usr/lib/python3.12/contextlib.py:158: in __exit__
+    self.gen.throw(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <urllib3.response.HTTPResponse object at 0x7046a95c9720>
+
+    @contextmanager
+    def _error_catcher(self) -> typing.Generator[None]:
+        """
+        Catch low-level python exceptions, instead re-raising urllib3
+        variants, so that low-level exceptions are not leaked in the
+        high-level api.
+    
+        On exit, release the connection back to the pool.
+        """
+        clean_exit = False
+    
+        try:
+            try:
+                yield
+    
+            except SocketTimeout as e:
+                # FIXME: Ideally we'd like to include the url in the ReadTimeoutError but
+                # there is yet no clean way to get at it from this context.
+>               raise ReadTimeoutError(self._pool, None, "Read timed out.") from e  # type: ignore[arg-type]
+E               urllib3.exceptions.ReadTimeoutError: HTTPConnectionPool(host='127.0.0.1', port=3000): Read timed out.
+
+/usr/local/lib/python3.12/dist-packages/urllib3/response.py:910: ReadTimeoutError
+
+During handling of the above exception, another exception occurred:
+
+start_app = None
+
+    def test_sse_headers_and_initial_stream(start_app):
+        """Verify that GET /api/messages returns the correct SSE headers and initial stream of messages."""
+        api_url = f"{BASE_URL}/api/messages"
+    
+        # Clean up and seed database with a known message to ensure deterministic initial stream
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        try:
+            cursor.execute("DELETE FROM messages")
+            cursor.execute("INSERT INTO messages (user, text, timestamp) VALUES (?, ?, ?)",
+                           ("SeedUser", "SeedText", "2026-08-01T12:00:00.000Z"))
+            conn.commit()
+        finally:
+            conn.close()
+    
+        resp = requests.get(api_url, stream=True, timeout=5)
+    
+        # Verify SSE headers
+        assert resp.headers.get("Content-Type") == "text/event-stream", \
+            f"Incorrect Content-Type header: {resp.headers.get('Content-Type')}"
+        assert resp.headers.get("Cache-Control") == "no-cache", \
+            f"Incorrect Cache-Control header: {resp.headers.get('Cache-Control')}"
+        assert resp.headers.get("Connection") == "keep-alive", \
+            f"Incorrect Connection header: {resp.headers.get('Connection')}"
+    
+        # Read the stream lines to check the seeded message
+        lines = []
+>       for line in resp.iter_lines():
+
+/tests/test_final_state.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/requests/models.py:1008: in iter_lines
+    for chunk in self.iter_content(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def generate() -> Generator[bytes, None, None]:
+        # Special case for urllib3.
+        if hasattr(self.raw, "stream"):
+            try:
+                yield from self.raw.stream(chunk_size, decode_content=True)
+            except ProtocolError as e:
+                raise ChunkedEncodingError(e)
+            except DecodeError as e:
+                raise ContentDecodingError(e)
+            except ReadTimeoutError as e:
+>               raise ConnectionError(e)
+E               requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=3000): Read timed out.
+
+/usr/local/lib/python3.12/dist-packages/requests/models.py:943: ConnectionError
+==================================== PASSES ====================================
+_____________________________ test_database_schema _____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'start_app' started pid=2044
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 567 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+(skipped 9 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_database_schema
+PASSED ../tests/test_final_state.py::test_post_message_and_validation
+PASSED ../tests/test_final_state.py::test_sse_realtime_broadcast
+PASSED ../tests/test_final_state.py::test_chat_page_html_structure
+PASSED ../tests/test_final_state.py::test_chat_page_browser_interaction
+FAILED ../tests/test_final_state.py::test_sse_headers_and_initial_stream - re...
+==================== 1 failed, 5 passed in 73.84s (0:01:13) ====================

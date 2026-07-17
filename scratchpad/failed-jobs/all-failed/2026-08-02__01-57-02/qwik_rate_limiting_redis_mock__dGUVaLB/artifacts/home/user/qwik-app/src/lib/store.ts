@@ -1,0 +1,47 @@
+class MockRedisStore {
+  private store = new Map<string, number>();
+
+  private cleanup() {
+    const currentWindowId = Math.floor(Date.now() / 10000);
+    for (const key of this.store.keys()) {
+      const parts = key.split(':');
+      const windowId = parseInt(parts[parts.length - 1], 10);
+      if (!isNaN(windowId) && windowId < currentWindowId) {
+        this.store.delete(key);
+      }
+    }
+  }
+
+  get(key: string): number | null {
+    this.cleanup();
+    return this.store.get(key) ?? null;
+  }
+
+  set(key: string, value: number) {
+    this.cleanup();
+    this.store.set(key, value);
+  }
+
+  incr(key: string): number {
+    this.cleanup();
+    const current = this.store.get(key) ?? 0;
+    const next = current + 1;
+    this.store.set(key, next);
+    return next;
+  }
+
+  getKeys(): Record<string, number> {
+    this.cleanup();
+    const result: Record<string, number> = {};
+    for (const [key, val] of this.store.entries()) {
+      result[key] = val;
+    }
+    return result;
+  }
+
+  clear() {
+    this.store.clear();
+  }
+}
+
+export const redisStore = new MockRedisStore();

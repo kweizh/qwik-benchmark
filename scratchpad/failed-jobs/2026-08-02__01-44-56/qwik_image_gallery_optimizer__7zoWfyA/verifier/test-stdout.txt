@@ -1,0 +1,108 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 1 item
+
+../tests/test_final_state.py E                                           [100%]
+
+==================================== ERRORS ====================================
+__________________ ERROR at setup of test_image_gallery_flow ___________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x76001b1b9fd0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik app using xprocess. Confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "start_qwik_app"
+            # --host 127.0.0.1 forces Vite/Qwik to bind to IPv4 loopback
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Wait until the Qwik page actually loads or at least returns a valid status
+                    resp = requests.get(BASE_URL, timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if os.path.exists(info.logpath):
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+                new_lines = all_lines[printed_log_lines:]
+                printed_log_lines = len(all_lines)
+                print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+                print("".join(new_lines))
+                print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x76001b1b99d0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_qwik_app$ npm run dev -- --host 127.0.0.1
+process 'start_qwik_app' started pid=2385
+============================== [FAILED: Begin] Captured start_qwik_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 538 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [FAILED: End  ] Captured start_qwik_app logfile ==============================
+=========================== short test summary info ============================
+ERROR ../tests/test_final_state.py::test_image_gallery_flow - TimeoutError: T...
+========================= 1 error in 180.22s (0:03:00) =========================

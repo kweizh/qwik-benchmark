@@ -1,0 +1,872 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 5 items
+
+../tests/test_final_state.py FFFFF                                       [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_get_poll_pages ______________________________
+
+start_app = None
+
+    def test_get_poll_pages(start_app):
+        """Verify that poll pages load successfully and render correct elements."""
+        # Test valid poll: frameworks
+        resp = requests.get(f"{BASE_URL}/poll/frameworks")
+        assert resp.status_code == 200, f"Expected 200 OK for /poll/frameworks, got {resp.status_code}"
+        html = resp.text
+    
+>       assert "What is your favorite frontend framework?" in html, "Poll question not found in HTML"
+E       AssertionError: Poll question not found in HTML
+E       assert 'What is your favorite frontend framework?' in "<style>\nvite-error-overlay {\n  --color-bright: rgba(255, 255, 255, 0.8);\n  --color-yellow: rgba(255,246,85,0.8);\n...             }\n            </script>\n          </head>\n          <body>\n          </body>\n        </html>\n      "
+
+/tests/test_final_state.py:87: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'start_app' started pid=1938
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 539 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+6:03:25 PM [vite] Internal server error: Too few parameter values were provided
+  File: /home/user/qwik-app/src/routes/poll/[id]/index.tsx:11:73
+  9  |      throw error(404, 'Poll not found');
+  10 |    }
+  11 |    const options = db.prepare('SELECT * FROM options WHERE poll_id = ?').all() as { id: number; poll_id: string; text: string; votes: number }[];
+     |                                                                           ^
+  12 |    return { poll, options };
+  13 |  });
+      at Object.usePollData_routeLoader_BGggp3zXbbg (/home/user/qwik-app/src/routes/poll/[id]/index.tsx:11:73)
+      at Object.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at Object.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at Object.qrl2 (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:34:30)
+      at file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26400:36
+      at measure (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26670:18)
+      at file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26397:22
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+___________________________ test_vote_api_validation ___________________________
+
+start_app = None
+
+    def test_vote_api_validation(start_app):
+        """Verify API input validation and error responses."""
+        # Invalid Option ID (non-existent option)
+        resp = requests.post(
+            f"{BASE_URL}/poll/frameworks/vote",
+            json={"optionId": 999},
+            headers={"X-Forwarded-For": "100.100.100.1"}
+        )
+>       assert resp.status_code in [404, 400], f"Expected 404 or 400 for non-existent option, got {resp.status_code}"
+E       AssertionError: Expected 404 or 400 for non-existent option, got 200
+E       assert 200 in [404, 400]
+E        +  where 200 = <Response [200]>.status_code
+
+/tests/test_final_state.py:116: AssertionError
+_______________________ test_vote_flow_and_rate_limiting _______________________
+
+self = <Response [200]>, kwargs = {}, encoding = 'utf-8'
+
+    def json(self, **kwargs: Any) -> Any:
+        r"""Decodes the JSON response body (if any) as a Python object.
+    
+        This may return a dictionary, list, etc. depending on what is in the response.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) > 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+>                   return complexjson.loads(self.content.decode(encoding), **kwargs)
+
+/usr/local/lib/python3.12/dist-packages/requests/models.py:1105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib/python3.12/json/__init__.py:346: in loads
+    return _default_decoder.decode(s)
+/usr/lib/python3.12/json/decoder.py:337: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7af8ca13eb70>
+s = "<style>\nvite-error-overlay {\n  --color-bright: rgba(255, 255, 255, 0.8);\n  --color-yellow: rgba(255,246,85,0.8);\n...             }\n            </script>\n          </head>\n          <body>\n          </body>\n        </html>\n      "
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+/usr/lib/python3.12/json/decoder.py:355: JSONDecodeError
+
+During handling of the above exception, another exception occurred:
+
+start_app = None
+
+    def test_vote_flow_and_rate_limiting(start_app):
+        """Verify voting success, database persistence, and rate limiting."""
+        # Reset any previous votes for option 1 (Qwik) in SQLite for determinism
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE options SET votes = 0 WHERE id = 1;")
+        cursor.execute("DELETE FROM votes_log WHERE poll_id = 'frameworks';")
+        conn.commit()
+        conn.close()
+    
+        # Vote 1: IP 1.2.3.4
+        resp = requests.post(
+            f"{BASE_URL}/poll/frameworks/vote",
+            json={"optionId": 1},
+            headers={"X-Forwarded-For": "1.2.3.4"}
+        )
+        assert resp.status_code == 200, f"First vote failed: {resp.text}"
+>       data = resp.json()
+
+/tests/test_final_state.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Response [200]>, kwargs = {}, encoding = 'utf-8'
+
+    def json(self, **kwargs: Any) -> Any:
+        r"""Decodes the JSON response body (if any) as a Python object.
+    
+        This may return a dictionary, list, etc. depending on what is in the response.
+    
+        :param \*\*kwargs: Optional arguments that ``json.loads`` takes.
+        :raises requests.exceptions.JSONDecodeError: If the response body does not
+            contain valid json.
+        """
+    
+        if not self.encoding and self.content and len(self.content) > 3:
+            # No encoding set. JSON RFC 4627 section 3 states we should expect
+            # UTF-8, -16 or -32. Detect which one to use; If the detection or
+            # decoding fails, fall back to `self.text` (using charset_normalizer to make
+            # a best guess).
+            encoding = guess_json_utf(self.content)
+            if encoding is not None:
+                try:
+                    return complexjson.loads(self.content.decode(encoding), **kwargs)
+                except UnicodeDecodeError:
+                    # Wrong UTF codec detected; usually because it's not UTF-8
+                    # but some other 8-bit codec.  This is an RFC violation,
+                    # and the server didn't bother to tell us what codec *was*
+                    # used.
+                    pass
+                except JSONDecodeError as e:
+>                   raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+E                   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+/usr/local/lib/python3.12/dist-packages/requests/models.py:1113: JSONDecodeError
+_______________________________ test_concurrency _______________________________
+
+start_app = None
+
+    def test_concurrency(start_app):
+        """Verify that concurrent votes from different IPs are processed correctly without race conditions."""
+        # Reset votes for option 3 (Vue)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE options SET votes = 0 WHERE id = 3;")
+        cursor.execute("DELETE FROM votes_log WHERE poll_id = 'frameworks';")
+        conn.commit()
+        conn.close()
+    
+        num_threads = 20
+        ips = [f"10.0.0.{i}" for i in range(1, num_threads + 1)]
+    
+        def cast_vote(ip):
+            try:
+                resp = requests.post(
+                    f"{BASE_URL}/poll/frameworks/vote",
+                    json={"optionId": 3},
+                    headers={"X-Forwarded-For": ip},
+                    timeout=5
+                )
+                return resp.status_code
+            except Exception as e:
+                return str(e)
+    
+        with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+            results = list(executor.map(cast_vote, ips))
+    
+        # Assert all concurrent requests succeeded with 200
+        assert results == [200] * num_threads, f"Some concurrent requests failed: {results}"
+    
+        # Verify database has exactly 20 votes
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT votes FROM options WHERE id = 3;")
+        votes = cursor.fetchone()[0]
+        conn.close()
+>       assert votes == num_threads, f"Expected exactly {num_threads} votes, but found {votes} in database."
+E       AssertionError: Expected exactly 20 votes, but found 0 in database.
+E       assert 0 == 20
+
+/tests/test_final_state.py:224: AssertionError
+_________________________ test_browser_ui_verification _________________________
+
+start_app = None
+browser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x7af8c90030b0>
+
+    def test_browser_ui_verification(start_app, browser_verifier):
+        """Verify frontend rendering and dynamic updates using PochiVerifier."""
+        # Reset votes for poll 'colors' to 0 for option 5 (Red)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE options SET votes = 0 WHERE id = 5;")
+        cursor.execute("DELETE FROM votes_log WHERE poll_id = 'colors';")
+        conn.commit()
+        conn.close()
+    
+        reason = "The poll page should render the question, an SVG bar chart of results, and allow casting a vote which dynamically updates the SVG chart."
+        truth = (
+            f"Navigate to {BASE_URL}/poll/colors. "
+            "Verify that the element with id 'poll-question' contains 'What is your favorite primary color?'. "
+            "Verify that the SVG with id 'poll-chart' is visible. "
+            "Find the vote button with data-option-id '5' (for Red) and click it. "
+            "Verify that the vote count text with data-option-id '5' inside the SVG chart is updated to '1' or contains '1'. "
+            "Verify that the SVG rect with data-option-id '5' now has a width greater than 0."
+        )
+    
+        result = browser_verifier.verify(
+            reason=reason,
+            truth=truth,
+            use_browser_agent=True,
+            trajectory_dir="/logs/verifier/pochi/test_polling_system_ui"
+        )
+>       assert result.status == "pass", f"Browser verification failed: {result.reason}"
+E       AssertionError: Browser verification failed: The test failed because navigating to http://127.0.0.1:3000/poll/colors resulted in a server-side error (500) with a Vite error overlay displaying 'Too few parameter values were provided' inside the Qwik route loader. Due to this error, the poll page, the question, and the SVG chart did not render, preventing any further verification steps from being executed.
+E       assert 'fail' == 'pass'
+E         - pass
+E         + fail
+
+/tests/test_final_state.py:253: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+(skipped 29 already-printed lines)
+6:03:25 PM [vite] Internal server error: Too few parameter values were provided
+  File: /home/user/qwik-app/src/routes/poll/[id]/index.tsx:11:73
+  9  |      throw error(404, 'Poll not found');
+  10 |    }
+  11 |    const options = db.prepare('SELECT * FROM options WHERE poll_id = ?').all() as { id: number; poll_id: string; text: string; votes: number }[];
+     |                                                                           ^
+  12 |    return { poll, options };
+  13 |  });
+      at Object.usePollData_routeLoader_BGggp3zXbbg (/home/user/qwik-app/src/routes/poll/[id]/index.tsx:11:73)
+      at Object.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at Object.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at Object.qrl2 (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:34:30)
+      at file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26400:36
+      at measure (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26670:18)
+      at file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26397:22
+Error processing vote: TypeError: Cannot read properties of undefined (reading 'forEach')
+    at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+    at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:41:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Error processing vote: RangeError: Too few parameter values were provided
+    at eval (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:85:105)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:38:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:03:25 PM [vite] Internal server error: Cannot read properties of undefined (reading 'forEach')
+  File: /home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5
+  57 |      console.error('Error processing vote:', error);
+  58 |      status(500);
+  59 |      json({ error: 'Internal server error' });
+     |       ^
+  60 |    }
+  61 |  };
+      at send (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25869:32)
+      at json (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26030:14)
+      at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:59:5)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+6:04:08 PM [vite] Internal server error: Too few parameter values were provided
+  File: /home/user/qwik-app/src/routes/poll/[id]/index.tsx:11:73
+  9  |      throw error(404, 'Poll not found');
+  10 |    }
+  11 |    const options = db.prepare('SELECT * FROM options WHERE poll_id = ?').all() as { id: number; poll_id: string; text: string; votes: number }[];
+     |                                                                           ^
+  12 |    return { poll, options };
+  13 |  });
+      at Object.usePollData_routeLoader_BGggp3zXbbg (/home/user/qwik-app/src/routes/poll/[id]/index.tsx:11:73)
+      at Object.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at Object.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at Object.qrl2 (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:34:30)
+      at file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26400:36
+      at measure (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26670:18)
+      at file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26397:22
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+FAILED ../tests/test_final_state.py::test_get_poll_pages - AssertionError: Po...
+FAILED ../tests/test_final_state.py::test_vote_api_validation - AssertionErro...
+FAILED ../tests/test_final_state.py::test_vote_flow_and_rate_limiting - reque...
+FAILED ../tests/test_final_state.py::test_concurrency - AssertionError: Expec...
+FAILED ../tests/test_final_state.py::test_browser_ui_verification - Assertion...
+========================= 5 failed in 65.75s (0:01:05) =========================

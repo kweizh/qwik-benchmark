@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T17:34:53.346248+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 4,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785605637973,
+            "stop": 1785605693346
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_public_page_not_logged",
+                "status": "passed",
+                "duration": 1306,
+                "start": 1785605638041,
+                "stop": 1785605639347,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_api_ping_logged",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 124,
+                "start": 1785605639347,
+                "stop": 1785605639471,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_api_ping_logged(start_app):\n        \"\"\"Verify that requests to /api/ping are logged with correct details.\"\"\"\n        response = requests.get(f\"{BASE_URL}/api/ping\")\n        assert response.status_code == 200, \"Failed to load /api/ping\"\n        assert response.json() == {\"ping\": \"pong\"}, f\"Unexpected response from /api/ping: {response.text}\"\n    \n        # Verify database log entry\n        assert os.path.exists(DB_PATH), \"Database file activity.db was not created.\"\n        conn = get_db_connection()\n        cursor = conn.cursor()\n        try:\n            cursor.execute(\"SELECT * FROM ActivityLog ORDER BY id DESC LIMIT 1\")\n            row = cursor.fetchone()\n            assert row is not None, \"No log entry found in ActivityLog table.\"\n>           assert row[\"path\"] == \"/api/ping\", f\"Expected path '/api/ping', got '{row['path']}'\"\nE           AssertionError: Expected path '/api/ping', got '/admin/activity'\nE           assert '/admin/activity' == '/api/ping'\nE             - /api/ping\nE             + /admin/activity\n\n/tests/test_final_state.py:134: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_admin_dashboard_logged",
+                "status": "passed",
+                "duration": 10,
+                "start": 1785605639471,
+                "stop": 1785605639481,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_api_slow_timing_accuracy",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 364,
+                "start": 1785605639481,
+                "stop": 1785605639845,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_api_slow_timing_accuracy(start_app):\n        \"\"\"Verify that the slow endpoint delays properly and the duration logged is accurate.\"\"\"\n        delay_ms = 350\n        start_time = time.time()\n        response = requests.get(f\"{BASE_URL}/api/slow?delay={delay_ms}\")\n        end_time = time.time()\n    \n        assert response.status_code == 200, \"Failed to load /api/slow\"\n>       assert response.json() == {\"delayed\": true, \"delay\": delay_ms}, f\"Unexpected response: {response.text}\"\nE       NameError: name 'true' is not defined\n\n/tests/test_final_state.py:172: NameError",
+                "message": "The test failed in the call phase"
+            },
+            {
+                "name": "test_final_state.py::test_admin_activity_json",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 19,
+                "start": 1785605639845,
+                "stop": 1785605639864,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_admin_activity_json(start_app):\n        \"\"\"Verify the JSON representation of the activity page.\"\"\"\n        response = requests.get(f\"{BASE_URL}/admin/activity?format=json\")\n        assert response.status_code == 200, \"Failed to load /admin/activity?format=json\"\n    \n        data = response.json()\n        assert \"total_requests\" in data, \"JSON response missing 'total_requests'\"\n        assert \"average_duration_ms\" in data, \"JSON response missing 'average_duration_ms'\"\n        assert \"logs\" in data, \"JSON response missing 'logs'\"\n    \n        logs = data[\"logs\"]\n        assert isinstance(logs, list), \"'logs' must be a list\"\n        assert len(logs) > 0, \"'logs' list should not be empty\"\n    \n        # Verify logs order (descending by timestamp)\n        timestamps = [log[\"timestamp\"] for log in logs]\n        sorted_timestamps = sorted(timestamps, reverse=True)\n        assert timestamps == sorted_timestamps, \"Logs are not sorted descending by timestamp\"\n    \n        # Verify metrics calculation\n        conn = get_db_connection()\n        cursor = conn.cursor()\n        try:\n            cursor.execute(\"SELECT COUNT(*), AVG(duration_ms) FROM ActivityLog\")\n            db_count, db_avg = cursor.fetchone()\n>           assert data[\"total_requests\"] == db_count, f\"Expected total_requests {db_count}, got {data['total_requests']}\"\nE           AssertionError: Expected total_requests 10, got 9\nE           assert 9 == 10\n\n/tests/test_final_state.py:217: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_admin_activity_html",
+                "status": "passed",
+                "duration": 53403,
+                "start": 1785605639864,
+                "stop": 1785605693267,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_concurrency_robustness",
+                "status": "passed",
+                "duration": 78,
+                "start": 1785605693267,
+                "stop": 1785605693345,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

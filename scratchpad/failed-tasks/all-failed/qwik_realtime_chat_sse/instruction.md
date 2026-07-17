@@ -1,0 +1,69 @@
+# Qwik City Real-Time Chat with Server-Sent Events (SSE)
+
+## Background
+Real-time communication is a core feature of modern web applications. In Qwik City, we can implement real-time features using Server-Sent Events (SSE). This task requires building a collaborative real-time chat room where messages are persisted in a local SQLite database and broadcast to all connected clients in real-time using SSE.
+
+## Requirements
+
+1. **Database Persistence**:
+   - Use a local SQLite database located at `/home/user/qwik-app/chat.db`.
+   - Create a table named `messages` with columns:
+     - `id` (INTEGER PRIMARY KEY AUTOINCREMENT)
+     - `user` (TEXT NOT NULL)
+     - `text` (TEXT NOT NULL)
+     - `timestamp` (TEXT NOT NULL, storing the ISO 8601 string of when the message was saved).
+
+2. **SSE Streaming Endpoint (GET `/api/messages`)**:
+   - Establishes a persistent SSE stream.
+   - Response headers must include:
+     - `Content-Type: text/event-stream`
+     - `Cache-Control: no-cache`
+     - `Connection: keep-alive`
+   - Upon a new connection, the endpoint must immediately fetch all existing messages from the database and stream them to the client. Each message must be sent as a separate SSE message block of format:
+     ```
+     data: {"id":1,"user":"Alice","text":"Hello","timestamp":"2026-08-01T23:46:46.000Z"}
+
+     ```
+     (Note the double newline at the end of each SSE event block).
+   - Keep the connection open and broadcast any newly posted messages to all active SSE connections in the same JSON format.
+
+3. **Message Posting Endpoint (POST `/api/messages`)**:
+   - Accepts a JSON payload:
+     ```json
+     {
+       "user": "string",
+       "text": "string"
+     }
+     ```
+   - Inserts the message into the SQLite database with the current ISO timestamp.
+   - Broadcasts the new message to all active SSE connections.
+   - Returns a `201 Created` status with the JSON representation of the saved message:
+     ```json
+     {
+       "id": 1,
+       "user": "string",
+       "text": "string",
+       "timestamp": "string"
+     }
+     ```
+   - If `user` or `text` is missing, empty, or not a string, return a `400 Bad Request` response.
+
+4. **Chat Page (`/chat`)**:
+   - Implement a Qwik City page at `/chat`.
+   - The page must connect to `/api/messages` on the client side using Qwik's client-side task execution primitive (`useVisibleTask$`).
+   - It must display a list of all messages received from the SSE stream.
+   - It must contain form inputs and a submit button to send new messages:
+     - User input field: must have attribute `data-testid="user-input"` or `id="user-input"`.
+     - Message text input field: must have attribute `data-testid="text-input"` or `id="text-input"`.
+     - Send button: must have attribute `data-testid="send-button"` or `id="send-button"`.
+     - Message list container: must have attribute `data-testid="message-list"` or `id="message-list"`.
+     - Message items: each message element inside the list must have attribute `data-testid="message-item"` or `class="message-item"`.
+   - Submitting the form must send a POST request to `/api/messages` with the inputs. The input fields should be cleared after successful submission.
+   - The chat list must update dynamically in real-time as messages are received from the SSE stream, without reloading the page.
+
+## Implementation Hints
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev`
+- Port: 3000
+- All routes/endpoints must be implemented under the standard Qwik City routing structure.
+

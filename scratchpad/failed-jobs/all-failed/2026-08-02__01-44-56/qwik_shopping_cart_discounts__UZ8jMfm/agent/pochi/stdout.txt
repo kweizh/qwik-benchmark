@@ -1,0 +1,104 @@
+- Initializing MCP connections...
+You
+# Qwik Shopping Cart with Coupon Rule Engine ## Background In e-commerce applications, calculating discounts accurately on the server is critical to prevent client-side tampering and ensure business rules are enforced. You will build a self-contained shopping cart and coupon engine using Qwik and Qwik City, backed by a local SQLite database. ## Requirements Implement a shopping cart system with a coupon discount engine that calculates subtotals, applies coupon rules, and computes final totals server-side. ### 1. Database Schema The application must use a local SQLite database located at `/home/user/qwik-app/db.sqlite` with the following tables: - **`Product`**: - `id`: INTEGER PRIMARY KEY AUTOINCREMENT - `name`: TEXT NOT NULL - `price`: REAL NOT NULL - **`Coupon`**: - `code`: TEXT PRIMARY KEY - `type`: TEXT NOT NULL (must be one of: `"PERCENT"`, `"FIXED"`, `"BOGO"`) - `value`: REAL NOT NULL - `minSpend`: REAL NOT NULL - **`CartItem`**: - `productId`: INTEGER PRIMARY KEY - `quantity`: INTEGER NOT NULL - FOREIGN KEY(`productId`) REFERENCES `Product`(`id`) - **`ActiveCoupon`**: - `code`: TEXT PRIMARY KEY - FOREIGN KEY(`code`) REFERENCES `Coupon`(`code`) *(Note: Since only one coupon can be active at a time, this table must contain at most one row.)* ### 2. Coupon Discount Rules - **`PERCENT`**: The discount is `subtotal * (value / 100)`. For example, if subtotal is $100 and value is 15.0, the discount is $15.00. - **`FIXED`**: The discount is a flat amount equal to `value`. The final total cannot be negative; if the discount exceeds the subtotal, the total is capped at $0.00. - **`BOGO`** (Buy One Get One Free): The `value` field stores the `productId` (as a float, e.g., `2.0` represents product ID 2) to which the BOGO applies. For every 2 units of that product in the cart, 1 unit's price is discounted (e.g., quantity of 1 -> 0 free; quantity of 2 -> 1 free; quantity of 3 -> 1 free; quantity of 4 -> 2 free). The discount amount is the number of free units multiplied by the product's unit price. - **`minSpend` Validation**: A coupon can only be applied if the cart `subtotal` (sum of `price * quantity` for all items, before any discount) is greater than or equal to `minSpend`. If the subtotal is strictly less than `minSpend`: - Applying the coupon must fail with the error `"Minimum spend not met"`. - If a coupon was already active and a cart modification causes the subtotal to drop below `minSpend`, the active coupon must be automatically removed (invalidated) from the database, and the error `"Minimum spend not met"` must be returned. ### 3. API Endpoints - **GET `/api/cart`**: Returns status 200 and a JSON object representing the current cart state. The `items` array must be sorted by `productId` in ascending order. **Response Schema**: ```json { "items": [ { "productId": number, "name": string, "price": number, "quantity": number, "total": number } ], "subtotal": number, "coupon": { "code": string, "type": "PERCENT" | "FIXED" | "BOGO", "value": number, "minSpend": number } | null, "discount": number, "total": number, "error": string | null } ``` - **POST `/api/cart`**: Processes cart mutations and coupon operations. It accepts a JSON body and returns the updated cart state in the same JSON schema as GET `/api/cart`. **Supported JSON Payloads**: 1. *Update Quantity*: ```json { "action": "update", "productId": number, "quantity": number } ``` If the `quantity` is 0 or less, the item must be removed from the cart. 2. *Apply Coupon*: ```json { "action": "applyCoupon", "code": string } ``` - If the coupon code does not exist in the database, do not apply any coupon, and return `"Invalid coupon code"` in the `error` field. - If the coupon exists but the `minSpend` condition is not met, do not apply any coupon, and return `"Minimum spend not met"` in the `error` field. 3. *Clear Cart*: ```json { "action": "clear" } ``` Clears all items and active coupons from the database. ### 4. User Interface Route - **GET `/cart`**: Renders a user-facing HTML page displaying the cart items, subtotal, applied coupon, discount, and final total. The page must include: - A list of cart items with their quantities and totals. - Form controls or buttons to update quantities of items. - An input field and button to apply a coupon code. - A button to clear the cart. - Prominent display of any active coupon and the calculated discount. - Display of error messages (e.g., `"Invalid coupon code"`, `"Minimum spend not met"`) when they occur. ## Implementation Hints - Project path: `/home/user/qwik-app` - Start command: `npm run dev` - Port: 3000 - Ensure the database is initialized with the seed data specified in the verification plan. - Do not hardcode calculated totals or discounts on the client side. All calculations and coupon validations must be performed server-side on every load or action.   
+
+Pochi
+💭 Thinking for 288 characters   
+📂 Listing files in /home/user/qwik-app recursively ✔ 
+💭 Thinking for 168 characters   
+📖 Reading /home/user/qwik-app/package.json ✔ 
+💭 Thinking for 313 characters   
+💫 Executing node -v ✔ 
+💭 Thinking for 253 characters   
+💫 Executing node --eval "import('node:sqlite').then(m => console.log('node:sqlite is available')).catch(err => console.log('not available: ' + err))" ✔ 
+💭 Thinking for 348 characters   
+💫 Executing node --eval "import('node:sqlite').then(m => { const db = new m.DatabaseSync(':memory:'); console.log(db); })" ✔ 
+💭 Thinking for 351 characters   
+💫 Executing node --eval "import('node:sqlite').then(m => { const db = new m.DatabaseSync(':memory:'); db.exec('create table t (id integer primary key, name text)'); const s = db.prepare('insert into t (name) values (?)'); console.log(s.run('hello')); console.log(db.prepare('select * from t').all()); })" ✔ 
+💭 Thinking for 379 characters   
+📂 Listing files in /home/user/qwik-app/src/routes recursively ✔ 
+📖 Reading /home/user/qwik-app/src/routes/index.tsx ✔ 
+💭 Thinking for 301 characters   
+📖 Reading /home/user/qwik-app/src/root.tsx ✔ 
+💭 Thinking for 338 characters   
+🔍 Searching for verification in /home/user/qwik-app ✔ 
+💭 Thinking for 220 characters   
+🔍 Searching for BOGO in *.{md,json,jsonc,ts,tsx} files in /home/user/qwik-app ✔ 
+📖 Reading /home/user/qwik-app/README.md ✔ 
+💭 Thinking for 274 characters   
+📂 Listing files in /home/user ✔ 
+📂 Listing files in /root ✔ 
+💭 Thinking for 333 characters   
+🔍 Searching for **/* in /home/user/qwik-app ✔ 
+💭 Thinking for 1004 characters   
+💫 Executing find / -name "*verification*" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/usr/*" -not -path "*/var/*" -not -path "*/lib/*" -not -path "*/proc/*" -not -path "*/sys/*" 2>/dev/null ✖ "Command exited with code 1"
+💫 Executing find / -name "*seed*" -not -path "*/node_modules/*" -not -path "*/.git/*" -not -path "*/usr/*" -not -path "*/var/*" -not -path "*/lib/*" -not -path "*/proc/*" -not -path "*/sys/*" 2>/dev/null ✖ "Command exited with code 1"
+💭 Thinking for 278 characters   
+💫 Executing find /home/user -maxdepth 3 -not -path "*/node_modules/*" -not -path "*/.git/*" ✔ 
+💭 Thinking for 1210 characters   
+📖 Reading /home/user/qwik-app/vite.config.ts ✔ 
+💭 Thinking for 1169 characters   
+✏️  Writing /home/user/qwik-app/src/db.ts ✔ 
+💭 Thinking for 204 characters   
+💫 Executing node --experimental-strip-types --eval "import { getDb } from './src/db.ts'; console.log(getDb().prepare('select * from Product').all());" ✔ 
+💭 Thinking for 6120 characters   
+💭 Thinking for 8302 characters   
+✏️  Writing /home/user/qwik-app/src/db.ts ✔ 
+💫 Executing node --experimental-strip-types --eval "import { getDb, calculateCartState } from './src/db.ts'; console.log(calculateCartState(getDb()));" ✔ 
+💭 Thinking for 353 characters   
+🔍 Searching for RequestHandler in *.ts files in /home/user/qwik-app ✔ 
+📖 Reading /home/user/qwik-app/node_modules/@builder.io/qwik/dist/starters/features/compiled-i18n/src/routes/plugin@compiled-i18n.ts ✔ 
+💭 Thinking for 344 characters   
+✏️  Writing /home/user/qwik-app/src/routes/api/cart/index.ts ✔ 
+💭 Thinking for 245 characters   
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 271 characters   
+📖 Reading /home/user/qwik-app/vite.config.ts ✔ 
+🔧 Applying diff to /home/user/qwik-app/vite.config.ts ✔ 
+🛠️ Tool killBackgroundJob ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💫 Executing fuser -k 3000/tcp || true ✔ 
+💫 Executing lsof -i :3000 || true ✔ 
+💫 Executing ss -tulnp || true ✔ 
+💫 Executing ps aux ✔ 
+💭 Thinking for 221 characters   
+💫 Executing kill -9 2757 2931 || true ✔ 
+💫 Executing ps aux ✔ 
+🛠️ Tool killBackgroundJob ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💫 Executing curl -s http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 2, "quantity": 3}' http://localhost:3000/api/cart ✔ 
+💭 Thinking for 289 characters   
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "applyCoupon", "code": "SAVE10"}' http://localhost:3000/api/cart ✔ 
+💭 Thinking for 266 characters   
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 2, "quantity": 0}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s http://localhost:3000/api/cart ✔ 
+💭 Thinking for 284 characters   
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "applyCoupon", "code": "INVALID_CODE"}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 3, "quantity": 1}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "applyCoupon", "code": "SAVE10"}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "clear"}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 2, "quantity": 1}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "applyCoupon", "code": "BOGO2"}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 2, "quantity": 2}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 2, "quantity": 3}' http://localhost:3000/api/cart ✔ 
+💭 Thinking for 199 characters   
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 2, "quantity": 4}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "clear"}' http://localhost:3000/api/cart ✔ 
+💭 Thinking for 342 characters   
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "update", "productId": 2, "quantity": 1}' http://localhost:3000/api/cart ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "applyCoupon", "code": "FLAT100"}' http://localhost:3000/api/cart ✔ 
+💭 Thinking for 314 characters   
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"action": "clear"}' http://localhost:3000/api/cart ✔ 
+💭 Thinking for 2369 characters   
+📖 Reading /home/user/qwik-app/src/global.css ✔ 
+💭 Thinking for 3537 characters   
+✏️  Writing /home/user/qwik-app/src/routes/cart/index.tsx ✔ 
+💭 Thinking for 278 characters   
+💫 Executing curl -s http://localhost:3000/cart ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💫 Executing curl -v http://localhost:3000/cart ✔ 
+💫 Executing curl -v -L http://localhost:3000/cart ✔ 

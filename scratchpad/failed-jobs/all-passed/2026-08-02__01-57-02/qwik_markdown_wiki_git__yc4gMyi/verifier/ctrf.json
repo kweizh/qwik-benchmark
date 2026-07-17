@@ -1,0 +1,65 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T18:03:47.834553+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 4,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785607425304,
+            "stop": 1785607427834
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_missing_page_returns_404",
+                "status": "passed",
+                "duration": 1588,
+                "start": 1785607425410,
+                "stop": 1785607426998,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_edit_page_saves_and_logs",
+                "status": "passed",
+                "duration": 30,
+                "start": 1785607426999,
+                "stop": 1785607427029,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_view_rendered_page",
+                "status": "passed",
+                "duration": 535,
+                "start": 1785607427029,
+                "stop": 1785607427564,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_get_page_history_and_sorting",
+                "status": "passed",
+                "duration": 268,
+                "start": 1785607427565,
+                "stop": 1785607427833,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

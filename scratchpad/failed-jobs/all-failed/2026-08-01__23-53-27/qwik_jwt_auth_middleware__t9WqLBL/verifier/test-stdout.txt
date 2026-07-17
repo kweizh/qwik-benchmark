@@ -1,0 +1,380 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 4 items
+
+../tests/test_final_state.py EEEE                                        [100%]
+
+==================================== ERRORS ====================================
+_______________ ERROR at setup of test_unauthorized_admin_access _______________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7c30672244a0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application service using xprocess. Confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            # Force Vite/Qwik to bind to IPv4 explicitly on port 3000
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            env["PORT"] = str(PORT)
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections and responds to HTTP requests.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # The port is open; check if the HTTP server responds
+                    resp = requests.get(f"{BASE_URL}/login", timeout=5, allow_redirects=False)
+                    return resp.status_code in [200, 302, 404]
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7c306701b500>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_app' started pid=1708
+============================== [FAILED: Begin] Captured qwik_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 609 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [FAILED: End  ] Captured qwik_app logfile ==============================
+_______________ ERROR at setup of test_invalid_jwt_admin_access ________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7c30672244a0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application service using xprocess. Confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            # Force Vite/Qwik to bind to IPv4 explicitly on port 3000
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            env["PORT"] = str(PORT)
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections and responds to HTTP requests.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # The port is open; check if the HTTP server responds
+                    resp = requests.get(f"{BASE_URL}/login", timeout=5, allow_redirects=False)
+                    return resp.status_code in [200, 302, 404]
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7c306701b500>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+_______________ ERROR at setup of test_login_invalid_credentials _______________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7c30672244a0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application service using xprocess. Confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            # Force Vite/Qwik to bind to IPv4 explicitly on port 3000
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            env["PORT"] = str(PORT)
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections and responds to HTTP requests.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # The port is open; check if the HTTP server responds
+                    resp = requests.get(f"{BASE_URL}/login", timeout=5, allow_redirects=False)
+                    return resp.status_code in [200, 302, 404]
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7c306701b500>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+________ ERROR at setup of test_login_valid_credentials_and_admin_flow _________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7c30672244a0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        """
+        Starts the Qwik application service using xprocess. Confirms readiness via port check.
+        """
+        class Starter(ProcessStarter):
+            name = "qwik_app"
+            # Force Vite/Qwik to bind to IPv4 explicitly on port 3000
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            env["PORT"] = str(PORT)
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections and responds to HTTP requests.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # The port is open; check if the HTTP server responds
+                    resp = requests.get(f"{BASE_URL}/login", timeout=5, allow_redirects=False)
+                    return resp.status_code in [200, 302, 404]
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7c306701b500>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+=========================== short test summary info ============================
+ERROR ../tests/test_final_state.py::test_unauthorized_admin_access - TimeoutE...
+ERROR ../tests/test_final_state.py::test_invalid_jwt_admin_access - TimeoutEr...
+ERROR ../tests/test_final_state.py::test_login_invalid_credentials - TimeoutE...
+ERROR ../tests/test_final_state.py::test_login_valid_credentials_and_admin_flow
+======================== 4 errors in 180.21s (0:03:00) =========================

@@ -1,0 +1,86 @@
+/* Fallback defaults (overridden by theme-variables style tag) */
+:root {
+  --primary-color: #00bcd4;
+  --font-size: 16px;
+  --border-radius: 4px;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: var(--font-size);
+  margin: 0;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: var(--primary-color);
+}
+
+a {
+  color: var(--primary-color);
+}
+
+.theme-demo {
+  margin-top: 2rem;
+}
+
+.demo-card {
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
+
+.demo-card h2 {
+  color: var(--primary-color);
+  margin-top: 0;
+}
+
+.demo-button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1.5rem;
+  font-size: var(--font-size);
+  cursor: pointer;
+}
+
+.demo-button:hover {
+  opacity: 0.9;
+}
+
+/* Theme editor form styles */
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size);
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+button[type="submit"] {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1.5rem;
+  font-size: var(--font-size);
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+button[type="submit"]:hover {
+  opacity: 0.9;
+}

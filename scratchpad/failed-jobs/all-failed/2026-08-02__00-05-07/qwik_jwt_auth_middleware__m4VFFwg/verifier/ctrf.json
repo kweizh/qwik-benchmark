@@ -1,0 +1,68 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T16:09:18.045795+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 3,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785600556387,
+            "stop": 1785600558045
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_unauthorized_admin_access",
+                "status": "passed",
+                "duration": 1524,
+                "start": 1785600556456,
+                "stop": 1785600557980,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_invalid_jwt_admin_access",
+                "status": "passed",
+                "duration": 3,
+                "start": 1785600557980,
+                "stop": 1785600557983,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_login_invalid_credentials",
+                "status": "passed",
+                "duration": 7,
+                "start": 1785600557983,
+                "stop": 1785600557990,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_login_valid_credentials_and_admin_flow",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 55,
+                "start": 1785600557990,
+                "stop": 1785600558045,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_login_valid_credentials_and_admin_flow(start_app):\n        \"\"\"\n        Verify the complete login, access authorized admin, and logout flow.\n        \"\"\"\n        login_url = f\"{BASE_URL}/login\"\n        payload = {\"username\": \"admin\", \"password\": \"password123\"}\n    \n        # 1. Login with valid credentials\n        response = requests.post(login_url, json=payload, allow_redirects=False)\n        assert response.status_code == 302, f\"Expected redirect status 302 on successful login, got {response.status_code}\"\n    \n        location = response.headers.get(\"Location\", \"\")\n        assert location.endswith(\"/admin/dashboard\") or \"/admin/dashboard\" in location, f\"Expected redirect to /admin/dashboard, got {location}\"\n    \n        jwt_cookie = response.cookies.get(\"jwt_token\")\n        assert jwt_cookie is not None, \"Expected 'jwt_token' cookie to be set in response\"\n    \n        # 2. Access /admin/dashboard with the valid JWT token\n        admin_url = f\"{BASE_URL}/admin/dashboard\"\n        cookies = {\"jwt_token\": jwt_cookie}\n        admin_response = requests.get(admin_url, cookies=cookies, allow_redirects=False)\n    \n        assert admin_response.status_code == 200, f\"Expected status 200 for authorized access, got {admin_response.status_code}\"\n>       assert \"Welcome to the Admin Dashboard, admin!\" in admin_response.text, \"Expected dashboard welcome text in response\"\nE       AssertionError: Expected dashboard welcome text in response\nE       assert 'Welcome to the Admin Dashboard, admin!' in '<!DOCTYPE html><html lang=\"en-us\" q:route=\"/admin/dashboard\" q:container=\"paused\" q:version=\"1.20.0\" q:render=\"ssr-de...istener(\\'resize\\', updateOverlay);\\n    document.addEventListener(\\'scroll\\', updateOverlay);\\n  })();\\n</script>\\n\\n'\nE        +  where '<!DOCTYPE html><html lang=\"en-us\" q:route=\"/admin/dashboard\" q:container=\"paused\" q:version=\"1.20.0\" q:render=\"ssr-de...istener(\\'resize\\', updateOverlay);\\n    document.addEventListener(\\'scroll\\', updateOverlay);\\n  })();\\n</script>\\n\\n' = <Response [200]>.text\n\n/tests/test_final_state.py:151: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

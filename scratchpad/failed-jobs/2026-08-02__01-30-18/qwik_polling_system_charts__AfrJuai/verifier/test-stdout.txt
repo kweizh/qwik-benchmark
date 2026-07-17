@@ -1,0 +1,385 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 5 items
+
+../tests/test_final_state.py ..FFF                                       [100%]
+
+=================================== FAILURES ===================================
+_______________________ test_vote_flow_and_rate_limiting _______________________
+
+start_app = None
+
+    def test_vote_flow_and_rate_limiting(start_app):
+        """Verify voting success, database persistence, and rate limiting."""
+        # Reset any previous votes for option 1 (Qwik) in SQLite for determinism
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE options SET votes = 0 WHERE id = 1;")
+        cursor.execute("DELETE FROM votes_log WHERE poll_id = 'frameworks';")
+        conn.commit()
+        conn.close()
+    
+        # Vote 1: IP 1.2.3.4
+        resp = requests.post(
+            f"{BASE_URL}/poll/frameworks/vote",
+            json={"optionId": 1},
+            headers={"X-Forwarded-For": "1.2.3.4"}
+        )
+>       assert resp.status_code == 200, f"First vote failed: {resp.text}"
+E       AssertionError: First vote failed: {"error":"Internal server error"}
+E       assert 500 == 200
+E        +  where 500 = <Response [500]>.status_code
+
+/tests/test_final_state.py:153: AssertionError
+_______________________________ test_concurrency _______________________________
+
+start_app = None
+
+    def test_concurrency(start_app):
+        """Verify that concurrent votes from different IPs are processed correctly without race conditions."""
+        # Reset votes for option 3 (Vue)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE options SET votes = 0 WHERE id = 3;")
+        cursor.execute("DELETE FROM votes_log WHERE poll_id = 'frameworks';")
+        conn.commit()
+        conn.close()
+    
+        num_threads = 20
+        ips = [f"10.0.0.{i}" for i in range(1, num_threads + 1)]
+    
+        def cast_vote(ip):
+            try:
+                resp = requests.post(
+                    f"{BASE_URL}/poll/frameworks/vote",
+                    json={"optionId": 3},
+                    headers={"X-Forwarded-For": ip},
+                    timeout=5
+                )
+                return resp.status_code
+            except Exception as e:
+                return str(e)
+    
+        with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+            results = list(executor.map(cast_vote, ips))
+    
+        # Assert all concurrent requests succeeded with 200
+>       assert results == [200] * num_threads, f"Some concurrent requests failed: {results}"
+E       AssertionError: Some concurrent requests failed: [500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500]
+E       assert [500, 500, 50...500, 500, ...] == [200, 200, 20...200, 200, ...]
+E         At index 0 diff: 500 != 200
+E         Use -v to get more diff
+
+/tests/test_final_state.py:216: AssertionError
+_________________________ test_browser_ui_verification _________________________
+
+start_app = None
+browser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x737ccdc9e2a0>
+
+    def test_browser_ui_verification(start_app, browser_verifier):
+        """Verify frontend rendering and dynamic updates using PochiVerifier."""
+        # Reset votes for poll 'colors' to 0 for option 5 (Red)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("UPDATE options SET votes = 0 WHERE id = 5;")
+        cursor.execute("DELETE FROM votes_log WHERE poll_id = 'colors';")
+        conn.commit()
+        conn.close()
+    
+        reason = "The poll page should render the question, an SVG bar chart of results, and allow casting a vote which dynamically updates the SVG chart."
+        truth = (
+            f"Navigate to {BASE_URL}/poll/colors. "
+            "Verify that the element with id 'poll-question' contains 'What is your favorite primary color?'. "
+            "Verify that the SVG with id 'poll-chart' is visible. "
+            "Find the vote button with data-option-id '5' (for Red) and click it. "
+            "Verify that the vote count text with data-option-id '5' inside the SVG chart is updated to '1' or contains '1'. "
+            "Verify that the SVG rect with data-option-id '5' now has a width greater than 0."
+        )
+    
+        result = browser_verifier.verify(
+            reason=reason,
+            truth=truth,
+            use_browser_agent=True,
+            trajectory_dir="/logs/verifier/pochi/test_polling_system_ui"
+        )
+>       assert result.status == "pass", f"Browser verification failed: {result.reason}"
+E       AssertionError: Browser verification failed: The test failed because clicking the vote button with data-option-id '5' (for Red) resulted in an 'Internal server error' on the page. As a result, the vote count text inside the SVG chart was not updated to '1' or contains '1', and the SVG rect with data-option-id '5' did not have its width updated to greater than 0 as required by the verification steps.
+E       assert 'fail' == 'pass'
+E         - pass
+E         + fail
+
+/tests/test_final_state.py:253: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+(skipped 11 already-printed lines)
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+Transaction error: RangeError: Too few parameter values were provided
+    at sqliteTransaction.eval (/home/user/qwik-app/src/db.ts:64:99)
+    at sqliteTransaction (/home/user/qwik-app/node_modules/better-sqlite3/lib/methods/transaction.js:65:24)
+    at castVote (/home/user/qwik-app/src/db.ts:73:19)
+    at onPost (/home/user/qwik-app/src/routes/poll/[id]/vote/index.ts:45:54)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Object.next (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+    at async _runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+    at async runNext (file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+    at async file:///home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+==================================== PASSES ====================================
+_____________________________ test_get_poll_pages ______________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'start_app' started pid=2460
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 566 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_get_poll_pages
+PASSED ../tests/test_final_state.py::test_vote_api_validation
+FAILED ../tests/test_final_state.py::test_vote_flow_and_rate_limiting - Asser...
+FAILED ../tests/test_final_state.py::test_concurrency - AssertionError: Some ...
+FAILED ../tests/test_final_state.py::test_browser_ui_verification - Assertion...
+=================== 3 failed, 2 passed in 129.09s (0:02:09) ====================

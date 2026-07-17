@@ -1,0 +1,10 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to your dashboard, {name}!"
+  },
+  "profile": {
+    "title": "User Profile",
+    "email_label": "Email Address"
+  }
+}

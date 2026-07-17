@@ -1,0 +1,6 @@
+{
+  "library_name": "Qwik",
+  "task_name": "qwik_csv_importer_validator",
+  "research_plan_path": "plan.md",
+  "output_dir": "scratchpad/pending-tasks"
+}

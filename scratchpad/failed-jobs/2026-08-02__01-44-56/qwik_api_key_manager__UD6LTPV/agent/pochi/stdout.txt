@@ -1,0 +1,80 @@
+- Initializing MCP connections...
+You
+# Qwik API Key Manager ## Background In modern web applications, exposing internal databases or services directly to third-party developers is a security risk. A common solution is to implement an API Key management system where developers can generate, view, and revoke API keys via a dashboard, and use those keys to authenticate their API requests. In this task, you will build a secure API Key Management system using the **Qwik** and **Qwik City** meta-framework, backed by a local **SQLite** database. ## Requirements ### 1. Database Schema Your application must use a SQLite database located at `/home/user/qwik-app/db.sqlite`. It must contain a table named `api_keys` with the following schema: * `id` (INTEGER PRIMARY KEY AUTOINCREMENT) * `name` (TEXT NOT NULL) - A user-friendly name/description for the key. * `key_prefix` (TEXT NOT NULL) - The prefix of the key (e.g., `qk_abcd`) to help identify it. * `hashed_key` (TEXT NOT NULL) - The SHA-256 hash (hex encoded) of the full plain text API key. * `status` (TEXT NOT NULL) - The status of the key, which must be either `'active'` or `'revoked'`. * `created_at` (TEXT NOT NULL) - An ISO 8601 timestamp representing when the key was created. ### 2. API Key Generation & Security * When a new key is generated, it must be a string starting with the prefix `qk_` followed by 32 random alphanumeric characters (total length of 35 characters). * The `key_prefix` stored in the database must be the first 7 characters of the generated key (e.g., `qk_` plus the first 4 random characters). * The plain text key must be hashed using SHA-256 (hex encoded) and stored in the `hashed_key` column. * **CRITICAL SECURITY REQUIREMENT:** The plain text key must **NEVER** be stored in the database. A security audit will check the database contents to verify this. ### 3. REST API Endpoints You must implement the following REST API endpoints in your Qwik City application: #### A. POST `/api/v1/developer/keys` Generates a new API key. * **Request Body (JSON):** ```json { "name": "string" } ``` * **Response (201 Created):** ```json { "id": number, "name": "string", "prefix": "string", "key": "string", "status": "active", "created_at": "string" } ``` *Note: This is the ONLY time the plain text `key` is returned to the client.* #### B. GET `/api/v1/developer/keys` Lists all generated API keys. * **Response (200 OK):** ```json [ { "id": number, "name": "string", "prefix": "string", "status": "active" | "revoked", "created_at": "string" } ] ``` *Note: The plain text `key` or the `hashed_key` must NOT be returned in this response.* #### C. POST `/api/v1/developer/keys/:id/revoke` Revokes an API key by setting its status to `'revoked'` in the database. * **Response (200 OK):** ```json { "success": true, "message": "string" } ``` If the key ID does not exist, return a `404 Not Found` status with `{"error": "Key not found"}`. #### D. GET `/api/v1/hello` An authenticated endpoint that requires a valid and active API key passed in the `X-API-Key` header. * **Request Header:** `X-API-Key: qk_...` * **Response (200 OK) if valid:** ```json { "message": "Hello, authenticated developer!" } ``` * **Response (401 Unauthorized) if missing, invalid, or revoked:** ```json { "error": "Unauthorized" } ``` ### 4. UI Dashboard Route Implement a user-friendly UI route at `/developer/keys`: * It must display a list of all existing keys showing their name, prefix, status, and creation date. * It must include a form with an input field for the key name and a submit button to generate a new key. * When a new key is successfully generated, the plain text key must be displayed **exactly once** to the user in a prominent success/alert box (since it cannot be retrieved again). * Each listed key must have a button or form to revoke it. Clicking the button must trigger key revocation and update the list dynamically or via page reload. ## Implementation Hints * Project path: `/home/user/qwik-app` * Start command: `npm run dev` * Port: 3000 * SQLite database path: `/home/user/qwik-app/db.sqlite` * Ensure that all database interactions are safe from SQL injection (use parameterized queries or a secure ORM/query builder). * Ensure that concurrent requests to generate or revoke keys do not result in database locking issues (e.g., handle SQLite busy states correctly if needed, or use a single connection pool/appropriate configuration). * Do not include any mock data; the application must read and write to the SQLite database.   
+
+Pochi
+📂 Listing files in /home/user/qwik-app recursively ✔ 
+📂 Listing files in /home/user/qwik-app/src/routes recursively ✔ 
+📖 Reading /home/user/qwik-app/src/routes/index.tsx ✔ 
+📖 Reading /home/user/qwik-app/package.json ✔ 
+💭 Thinking for 310 characters   
+📖 Reading /home/user/qwik-app/vite.config.ts ✔ 
+💭 Thinking for 679 characters   
+💫 Executing node -e "const Database = require('better-sqlite3'); console.log('better-sqlite3 loaded successfully');" ✖ "Command exited with code 1"
+💫 Executing node -e "const Database = require('better-sqlite3'); console.log('better-sqlite3 loaded successfully');" ✔ 
+💭 Thinking for 2688 characters   
+🔧 Applying diff to /home/user/qwik-app/vite.config.ts ✔ 
+💭 Thinking for 697 characters   
+✏️  Writing /home/user/qwik-app/src/lib/db.ts ✔ 
+💭 Thinking for 561 characters   
+🔍 Searching for export interface RequestEvent in /home/user/qwik-app/node_modules/@builder.io/qwik-city ✔ 
+🔍 Searching for RequestHandler in /home/user/qwik-app/node_modules/@builder.io/qwik-city ✔ 
+📖 Reading /home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.d.ts ✔ 
+🔍 Searching for export declare interface RequestEvent in /home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler ✔ 
+📖 Reading /home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.d.ts ✔ 
+📖 Reading /home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.d.ts ✔ 
+💭 Thinking for 265 characters   
+📖 Reading /home/user/qwik-app/tsconfig.json ✔ 
+💭 Thinking for 765 characters   
+✏️  Writing /home/user/qwik-app/src/routes/api/v1/developer/keys/index.ts ✔ 
+💭 Thinking for 376 characters   
+✏️  Writing /home/user/qwik-app/src/routes/api/v1/developer/keys/[id]/revoke/index.ts ✔ 
+💭 Thinking for 549 characters   
+✏️  Writing /home/user/qwik-app/src/routes/api/v1/hello/index.ts ✔ 
+💭 Thinking for 991 characters   
+📖 Reading /home/user/qwik-app/src/global.css ✔ 
+💭 Thinking for 1648 characters   
+✏️  Writing /home/user/qwik-app/src/global.css ✔ 
+💭 Thinking for 1526 characters   
+✏️  Writing /home/user/qwik-app/src/routes/developer/keys/index.tsx ✔ 
+💭 Thinking for 277 characters   
+💫 Executing npm run build.types ✖ "Command exited with code 2"
+💫 Executing npm i --save-dev @types/better-sqlite3 ✔ 
+💫 Executing npm run build.types ✔ 
+💫 Executing npm run lint ✔ 
+💭 Thinking for 328 characters   
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 368 characters   
+🛠️ Tool killBackgroundJob ✔ 
+💭 Thinking for 287 characters   
+📖 Reading /home/user/qwik-app/vite.config.ts ✔ 
+🔧 Applying diff to /home/user/qwik-app/vite.config.ts ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 158 characters   
+💫 Executing lsof -i :3000 || netstat -tuln | grep 3000 ✖ "Command exited with code 1"
+💫 Executing ss -tuln | grep 3000 || ps aux | grep node ✔ 
+💭 Thinking for 344 characters   
+💫 Executing pkill -9 -f vite || killall -9 node ✖ "Command exited with code 1"
+💫 Executing ps aux | grep node ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 293 characters   
+💫 Executing curl -X POST http://localhost:3000/api/v1/developer/keys -H "Content-Type: application/json" -d '{"name": "Test Key"}' ✔ 
+💭 Thinking for 160 characters   
+💫 Executing sqlite3 /home/user/qwik-app/db.sqlite "SELECT * FROM api_keys;" ✖ "Command exited with code 127"
+💫 Executing node -e "const db = require('better-sqlite3')('/home/user/qwik-app/db.sqlite'); console.log(db.prepare('SELECT * FROM api_keys').all());" ✔ 
+💭 Thinking for 231 characters   
+💫 Executing curl http://localhost:3000/api/v1/developer/keys ✔ 
+💭 Thinking for 213 characters   
+💫 Executing curl -i http://localhost:3000/api/v1/hello ✔ 
+💭 Thinking for 248 characters   
+💫 Executing curl -i -H "X-API-Key: qk_SmgZh02i4e5XFxXQhRFTaE8gFhXpV8N8" http://localhost:3000/api/v1/hello ✔ 
+💫 Executing curl -i -H "X-API-Key: qk_SmgZh02i4e5XFxXQhRFTaE8gFhXpV8N9" http://localhost:3000/api/v1/hello ✔ 
+💫 Executing curl -i -X POST http://localhost:3000/api/v1/developer/keys/1/revoke ✔ 
+💫 Executing curl http://localhost:3000/api/v1/developer/keys ✔ 
+💫 Executing curl -i -H "X-API-Key: qk_SmgZh02i4e5XFxXQhRFTaE8gFhXpV8N8" http://localhost:3000/api/v1/hello ✔ 
+💫 Executing curl -i -X POST http://localhost:3000/api/v1/developer/keys/999/revoke ✔ 
+💫 Executing curl -i http://localhost:3000/developer/keys ✔ 
+💫 Executing curl -i http://localhost:3000/developer/keys/ ✔ 

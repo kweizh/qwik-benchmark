@@ -1,0 +1,37 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 4 items
+
+../tests/test_final_state.py ....                                        [100%]
+
+==================================== PASSES ====================================
+________________________ test_missing_page_returns_404 _________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_markdown_wiki$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'qwik_markdown_wiki' started pid=1984
+qwik_markdown_wiki process startup detected
+============================== [STARTED: Begin] Captured qwik_markdown_wiki logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 550 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] Captured qwik_markdown_wiki logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured qwik_markdown_wiki logfile ==============================
+(skipped 9 already-printed lines)
+
+============================== [TEARDOWN: End  ] Captured qwik_markdown_wiki logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_missing_page_returns_404
+PASSED ../tests/test_final_state.py::test_edit_page_saves_and_logs
+PASSED ../tests/test_final_state.py::test_view_rendered_page
+PASSED ../tests/test_final_state.py::test_get_page_history_and_sorting
+============================== 4 passed in 1.73s ===============================

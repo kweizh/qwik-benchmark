@@ -1,0 +1,137 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T16:12:49.179234+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 9,
+            "passed": 0,
+            "failed": 9,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785600767653,
+            "stop": 1785600769176
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_redirect_on_default_route",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 1309,
+                "start": 1785600767784,
+                "stop": 1785600769093,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_redirect_on_default_route(start_app):\n        url = f\"{BASE_URL}/signup\"\n        resp = requests.get(url, allow_redirects=False)\n>       assert resp.status_code in [302, 303], f\"Expected 302 or 303 redirect, got {resp.status_code}\"\nE       AssertionError: Expected 302 or 303 redirect, got 301\nE       assert 301 in [302, 303]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:91: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step1_validation_failure",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 40,
+                "start": 1785600769094,
+                "stop": 1785600769134,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step1_validation_failure(start_app):\n        url = f\"{BASE_URL}/signup?step=1\"\n        data = {\"username\": \"ab\", \"password\": \"123\"}\n        resp = requests.post(url, data=data, allow_redirects=False)\n>       assert resp.status_code == 200, f\"Expected status code 200, got {resp.status_code}\"\nE       AssertionError: Expected status code 200, got 301\nE       assert 301 == 200\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:100: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step1_validation_success",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1785600769134,
+                "stop": 1785600769140,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step1_validation_success(start_app):\n        url = f\"{BASE_URL}/signup?step=1\"\n        data = {\"username\": \"john_doe\", \"password\": \"password123\"}\n        resp = requests.post(url, data=data, allow_redirects=False)\n>       assert resp.status_code in [302, 303], f\"Expected 302/303 redirect, got {resp.status_code}\"\nE       AssertionError: Expected 302/303 redirect, got 301\nE       assert 301 in [302, 303]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:111: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step2_missing_cookie_redirect",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1785600769140,
+                "stop": 1785600769146,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step2_missing_cookie_redirect(start_app):\n        url = f\"{BASE_URL}/signup?step=2\"\n        resp = requests.get(url, allow_redirects=False)\n>       assert resp.status_code in [302, 303], f\"Expected 302/303 redirect, got {resp.status_code}\"\nE       AssertionError: Expected 302/303 redirect, got 301\nE       assert 301 in [302, 303]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:125: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step2_validation_failure",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1785600769146,
+                "stop": 1785600769152,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step2_validation_failure(start_app):\n        url = f\"{BASE_URL}/signup?step=2\"\n        data = {\"fullName\": \"J\", \"email\": \"invalid-email\"}\n        cookies = {\"signup_step1\": urllib.parse.quote(json.dumps({\"username\": \"john_doe\", \"password\": \"password123\"}))}\n        resp = requests.post(url, data=data, cookies=cookies, allow_redirects=False)\n>       assert resp.status_code == 200, f\"Expected status code 200, got {resp.status_code}\"\nE       AssertionError: Expected status code 200, got 301\nE       assert 301 == 200\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:135: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step2_validation_success",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5,
+                "start": 1785600769152,
+                "stop": 1785600769157,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step2_validation_success(start_app):\n        url = f\"{BASE_URL}/signup?step=2\"\n        data = {\"fullName\": \"John Doe\", \"email\": \"john@example.com\"}\n        cookies = {\"signup_step1\": urllib.parse.quote(json.dumps({\"username\": \"john_doe\", \"password\": \"password123\"}))}\n        resp = requests.post(url, data=data, cookies=cookies, allow_redirects=False)\n>       assert resp.status_code in [302, 303], f\"Expected 302/303 redirect, got {resp.status_code}\"\nE       AssertionError: Expected 302/303 redirect, got 301\nE       assert 301 in [302, 303]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:147: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step3_missing_cookies_redirect",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1785600769158,
+                "stop": 1785600769164,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step3_missing_cookies_redirect(start_app):\n        url = f\"{BASE_URL}/signup?step=3\"\n        # Try with no cookies\n        resp = requests.get(url, allow_redirects=False)\n>       assert resp.status_code in [302, 303], \"Expected redirect on missing cookies\"\nE       AssertionError: Expected redirect on missing cookies\nE       assert 301 in [302, 303]\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:162: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step3_render_details",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5,
+                "start": 1785600769165,
+                "stop": 1785600769170,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step3_render_details(start_app):\n        url = f\"{BASE_URL}/signup?step=3\"\n        cookies = {\n            \"signup_step1\": urllib.parse.quote(json.dumps({\"username\": \"john_doe\", \"password\": \"password123\"})),\n            \"signup_step2\": urllib.parse.quote(json.dumps({\"fullName\": \"John Doe\", \"email\": \"john@example.com\"}))\n        }\n        resp = requests.get(url, cookies=cookies, allow_redirects=False)\n>       assert resp.status_code == 200, f\"Expected status code 200, got {resp.status_code}\"\nE       AssertionError: Expected status code 200, got 301\nE       assert 301 == 200\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:185: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_step3_submit_confirmation",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1785600769170,
+                "stop": 1785600769176,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_step3_submit_confirmation(start_app):\n        url = f\"{BASE_URL}/signup?step=3\"\n        cookies = {\n            \"signup_step1\": urllib.parse.quote(json.dumps({\"username\": \"john_doe\", \"password\": \"password123\"})),\n            \"signup_step2\": urllib.parse.quote(json.dumps({\"fullName\": \"John Doe\", \"email\": \"john@example.com\"}))\n        }\n        resp = requests.post(url, cookies=cookies, allow_redirects=False)\n>       assert resp.status_code == 200, f\"Expected status code 200, got {resp.status_code}\"\nE       AssertionError: Expected status code 200, got 301\nE       assert 301 == 200\nE        +  where 301 = <Response [301]>.status_code\n\n/tests/test_final_state.py:200: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,224 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 2 items
+
+../../../tests/test_final_state.py FF                                    [100%]
+
+=================================== FAILURES ===================================
+____________________ test_api_crud_and_background_execution ____________________
+
+start_app = None
+
+    def test_api_crud_and_background_execution(start_app):
+        """
+        Test API endpoints for creating, retrieving, pausing, resuming, and triggering tasks,
+        as well as verifying the background executor behavior.
+        """
+        # 1. Create a successful task via POST /api/tasks
+        success_task_payload = {
+            "id": "test-success-task",
+            "name": "Test Success Task",
+            "command": "echo 'success'",
+            "interval_seconds": 3,
+            "status": "ACTIVE"
+        }
+        create_resp = requests.post(f"{BASE_URL}/api/tasks", json=success_task_payload, timeout=5)
+        assert create_resp.status_code == 201, f"Expected 201 Created, got {create_resp.status_code}. Response: {create_resp.text}"
+    
+        created_task = create_resp.json()
+        assert created_task["id"] == "test-success-task", f"Expected task id to be 'test-success-task', got {created_task.get('id')}"
+        assert created_task["status"] == "ACTIVE", f"Expected task status to be 'ACTIVE', got {created_task.get('status')}"
+    
+        # 2. Verify background execution logs 'SUCCESS'
+        # Wait 7 seconds to allow at least 2 executions (at t=0, t=3, t=6 approx)
+        time.sleep(7)
+    
+        history_resp = requests.get(f"{BASE_URL}/api/tasks/test-success-task/history", timeout=5)
+        assert history_resp.status_code == 200, f"Expected 200 OK, got {history_resp.status_code}. Response: {history_resp.text}"
+        history_logs = history_resp.json()
+        assert isinstance(history_logs, list), f"Expected history to be a list, got {type(history_logs)}"
+>       assert len(history_logs) >= 2, f"Expected at least 2 executions, got {len(history_logs)}"
+E       AssertionError: Expected at least 2 executions, got 1
+E       assert 1 >= 2
+E        +  where 1 = len([{'id': 40, 'status': 'SUCCESS', 'task_id': 'test-success-task', 'timestamp': '2026-08-01T17:38:02.553Z'}])
+
+/tests/test_final_state.py:112: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'start_app' started pid=2144
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 649 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+Starting background scheduled tasks runner...
+QWIK WARN jsx: Using <style>{content}</style> will escape the content, effectively breaking the CSS.
+In order to disable content escaping use '<style dangerouslySetInnerHTML={content}/>'
+
+However, if the use case is to inject component styleContent, use 'useStyles$()' instead, it will be a lot more efficient.
+See https://qwik.dev/docs/core/styles/#usestyles for more information.
+5:37:57 PM [vite] Internal server error: The value passed in onSubmit$={...}> must be a QRL, instead you passed a "function". Make sure your function is wrapped with $(...), so it can be serialized. Like this:
+$(async ()=>{
+        clearMessages();
+        state.isSubmitting = true;
+        try {
+            const response = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: state.form.id,
+                    name: state.form.name,
+                    command: state.form.command,
+                    interval_seconds: Number(state.form.interval_seconds),
+                    status: state.form.status
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) state.errorMsg = data.error || 'Failed to create task';
+            else {
+                state.successMsg = `Task '${data.name}' created successfully!`;
+                // Reset form
+                state.form = {
+                    id: '',
+                    name: '',
+                    command: '',
+                    interval_seconds: 5,
+                    status: 'ACTIVE'
+                };
+                // Immediately update state
+                const tasksRes = await fetch('/api/tasks');
+                if (tasksRes.ok) state.tasks = await tasksRes.json();
+            }
+        } catch (err) {
+            state.errorMsg = err.message || 'An unexpected error occurred';
+        } finally{
+            state.isSubmitting = false;
+        }
+    })
+  File: /home/user/qwik-app/src/routes/tasks/index.tsx:494:11
+  492|          <div class="card">
+  493|            <h2 class="card-title">Create New Task</h2>
+  494|            <form
+     |             ^
+  495|              preventdefault:submit
+  496|              onSubmit$={handleCreateTask}
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/jsx/jsx-runtime.js:206:35
+      at invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at validateJSXNode (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/jsx/jsx-runtime.js:143:9)
+      at _jsxQ (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/jsx/jsx-runtime.js:34:5)
+      at qrl2.tasks_component_nUnmoKw3t1Y [as resolved] (/home/user/qwik-app/src/routes/tasks/index.tsx:494:11)
+      at qrl2.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at qrl2.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+____________________________ test_html_dashboard_ui ____________________________
+
+start_app = None
+browser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x7eaf28c7df40>
+
+    def test_html_dashboard_ui(start_app, browser_verifier):
+        """
+        Verify that the Qwik-based HTML dashboard at /tasks renders correctly
+        and displays the task details and execution history.
+        """
+        reason = "The dashboard page at /tasks must render an HTML interface listing all active/paused tasks and their execution history logs."
+        truth = (
+            f"Navigate to {BASE_URL}/tasks. "
+            "Verify that the page contains the text 'Test Success Task' and 'Test Fail Task'. "
+            "Verify that there is a table or list showing execution logs with status 'SUCCESS' and 'FAILED'."
+        )
+    
+        result = browser_verifier.verify(
+            reason=reason,
+            truth=truth,
+            use_browser_agent=True,
+            trajectory_dir="/logs/verifier/pochi/test_html_dashboard_ui"
+        )
+>       assert result.status == "pass", f"Browser verification failed: {result.reason}"
+E       AssertionError: Browser verification failed: The page at http://127.0.0.1:3000/tasks failed to load properly due to a Qwik rendering/serialization error: 'The value passed in onSubmit$={...}> must be a QRL, instead you passed a "function"'. Because of this error overlay, the dashboard page interface did not render, and the required text ('Test Success Task', 'Test Fail Task') and execution logs with status 'SUCCESS' and 'FAILED' could not be found or verified.
+E       assert 'fail' == 'pass'
+E         - pass
+E         + fail
+
+/tests/test_final_state.py:185: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+(skipped 72 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+5:38:41 PM [vite] Internal server error: The value passed in onSubmit$={...}> must be a QRL, instead you passed a "function". Make sure your function is wrapped with $(...), so it can be serialized. Like this:
+$(async ()=>{
+        clearMessages();
+        state.isSubmitting = true;
+        try {
+            const response = await fetch('/api/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: state.form.id,
+                    name: state.form.name,
+                    command: state.form.command,
+                    interval_seconds: Number(state.form.interval_seconds),
+                    status: state.form.status
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) state.errorMsg = data.error || 'Failed to create task';
+            else {
+                state.successMsg = `Task '${data.name}' created successfully!`;
+                // Reset form
+                state.form = {
+                    id: '',
+                    name: '',
+                    command: '',
+                    interval_seconds: 5,
+                    status: 'ACTIVE'
+                };
+                // Immediately update state
+                const tasksRes = await fetch('/api/tasks');
+                if (tasksRes.ok) state.tasks = await tasksRes.json();
+            }
+        } catch (err) {
+            state.errorMsg = err.message || 'An unexpected error occurred';
+        } finally{
+            state.isSubmitting = false;
+        }
+    })
+  File: /home/user/qwik-app/src/routes/tasks/index.tsx:494:11
+  492|          <div class="card">
+  493|            <h2 class="card-title">Create New Task</h2>
+  494|            <form
+     |             ^
+  495|              preventdefault:submit
+  496|              onSubmit$={handleCreateTask}
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/jsx/jsx-runtime.js:206:35
+      at invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at validateJSXNode (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/jsx/jsx-runtime.js:143:9)
+      at _jsxQ (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/jsx/jsx-runtime.js:34:5)
+      at qrl2.tasks_component_nUnmoKw3t1Y [as resolved] (/home/user/qwik-app/src/routes/tasks/index.tsx:494:11)
+      at qrl2.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at qrl2.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+FAILED ../../../tests/test_final_state.py::test_api_crud_and_background_execution
+FAILED ../../../tests/test_final_state.py::test_html_dashboard_ui - Assertion...
+========================= 2 failed in 62.06s (0:01:02) =========================

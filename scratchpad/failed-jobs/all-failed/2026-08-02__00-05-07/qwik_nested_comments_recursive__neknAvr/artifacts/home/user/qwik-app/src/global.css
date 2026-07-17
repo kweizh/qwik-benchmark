@@ -1,0 +1,124 @@
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #1a1a1a;
+}
+
+.comments-page h1 {
+  margin-bottom: 0.25rem;
+}
+
+.post-id code {
+  background: #f0f0f0;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+.new-comment {
+  margin: 1.5rem 0 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.comment-form .form-row {
+  margin-bottom: 0.75rem;
+}
+
+.comment-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.comment-form input,
+.comment-form textarea {
+  font: inherit;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.comment-form button,
+.reply-toggle {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  background: #2563eb;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.reply-toggle {
+  background: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.comment-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+}
+
+.no-comments {
+  color: #666;
+  font-style: italic;
+}
+
+ul.comment-thread {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+ul.comment-thread.comment-replies {
+  margin-top: 0.75rem;
+  padding-left: 1.25rem;
+  border-left: 2px solid #e5e7eb;
+}
+
+li.comment {
+  margin-bottom: 1rem;
+}
+
+.comment-body {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+}
+
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #444;
+  margin-bottom: 0.35rem;
+}
+
+.comment-text {
+  margin: 0 0 0.5rem 0;
+  white-space: pre-wrap;
+}
+
+.reply-form {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #ddd;
+}

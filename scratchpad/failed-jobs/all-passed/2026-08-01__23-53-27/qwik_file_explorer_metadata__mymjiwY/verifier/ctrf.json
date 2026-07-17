@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T16:02:48.166050+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785600110260,
+            "stop": 1785600168165
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_01_initial_empty_list",
+                "status": "passed",
+                "duration": 1900,
+                "start": 1785600110341,
+                "stop": 1785600112241,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_02_upload_file",
+                "status": "passed",
+                "duration": 13,
+                "start": 1785600112242,
+                "stop": 1785600112255,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_03_list_with_uploaded_file",
+                "status": "passed",
+                "duration": 3,
+                "start": 1785600112256,
+                "stop": 1785600112259,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_04_files_page_ui",
+                "status": "passed",
+                "duration": 55862,
+                "start": 1785600112260,
+                "stop": 1785600168122,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_05_delete_file",
+                "status": "passed",
+                "duration": 28,
+                "start": 1785600168123,
+                "stop": 1785600168151,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_06_delete_non_existent",
+                "status": "passed",
+                "duration": 3,
+                "start": 1785600168151,
+                "stop": 1785600168154,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_07_upload_invalid",
+                "status": "passed",
+                "duration": 2,
+                "start": 1785600168154,
+                "stop": 1785600168156,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_08_delete_missing_physical_file",
+                "status": "passed",
+                "duration": 9,
+                "start": 1785600168156,
+                "stop": 1785600168165,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

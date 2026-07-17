@@ -1,0 +1,84 @@
+- Initializing MCP connections...
+You
+# Qwik Scheduled Tasks Dashboard ## Background In modern web applications, managing background scheduled jobs and monitoring their execution status is a common requirement. In this task, you will build a self-contained scheduled tasks dashboard using Qwik (Qwik City) and SQLite. ## Requirements * Build a web application using Qwik City that serves as a scheduled tasks manager and dashboard. * Store all tasks and their execution history in a local SQLite database. * Create a background interval runner within the application process that continuously polls the database and executes active tasks based on their configured interval. * Tasks are defined by shell commands. The background runner executes these commands, captures their exit status, and logs the execution results (success or failure) to the database history. * Implement a user interface at `/tasks` allowing users to view, create, pause/resume, and manually trigger tasks. * Implement a complete set of REST API endpoints under `/api/tasks` to allow programmatic control and automated verification of tasks. ## Implementation Hints * **Project Path**: `/home/user/qwik-app` * **Start Command**: `npm run dev` * **Port**: `3000` * **Database File**: `/home/user/qwik-app/tasks.db` * **Database Schema**: * Table `tasks`: * `id` (TEXT, PRIMARY KEY) - unique identifier (slug or UUID) * `name` (TEXT, NOT NULL) - human-readable name * `command` (TEXT, NOT NULL) - the shell command to execute * `interval_seconds` (INTEGER, NOT NULL) - execution interval in seconds * `status` (TEXT, NOT NULL) - must be either `'ACTIVE'` or `'PAUSED'` * Table `execution_history`: * `id` (INTEGER, PRIMARY KEY, AUTOINCREMENT) * `task_id` (TEXT, NOT NULL) - foreign key referencing `tasks.id` * `status` (TEXT, NOT NULL) - must be either `'SUCCESS'` or `'FAILED'` * `timestamp` (TEXT, NOT NULL) - ISO8601 UTC timestamp format (e.g., `YYYY-MM-DDTHH:MM:SS.SSSZ`) * **API Endpoints**: * **GET `/api/tasks`**: * Returns a JSON array of all tasks. * Status: 200 OK * Response schema: ```json [ { "id": "task-id", "name": "Task Name", "command": "echo 'hello'", "interval_seconds": 5, "status": "ACTIVE" } ] ``` * **POST `/api/tasks`**: * Creates a new task. * Status: 201 Created * Request body schema: ```json { "id": "task-id", "name": "Task Name", "command": "echo 'hello'", "interval_seconds": 5, "status": "ACTIVE" } ``` * Response body schema: Same as request body (the created task object). * If validation fails (e.g., missing fields, interval <= 0, invalid status), returns 400 Bad Request with a JSON error object. * **POST `/api/tasks/:id/pause`**: * Pauses an active task. * Status: 200 OK * Response body schema: ```json { "id": "task-id", "status": "PAUSED" } ``` * **POST `/api/tasks/:id/resume`**: * Resumes a paused task. * Status: 200 OK * Response body schema: ```json { "id": "task-id", "status": "ACTIVE" } ``` * **POST `/api/tasks/:id/trigger`**: * Triggers the task immediately in the background, executing the command and writing to `execution_history`. * Status: 200 OK * Response body schema: ```json { "id": "task-id", "triggered": true } ``` * **GET `/api/tasks/:id/history`**: * Returns execution history logs for the specified task, sorted by `timestamp` descending. * Status: 200 OK * Response body schema: ```json [ { "id": 1, "task_id": "task-id", "status": "SUCCESS", "timestamp": "2026-08-01T23:46:46.000Z" } ] ``` * **Frontend Routing**: * **GET `/tasks`**: * Renders an HTML page. * Displays all tasks and their current statuses. * Displays a table/list of the recent execution history logs. * Displays a form to create a new task. * Provides buttons or forms to pause, resume, and manually trigger each task. * **Background Runner Constraints**: * When the Qwik application is running via `npm run dev`, the background runner must be active. * It must execute active tasks' shell commands at least once every `interval_seconds`. * If the command exits with code `0`, log the execution as `'SUCCESS'`. Any other exit code must be logged as `'FAILED'`. * It must insert a row into `execution_history` with the exact task ID, status, and current UTC ISO8601 timestamp for every execution. * It must not block the main server thread or prevent HTTP requests from being handled. * Pausing a task must immediately stop its interval execution. Resuming a task must resume its interval execution.   
+
+Pochi
+📂 Listing files in . ✔ 
+📖 Reading package.json ✔ 
+📂 Listing files in src recursively ✔ 
+📖 Reading vite.config.ts ✔ 
+📖 Reading src/entry.dev.tsx ✔ 
+📖 Reading src/entry.ssr.tsx ✔ 
+💭 Thinking for 1277 characters   
+📖 Reading src/routes/index.tsx ✔ 
+💭 Thinking for 450 characters   
+🔍 Searching for **/*.ts in src ✔ 
+📂 Listing files in src/routes recursively ✔ 
+💭 Thinking for 331 characters   
+💫 Executing node -e "const Database = require('better-sqlite3'); console.log(Database);" ✔ 
+💭 Thinking for 512 characters   
+✏️  Writing src/db/db.ts ✔ 
+💭 Thinking for 2915 characters   
+✏️  Writing src/runner/runner.ts ✔ 
+💭 Thinking for 1008 characters   
+📖 Reading src/root.tsx ✔ 
+💭 Thinking for 1236 characters   
+✏️  Writing src/routes/plugin.ts ✔ 
+💭 Thinking for 1576 characters   
+✏️  Writing src/routes/api/tasks/index.ts ✔ 
+💭 Thinking for 236 characters   
+✏️  Writing src/routes/api/tasks/[id]/pause/index.ts ✔ 
+💭 Thinking for 262 characters   
+✏️  Writing src/routes/api/tasks/[id]/resume/index.ts ✔ 
+💭 Thinking for 180 characters   
+✏️  Writing src/routes/api/tasks/[id]/trigger/index.ts ✔ 
+💭 Thinking for 346 characters   
+✏️  Writing src/routes/api/tasks/[id]/history/index.ts ✔ 
+💭 Thinking for 2615 characters   
+📖 Reading src/global.css ✔ 
+💭 Thinking for 1903 characters   
+✏️  Writing src/routes/tasks/index.tsx ✔ 
+💫 Executing npm run build.types ✖ "Command exited with code 2"
+💭 Thinking for 670 characters   
+📖 Reading src/routes/api/tasks/[id]/history/index.ts ✔ 
+🔧 Applying diff to src/routes/api/tasks/[id]/history/index.ts ✔ 
+📖 Reading src/routes/api/tasks/[id]/pause/index.ts ✔ 
+🔧 Applying diff to src/routes/api/tasks/[id]/pause/index.ts ✔ 
+📖 Reading src/routes/api/tasks/[id]/resume/index.ts ✔ 
+🔧 Applying diff to src/routes/api/tasks/[id]/resume/index.ts ✔ 
+📖 Reading src/routes/api/tasks/[id]/trigger/index.ts ✔ 
+🔧 Applying diff to src/routes/api/tasks/[id]/trigger/index.ts ✔ 
+💫 Executing npm install --save-dev @types/better-sqlite3 ✔ 
+💫 Executing npm run build.types ✔ 
+💭 Thinking for 246 characters   
+📖 Reading vite.config.ts ✔ 
+🔧 Applying diff to vite.config.ts ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 235 characters   
+🛠️ Tool killBackgroundJob ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💫 Executing curl -s http://localhost:3000/api/tasks ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 231 characters   
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"id":"test-task","name":"Test Task","command":"echo '\''hello'\''","interval_seconds":3,"status":"ACTIVE"}' http://localhost:3000/api/tasks ✔ 
+💫 Executing sleep 4 && curl -s http://localhost:3000/api/tasks/test-task/history ✔ 
+💫 Executing curl -s -X POST http://localhost:3000/api/tasks/test-task/pause ✔ 
+💫 Executing curl -s http://localhost:3000/api/tasks ✔ 
+💫 Executing sleep 4 && curl -s http://localhost:3000/api/tasks/test-task/history ✔ 
+💫 Executing curl -s http://localhost:3000/api/tasks/test-task/history ✔ 
+💫 Executing curl -s -X POST http://localhost:3000/api/tasks/test-task/trigger ✔ 
+💫 Executing sleep 1 && curl -s http://localhost:3000/api/tasks/test-task/history ✔ 
+💫 Executing curl -s -X POST http://localhost:3000/api/tasks/test-task/resume ✔ 
+💫 Executing sleep 4 && curl -s http://localhost:3000/api/tasks/test-task/history ✔ 
+💫 Executing curl -s -X POST -H "Content-Type: application/json" -d '{"id":"failing-task","name":"Failing Task","command":"nonexistentcommand","interval_seconds":2,"status":"ACTIVE"}' http://localhost:3000/api/tasks ✔ 
+💫 Executing sleep 3 && curl -s http://localhost:3000/api/tasks/failing-task/history ✔ 
+💫 Executing curl -s -w "\nHTTP_STATUS: %{http_code}\n" -X POST -H "Content-Type: application/json" -d '{"id":"bad-task","name":"Bad Task","command":"echo","interval_seconds":-1,"status":"ACTIVE"}' http://localhost:3000/api/tasks ✔ 
+💫 Executing curl -s -w "\nHTTP_STATUS: %{http_code}\n" -X POST -H "Content-Type: application/json" -d '{"id":"bad-task","name":"Bad Task","command":"echo","interval_seconds":5,"status":"RUNNING"}' http://localhost:3000/api/tasks ✔ 
+💫 Executing curl -s -w "\nHTTP_STATUS: %{http_code}\n" -X POST -H "Content-Type: application/json" -d '{"id":"test-task","name":"Duplicate Task","command":"echo","interval_seconds":5,"status":"ACTIVE"}' http://localhost:3000/api/tasks ✔ 
+💫 Executing curl -s -w "\nHTTP_STATUS: %{http_code}\n" http://localhost:3000/api/tasks/nonexistent/history ✔ 
+💫 Executing curl -s -w "\nHTTP_STATUS: %{http_code}\n" -X POST http://localhost:3000/api/tasks/nonexistent/pause ✔ 
+💫 Executing curl -s -w "\nHTTP_STATUS: %{http_code}\n" -X POST http://localhost:3000/api/tasks/nonexistent/resume ✔ 
+💫 Executing curl -s -w "\nHTTP_STATUS: %{http_code}\n" -X POST http://localhost:3000/api/tasks/nonexistent/trigger ✔ 
+💭 Thinking for 205 characters   

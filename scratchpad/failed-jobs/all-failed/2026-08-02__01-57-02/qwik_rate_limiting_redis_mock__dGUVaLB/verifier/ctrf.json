@@ -1,0 +1,71 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T18:01:50.506661+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 2,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785607303258,
+            "stop": 1785607310506
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_rate_limiting_and_headers",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 1541,
+                "start": 1785607303347,
+                "stop": 1785607304888,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_rate_limiting_and_headers(start_app):\n        # To avoid boundary issues, if we are extremely close to the end of a 10s window (e.g. within 1.5 seconds),\n        # sleep until the next window starts so our test runs fully inside a single window.\n        now = time.time()\n        time_in_window = now % 10\n        if time_in_window > 8.5:\n            sleep_time = 10.5 - time_in_window\n            print(f\"Close to window boundary ({time_in_window:.2f}s). Sleeping for {sleep_time:.2f}s to align window.\")\n            time.sleep(sleep_time)\n    \n        # 1. Send first request\n        url = f\"{BASE_URL}/api/data\"\n        resp = requests.get(url)\n        assert resp.status_code == 200, f\"Expected 200 OK on first request, got {resp.status_code}\"\n        assert resp.json() == {\"data\": \"Success\"}, f\"Expected body to be {{'data': 'Success'}}, got {resp.json()}\"\n    \n        # Assert headers\n        headers = resp.headers\n        assert \"X-RateLimit-Limit\" in headers, \"Missing X-RateLimit-Limit header\"\n        assert \"X-RateLimit-Remaining\" in headers, \"Missing X-RateLimit-Remaining header\"\n        assert \"X-RateLimit-Reset\" in headers, \"Missing X-RateLimit-Reset header\"\n    \n        assert headers[\"X-RateLimit-Limit\"] == \"5\", f\"Expected X-RateLimit-Limit to be 5, got {headers['X-RateLimit-Limit']}\"\n>       assert headers[\"X-RateLimit-Remaining\"] == \"4\", f\"Expected X-RateLimit-Remaining to be 4 on first request, got {headers['X-RateLimit-Remaining']}\"\nE       AssertionError: Expected X-RateLimit-Remaining to be 4 on first request, got 3\nE       assert '3' == '4'\nE         - 4\nE         + 3\n\n/tests/test_final_state.py:90: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_debug_store_endpoint",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 7,
+                "start": 1785607304889,
+                "stop": 1785607304896,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_debug_store_endpoint(start_app):\n        # Retrieve current window ID\n        window_id = int(time.time()) // 10\n        debug_url = f\"{BASE_URL}/api/debug-store\"\n    \n        resp = requests.get(debug_url)\n        assert resp.status_code == 200, f\"Expected 200 OK from debug store, got {resp.status_code}\"\n    \n        data = resp.json()\n        assert \"keys\" in data, f\"Response JSON missing 'keys' field: {data}\"\n    \n        keys = data[\"keys\"]\n        expected_key = f\"ratelimit:127.0.0.1:{window_id}\"\n        assert expected_key in keys, f\"Expected key {expected_key} not found in debug store keys: {keys}\"\n>       assert keys[expected_key] == 6, f\"Expected count for 127.0.0.1 to be 6, got {keys[expected_key]}\"\nE       AssertionError: Expected count for 127.0.0.1 to be 6, got 2\nE       assert 2 == 6\n\n/tests/test_final_state.py:127: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_ip_detection_via_x_forwarded_for",
+                "status": "passed",
+                "duration": 4,
+                "start": 1785607304897,
+                "stop": 1785607304901,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_window_reset_and_cleanup",
+                "status": "passed",
+                "duration": 5605,
+                "start": 1785607304901,
+                "stop": 1785607310506,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

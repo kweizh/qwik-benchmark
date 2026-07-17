@@ -1,0 +1,93 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 2 items
+
+../../../tests/test_final_state.py ..                                    [100%]
+
+==================================== PASSES ====================================
+____________________ test_api_crud_and_background_execution ____________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --host 127.0.0.1 --port 3000
+process 'start_app' started pid=1896
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 3000
+
+
+  VITE v7.3.1   ssr   ready in 507 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+[Runner] Background task runner started
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+(skipped 10 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+[Task test-success-task] stdout: success
+[Task test-success-task] Executed: SUCCESS at 2026-08-01T17:05:56.278Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:05:56.278Z
+[Task test-success-task] stdout: success
+[Task test-success-task] Executed: SUCCESS at 2026-08-01T17:05:59.273Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:01.275Z
+[Task test-success-task] stdout: success
+[Task test-success-task] Executed: SUCCESS at 2026-08-01T17:06:02.276Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:03.277Z
+[Task test-success-task] stdout: success
+[Task test-success-task] Executed: SUCCESS at 2026-08-01T17:06:05.278Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:06.283Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:06.283Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:09.280Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:11.282Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:12.284Z
+[Task test-success-task] stdout: success
+[Task test-success-task] Executed: SUCCESS at 2026-08-01T17:06:13.530Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:15.286Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:16.287Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:18.288Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:21.296Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:21.296Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:24.295Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:26.295Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:27.296Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:30.300Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:31.300Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:33.302Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:36.308Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:36.308Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:39.308Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:41.326Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:42.309Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:45.326Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:46.312Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:48.314Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:51.320Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:51.320Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:54.319Z
+[Task hello-world] stdout: hello
+[Task hello-world] Executed: SUCCESS at 2026-08-01T17:06:56.319Z
+[Task test-fail-task] Executed: FAILED at 2026-08-01T17:06:57.321Z
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../../../tests/test_final_state.py::test_api_crud_and_background_execution
+PASSED ../../../tests/test_final_state.py::test_html_dashboard_ui
+========================= 2 passed in 65.07s (0:01:05) =========================

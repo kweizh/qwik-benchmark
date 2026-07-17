@@ -1,0 +1,6 @@
+{
+  "library_name": "Qwik",
+  "task_name": "qwik_realtime_chat_sse",
+  "research_plan_path": "plan.md",
+  "output_dir": "scratchpad/pending-tasks"
+}

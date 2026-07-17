@@ -1,0 +1,6 @@
+{
+  "library_name": "Qwik",
+  "task_name": "qwik_full_text_search_sqlite",
+  "research_plan_path": "plan.md",
+  "output_dir": "scratchpad/pending-tasks"
+}

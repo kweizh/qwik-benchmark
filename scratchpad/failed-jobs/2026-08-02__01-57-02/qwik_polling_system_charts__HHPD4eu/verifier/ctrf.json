@@ -1,0 +1,89 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T18:04:29.516312+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 0,
+            "failed": 5,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785607403768,
+            "stop": 1785607469516
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_get_poll_pages",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 1965,
+                "start": 1785607403843,
+                "stop": 1785607405808,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_get_poll_pages(start_app):\n        \"\"\"Verify that poll pages load successfully and render correct elements.\"\"\"\n        # Test valid poll: frameworks\n        resp = requests.get(f\"{BASE_URL}/poll/frameworks\")\n        assert resp.status_code == 200, f\"Expected 200 OK for /poll/frameworks, got {resp.status_code}\"\n        html = resp.text\n    \n>       assert \"What is your favorite frontend framework?\" in html, \"Poll question not found in HTML\"\nE       AssertionError: Poll question not found in HTML\nE       assert 'What is your favorite frontend framework?' in \"<style>\\nvite-error-overlay {\\n  --color-bright: rgba(255, 255, 255, 0.8);\\n  --color-yellow: rgba(255,246,85,0.8);\\n...             }\\n            </script>\\n          </head>\\n          <body>\\n          </body>\\n        </html>\\n      \"\n\n/tests/test_final_state.py:87: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_vote_api_validation",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 15,
+                "start": 1785607405809,
+                "stop": 1785607405824,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_vote_api_validation(start_app):\n        \"\"\"Verify API input validation and error responses.\"\"\"\n        # Invalid Option ID (non-existent option)\n        resp = requests.post(\n            f\"{BASE_URL}/poll/frameworks/vote\",\n            json={\"optionId\": 999},\n            headers={\"X-Forwarded-For\": \"100.100.100.1\"}\n        )\n>       assert resp.status_code in [404, 400], f\"Expected 404 or 400 for non-existent option, got {resp.status_code}\"\nE       AssertionError: Expected 404 or 400 for non-existent option, got 200\nE       assert 200 in [404, 400]\nE        +  where 200 = <Response [200]>.status_code\n\n/tests/test_final_state.py:116: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_vote_flow_and_rate_limiting",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 60,
+                "start": 1785607405824,
+                "stop": 1785607405884,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "self = <Response [200]>, kwargs = {}, encoding = 'utf-8'\n\n    def json(self, **kwargs: Any) -> Any:\n        r\"\"\"Decodes the JSON response body (if any) as a Python object.\n    \n        This may return a dictionary, list, etc. depending on what is in the response.\n    \n        :param \\*\\*kwargs: Optional arguments that ``json.loads`` takes.\n        :raises requests.exceptions.JSONDecodeError: If the response body does not\n            contain valid json.\n        \"\"\"\n    \n        if not self.encoding and self.content and len(self.content) > 3:\n            # No encoding set. JSON RFC 4627 section 3 states we should expect\n            # UTF-8, -16 or -32. Detect which one to use; If the detection or\n            # decoding fails, fall back to `self.text` (using charset_normalizer to make\n            # a best guess).\n            encoding = guess_json_utf(self.content)\n            if encoding is not None:\n                try:\n>                   return complexjson.loads(self.content.decode(encoding), **kwargs)\n\n/usr/local/lib/python3.12/dist-packages/requests/models.py:1105: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/lib/python3.12/json/__init__.py:346: in loads\n    return _default_decoder.decode(s)\n/usr/lib/python3.12/json/decoder.py:337: in decode\n    obj, end = self.raw_decode(s, idx=_w(s, 0).end())\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <json.decoder.JSONDecoder object at 0x7af8ca13eb70>\ns = \"<style>\\nvite-error-overlay {\\n  --color-bright: rgba(255, 255, 255, 0.8);\\n  --color-yellow: rgba(255,246,85,0.8);\\n...             }\\n            </script>\\n          </head>\\n          <body>\\n          </body>\\n        </html>\\n      \"\nidx = 0\n\n    def raw_decode(self, s, idx=0):\n        \"\"\"Decode a JSON document from ``s`` (a ``str`` beginning with\n        a JSON document) and return a 2-tuple of the Python\n        representation and the index in ``s`` where the document ended.\n    \n        This can be used to decode a JSON document from a string that may\n        have extraneous data at the end.\n    \n        \"\"\"\n        try:\n            obj, end = self.scan_once(s, idx)\n        except StopIteration as err:\n>           raise JSONDecodeError(\"Expecting value\", s, err.value) from None\nE           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\n/usr/lib/python3.12/json/decoder.py:355: JSONDecodeError\n\nDuring handling of the above exception, another exception occurred:\n\nstart_app = None\n\n    def test_vote_flow_and_rate_limiting(start_app):\n        \"\"\"Verify voting success, database persistence, and rate limiting.\"\"\"\n        # Reset any previous votes for option 1 (Qwik) in SQLite for determinism\n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n        cursor.execute(\"UPDATE options SET votes = 0 WHERE id = 1;\")\n        cursor.execute(\"DELETE FROM votes_log WHERE poll_id = 'frameworks';\")\n        conn.commit()\n        conn.close()\n    \n        # Vote 1: IP 1.2.3.4\n        resp = requests.post(\n            f\"{BASE_URL}/poll/frameworks/vote\",\n            json={\"optionId\": 1},\n            headers={\"X-Forwarded-For\": \"1.2.3.4\"}\n        )\n        assert resp.status_code == 200, f\"First vote failed: {resp.text}\"\n>       data = resp.json()\n\n/tests/test_final_state.py:154: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Response [200]>, kwargs = {}, encoding = 'utf-8'\n\n    def json(self, **kwargs: Any) -> Any:\n        r\"\"\"Decodes the JSON response body (if any) as a Python object.\n    \n        This may return a dictionary, list, etc. depending on what is in the response.\n    \n        :param \\*\\*kwargs: Optional arguments that ``json.loads`` takes.\n        :raises requests.exceptions.JSONDecodeError: If the response body does not\n            contain valid json.\n        \"\"\"\n    \n        if not self.encoding and self.content and len(self.content) > 3:\n            # No encoding set. JSON RFC 4627 section 3 states we should expect\n            # UTF-8, -16 or -32. Detect which one to use; If the detection or\n            # decoding fails, fall back to `self.text` (using charset_normalizer to make\n            # a best guess).\n            encoding = guess_json_utf(self.content)\n            if encoding is not None:\n                try:\n                    return complexjson.loads(self.content.decode(encoding), **kwargs)\n                except UnicodeDecodeError:\n                    # Wrong UTF codec detected; usually because it's not UTF-8\n                    # but some other 8-bit codec.  This is an RFC violation,\n                    # and the server didn't bother to tell us what codec *was*\n                    # used.\n                    pass\n                except JSONDecodeError as e:\n>                   raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)\nE                   requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)\n\n/usr/local/lib/python3.12/dist-packages/requests/models.py:1113: JSONDecodeError",
+                "message": "The test failed in the call phase"
+            },
+            {
+                "name": "test_final_state.py::test_concurrency",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 103,
+                "start": 1785607405884,
+                "stop": 1785607405987,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_concurrency(start_app):\n        \"\"\"Verify that concurrent votes from different IPs are processed correctly without race conditions.\"\"\"\n        # Reset votes for option 3 (Vue)\n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n        cursor.execute(\"UPDATE options SET votes = 0 WHERE id = 3;\")\n        cursor.execute(\"DELETE FROM votes_log WHERE poll_id = 'frameworks';\")\n        conn.commit()\n        conn.close()\n    \n        num_threads = 20\n        ips = [f\"10.0.0.{i}\" for i in range(1, num_threads + 1)]\n    \n        def cast_vote(ip):\n            try:\n                resp = requests.post(\n                    f\"{BASE_URL}/poll/frameworks/vote\",\n                    json={\"optionId\": 3},\n                    headers={\"X-Forwarded-For\": ip},\n                    timeout=5\n                )\n                return resp.status_code\n            except Exception as e:\n                return str(e)\n    \n        with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:\n            results = list(executor.map(cast_vote, ips))\n    \n        # Assert all concurrent requests succeeded with 200\n        assert results == [200] * num_threads, f\"Some concurrent requests failed: {results}\"\n    \n        # Verify database has exactly 20 votes\n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n        cursor.execute(\"SELECT votes FROM options WHERE id = 3;\")\n        votes = cursor.fetchone()[0]\n        conn.close()\n>       assert votes == num_threads, f\"Expected exactly {num_threads} votes, but found {votes} in database.\"\nE       AssertionError: Expected exactly 20 votes, but found 0 in database.\nE       assert 0 == 20\n\n/tests/test_final_state.py:224: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_browser_ui_verification",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 63528,
+                "start": 1785607405987,
+                "stop": 1785607469515,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\nbrowser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x7af8c90030b0>\n\n    def test_browser_ui_verification(start_app, browser_verifier):\n        \"\"\"Verify frontend rendering and dynamic updates using PochiVerifier.\"\"\"\n        # Reset votes for poll 'colors' to 0 for option 5 (Red)\n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n        cursor.execute(\"UPDATE options SET votes = 0 WHERE id = 5;\")\n        cursor.execute(\"DELETE FROM votes_log WHERE poll_id = 'colors';\")\n        conn.commit()\n        conn.close()\n    \n        reason = \"The poll page should render the question, an SVG bar chart of results, and allow casting a vote which dynamically updates the SVG chart.\"\n        truth = (\n            f\"Navigate to {BASE_URL}/poll/colors. \"\n            \"Verify that the element with id 'poll-question' contains 'What is your favorite primary color?'. \"\n            \"Verify that the SVG with id 'poll-chart' is visible. \"\n            \"Find the vote button with data-option-id '5' (for Red) and click it. \"\n            \"Verify that the vote count text with data-option-id '5' inside the SVG chart is updated to '1' or contains '1'. \"\n            \"Verify that the SVG rect with data-option-id '5' now has a width greater than 0.\"\n        )\n    \n        result = browser_verifier.verify(\n            reason=reason,\n            truth=truth,\n            use_browser_agent=True,\n            trajectory_dir=\"/logs/verifier/pochi/test_polling_system_ui\"\n        )\n>       assert result.status == \"pass\", f\"Browser verification failed: {result.reason}\"\nE       AssertionError: Browser verification failed: The test failed because navigating to http://127.0.0.1:3000/poll/colors resulted in a server-side error (500) with a Vite error overlay displaying 'Too few parameter values were provided' inside the Qwik route loader. Due to this error, the poll page, the question, and the SVG chart did not render, preventing any further verification steps from being executed.\nE       assert 'fail' == 'pass'\nE         - pass\nE         + fail\n\n/tests/test_final_state.py:253: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

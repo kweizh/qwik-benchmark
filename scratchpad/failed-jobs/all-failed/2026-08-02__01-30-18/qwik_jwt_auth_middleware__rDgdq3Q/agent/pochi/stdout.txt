@@ -1,0 +1,96 @@
+- Initializing MCP connections...
+You
+# Qwik City JWT Authentication Middleware ## Background Secure routing and session management are fundamental aspects of full-stack web applications. In Qwik City, middleware and routing primitives can be composed to intercept incoming requests, verify credentials, and protect sensitive pages. Your task is to implement a complete, secure JWT-based authentication middleware system in a Qwik City application. ## Requirements You must implement the following routes and middleware behavior in the Qwik City application located at `/home/user/qwik-app`: 1. **Authentication Middleware**: - Intercepts requests to `/admin/*` and checks for the presence of a cookie named `jwt_token`. - Verifies the signature of the `jwt_token` cookie using the HMAC-SHA256 algorithm and the secret key `secret_key_123`. - Decodes the JWT payload and verifies that the `role` field is equal to `"admin"`. - If the token is missing, invalid, or does not have the `"admin"` role, the middleware must redirect the client to `/login` with a `302 Found` status code. - If the token is valid and contains the `"admin"` role, the request is allowed to proceed. 2. **Login Route (`/login`)**: - **GET `/login`**: Renders a page containing the text `Login Page`. - **POST `/login`**: Accepts standard form submissions (URL-encoded) or JSON POST requests containing `username` and `password`. - Valid credentials are: username `admin` and password `password123`. - If the credentials are valid, it must generate a JWT signed with HMAC-SHA256 using the secret key `secret_key_123`. The JWT payload must contain: ```json { "username": "admin", "role": "admin" } ``` - It must set a cookie named `jwt_token` with the generated JWT as its value. - It must redirect the client to `/admin/dashboard` with a `302 Found` status code. - If the credentials are invalid, it must return a `401 Unauthorized` status code and a JSON response: ```json { "error": "Invalid credentials" } ``` 3. **Admin Dashboard Route (`/admin/dashboard`)**: - **GET `/admin/dashboard`**: Only accessible if the `jwt_token` is valid and contains the `"admin"` role. - If authorized, returns a `200 OK` status and renders a page containing the text `Welcome to the Admin Dashboard, admin!`. 4. **Logout Route (`/logout`)**: - **POST `/logout`**: Clears the `jwt_token` cookie and redirects the client to `/login` with a `302 Found` status code. ## Implementation Hints - Project path: `/home/user/qwik-app` - Start command: `npm run dev` - Port: 3000 - **Do NOT** add any external routing libraries; use Qwik City's native directory-based routing and middleware features. - All redirect status codes must be exactly `302`. - Cookies must be managed using Qwik City's request event context or standard HTTP headers. - The JWT secret key is exactly `secret_key_123`.   
+
+Pochi
+💭 Thinking for 266 characters   
+📂 Listing files in /home/user/qwik-app ✔ 
+📂 Listing files in /home/user/qwik-app/src recursively ✔ 
+📖 Reading /home/user/qwik-app/package.json ✔ 
+💭 Thinking for 241 characters   
+📖 Reading /home/user/qwik-app/src/routes/index.tsx ✔ 
+💭 Thinking for 2008 characters   
+🔍 Searching for redirect|RequestHandler in /home/user/qwik-app ✔ 
+📖 Reading /home/user/qwik-app/node_modules/@builder.io/qwik/dist/starters/features/compiled-i18n/src/routes/plugin@compiled-i18n.ts ✔ 
+💭 Thinking for 332 characters   
+🔍 Searching for export interface RequestEvent in *.d.ts files in /home/user/qwik-app/node_modules/@builder.io/qwik-city ✔ 
+🔍 Searching for interface RequestEvent in *.d.ts files in /home/user/qwik-app/node_modules/@builder.io/qwik-city ✔ 
+💭 Thinking for 228 characters   
+📖 Reading /home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.d.ts ✔ 
+📖 Reading /home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler/index.d.ts ✔ 
+🔍 Searching for cookie in index.d.ts files in /home/user/qwik-app/node_modules/@builder.io/qwik-city/lib/middleware/request-handler ✔ 
+💭 Thinking for 942 characters   
+🔍 Searching for throw.*redirect in /home/user/qwik-app/node_modules ✔ 
+💭 Thinking for 1537 characters   
+✏️  Writing /home/user/qwik-app/src/utils/jwt.ts ✔ 
+💭 Thinking for 253 characters   
+💫 Executing node -e '
+const crypto = require("crypto");
+const signJwt = (payload, secret) => {
+  const header = { alg: "HS256", typ: "JWT" };
+  const encodedHeader = Buffer.from(JSON.stringify(header)).toString("base64url");
+  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const signature = crypto.createHmac("sha256", secret).update(`${encodedHeader}.${encodedPayload}`).digest("base64url");
+  return `${encodedHeader}.${encodedPayload}.${signature}`;
+};
+const verifyJwt = (token, secret) => {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    const [encodedHeader, encodedPayload, signature] = parts;
+    const expectedSignature = crypto.createHmac("sha256", secret).update(`${encodedHeader}.${encodedPayload}`).digest("base64url");
+    if (signature !== expectedSignature) return null;
+    const payloadStr = Buffer.from(encodedPayload, "base64url").toString("utf8");
+    return JSON.parse(payloadStr);
+  } catch (err) {
+    return null;
+  }
+};
+const token = signJwt({ username: "admin", role: "admin" }, "secret_key_123");
+console.log("Token:", token);
+console.log("Verified:", verifyJwt(token, "secret_key_123"));
+console.log("Invalid Key Verified:", verifyJwt(token, "wrong_key"));
+' ✔ 
+💭 Thinking for 1431 characters   
+✏️  Writing /home/user/qwik-app/src/routes/admin/layout.tsx ✔ 
+✏️  Writing /home/user/qwik-app/src/routes/admin/dashboard/index.tsx ✔ 
+💭 Thinking for 1040 characters   
+✏️  Writing /home/user/qwik-app/src/routes/login/index.tsx ✔ 
+💭 Thinking for 588 characters   
+✏️  Writing /home/user/qwik-app/src/routes/logout/index.tsx ✔ 
+💭 Thinking for 1220 characters   
+💫 Executing npm run build.types ✔ 
+💫 Executing npm run lint ✖ "Command exited with code 1"
+💭 Thinking for 212 characters   
+📖 Reading /home/user/qwik-app/src/utils/jwt.ts ✔ 
+🔧 Applying diff to /home/user/qwik-app/src/utils/jwt.ts ✔ 
+💫 Executing npm run lint ✔ 
+💫 Executing npm run build ✔ 
+💭 Thinking for 327 characters   
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💭 Thinking for 233 characters   
+📖 Reading /home/user/qwik-app/vite.config.ts ✔ 
+💭 Thinking for 297 characters   
+🔧 Applying diff to /home/user/qwik-app/vite.config.ts ✔ 
+🛠️ Tool killBackgroundJob ✔ 
+🛠️ Tool startBackgroundJob ✔ 
+🛠️ Tool readBackgroundJobOutput ✔ 
+💫 Executing lsof -i :3000 || netstat -tulnp | grep 3000 || true ✔ 
+💫 Executing ss -tlpn || true ✔ 
+💭 Thinking for 298 characters   
+💫 Executing python3 -c '
+import socket
+s = socket.socket()
+try:
+    s.bind(("127.0.0.1", 3000))
+    print("Port 3000 is free")
+except Exception as e:
+    print("Port 3000 is occupied:", e)
+finally:
+    s.close()
+' ✔ 
+💭 Thinking for 280 characters   
+🔧 Applying diff to /home/user/qwik-app/vite.config.ts ✔ 
+🛠️ Tool killBackgroundJob ✔ 
+🛠️ Tool startBackgroundJob ✔ 

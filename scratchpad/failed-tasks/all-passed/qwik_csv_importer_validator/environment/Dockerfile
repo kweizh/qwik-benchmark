@@ -1,0 +1,40 @@
+FROM ubuntu:24.04
+
+ARG POCHI_VERSION
+
+RUN apt-get update -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        curl wget ca-certificates git python3 python3-pip python3-pytest bash ripgrep && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
+    curl -fsSL https://getpochi.com/install.sh | bash -s ${POCHI_VERSION} && \
+    ln -s /root/.pochi/bin/pochi /usr/local/bin/pochi && \
+    pip3 install --break-system-packages pytest-json-ctrf requests pytest-xprocess && \
+    curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
+    apt-get install -y --no-install-recommends nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /home/user && chmod 0755 /home/user
+
+RUN cd /home/user && \
+    CI=true npm create qwik@latest empty qwik-app --yes --no-git --no-install && \
+    cd qwik-app && \
+    npm install
+
+LABEL Author="generate-harbor-tasks"
+LABEL Description="Qwik City meta-framework environment with Node.js v24 and a scaffolded empty project, utilizing local SQLite."
+
+CMD ["/bin/bash", "-c", "trap : TERM INT; sleep infinity & wait"]
+
+# Container contents:
+#   - always required apt packages: curl wget ca-certificates git python3 python3-pip python3-pytest bash ripgrep
+#   - always required pip3 packages: pytest-json-ctrf, requests, pytest-xprocess
+#   - Node.js v24 for Qwik development
+#   - Scaffolded empty Qwik City project at /home/user/qwik-app
+
+COPY test_initial_state.py /bootstrap/test_initial_state.py
+
+# Setup entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,0 +1,38 @@
+Traceback (most recent call last):
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/verifier/verifier.py", line 150, in verify
+    await self.environment.upload_dir(
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/environments/daytona/environment.py", line 1936, in upload_dir
+    return await self._strategy.upload_dir(source_dir, target_dir)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/environments/daytona/environment.py", line 386, in upload_dir
+    await self._env._sdk_upload_dir(source_dir, target_dir)
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/environments/daytona/environment.py", line 1847, in _sdk_upload_dir
+    await self._sandbox_exec(
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/environments/daytona/environment.py", line 1716, in _sandbox_exec
+    response = await self._sandbox.process.execute_session_command(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/daytona/_utils/errors.py", line 219, in async_wrapper
+    process_n_raise_exception(e)
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/daytona/_utils/errors.py", line 173, in process_n_raise_exception
+    raise daytona_error_cls(_prefix_message(message_prefix, str(e))) from None
+daytona.common.errors.DaytonaTimeoutError: Failed to execute session command: 
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/trial/trial.py", line 354, in run
+    await self._run()
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/trial/single_step.py", line 52, in _run
+    await self._run_verifier()
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/trial/single_step.py", line 105, in _run_verifier
+    self.result.verifier_result = await self._run_shared_verifier(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/trial/trial.py", line 535, in _run_shared_verifier
+    return await asyncio.wait_for(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/miniconda3/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/home/kw/.local/share/uv/tools/harbor/lib/python3.12/site-packages/harbor/verifier/verifier.py", line 155, in verify
+    raise AddTestsDirError(
+harbor.verifier.verifier.AddTestsDirError: Failed to add tests directory to environment.

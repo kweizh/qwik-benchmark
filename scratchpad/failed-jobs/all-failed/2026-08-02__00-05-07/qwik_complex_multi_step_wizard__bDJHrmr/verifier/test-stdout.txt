@@ -1,0 +1,172 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 9 items
+
+../tests/test_final_state.py FFFFFFFFF                                   [100%]
+
+=================================== FAILURES ===================================
+________________________ test_redirect_on_default_route ________________________
+
+start_app = None
+
+    def test_redirect_on_default_route(start_app):
+        url = f"{BASE_URL}/signup"
+        resp = requests.get(url, allow_redirects=False)
+>       assert resp.status_code in [302, 303], f"Expected 302 or 303 redirect, got {resp.status_code}"
+E       AssertionError: Expected 302 or 303 redirect, got 301
+E       assert 301 in [302, 303]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:91: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'start_app' started pid=1588
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 533 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+________________________ test_step1_validation_failure _________________________
+
+start_app = None
+
+    def test_step1_validation_failure(start_app):
+        url = f"{BASE_URL}/signup?step=1"
+        data = {"username": "ab", "password": "123"}
+        resp = requests.post(url, data=data, allow_redirects=False)
+>       assert resp.status_code == 200, f"Expected status code 200, got {resp.status_code}"
+E       AssertionError: Expected status code 200, got 301
+E       assert 301 == 200
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:100: AssertionError
+________________________ test_step1_validation_success _________________________
+
+start_app = None
+
+    def test_step1_validation_success(start_app):
+        url = f"{BASE_URL}/signup?step=1"
+        data = {"username": "john_doe", "password": "password123"}
+        resp = requests.post(url, data=data, allow_redirects=False)
+>       assert resp.status_code in [302, 303], f"Expected 302/303 redirect, got {resp.status_code}"
+E       AssertionError: Expected 302/303 redirect, got 301
+E       assert 301 in [302, 303]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:111: AssertionError
+______________________ test_step2_missing_cookie_redirect ______________________
+
+start_app = None
+
+    def test_step2_missing_cookie_redirect(start_app):
+        url = f"{BASE_URL}/signup?step=2"
+        resp = requests.get(url, allow_redirects=False)
+>       assert resp.status_code in [302, 303], f"Expected 302/303 redirect, got {resp.status_code}"
+E       AssertionError: Expected 302/303 redirect, got 301
+E       assert 301 in [302, 303]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:125: AssertionError
+________________________ test_step2_validation_failure _________________________
+
+start_app = None
+
+    def test_step2_validation_failure(start_app):
+        url = f"{BASE_URL}/signup?step=2"
+        data = {"fullName": "J", "email": "invalid-email"}
+        cookies = {"signup_step1": urllib.parse.quote(json.dumps({"username": "john_doe", "password": "password123"}))}
+        resp = requests.post(url, data=data, cookies=cookies, allow_redirects=False)
+>       assert resp.status_code == 200, f"Expected status code 200, got {resp.status_code}"
+E       AssertionError: Expected status code 200, got 301
+E       assert 301 == 200
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:135: AssertionError
+________________________ test_step2_validation_success _________________________
+
+start_app = None
+
+    def test_step2_validation_success(start_app):
+        url = f"{BASE_URL}/signup?step=2"
+        data = {"fullName": "John Doe", "email": "john@example.com"}
+        cookies = {"signup_step1": urllib.parse.quote(json.dumps({"username": "john_doe", "password": "password123"}))}
+        resp = requests.post(url, data=data, cookies=cookies, allow_redirects=False)
+>       assert resp.status_code in [302, 303], f"Expected 302/303 redirect, got {resp.status_code}"
+E       AssertionError: Expected 302/303 redirect, got 301
+E       assert 301 in [302, 303]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:147: AssertionError
+_____________________ test_step3_missing_cookies_redirect ______________________
+
+start_app = None
+
+    def test_step3_missing_cookies_redirect(start_app):
+        url = f"{BASE_URL}/signup?step=3"
+        # Try with no cookies
+        resp = requests.get(url, allow_redirects=False)
+>       assert resp.status_code in [302, 303], "Expected redirect on missing cookies"
+E       AssertionError: Expected redirect on missing cookies
+E       assert 301 in [302, 303]
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:162: AssertionError
+__________________________ test_step3_render_details ___________________________
+
+start_app = None
+
+    def test_step3_render_details(start_app):
+        url = f"{BASE_URL}/signup?step=3"
+        cookies = {
+            "signup_step1": urllib.parse.quote(json.dumps({"username": "john_doe", "password": "password123"})),
+            "signup_step2": urllib.parse.quote(json.dumps({"fullName": "John Doe", "email": "john@example.com"}))
+        }
+        resp = requests.get(url, cookies=cookies, allow_redirects=False)
+>       assert resp.status_code == 200, f"Expected status code 200, got {resp.status_code}"
+E       AssertionError: Expected status code 200, got 301
+E       assert 301 == 200
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:185: AssertionError
+________________________ test_step3_submit_confirmation ________________________
+
+start_app = None
+
+    def test_step3_submit_confirmation(start_app):
+        url = f"{BASE_URL}/signup?step=3"
+        cookies = {
+            "signup_step1": urllib.parse.quote(json.dumps({"username": "john_doe", "password": "password123"})),
+            "signup_step2": urllib.parse.quote(json.dumps({"fullName": "John Doe", "email": "john@example.com"}))
+        }
+        resp = requests.post(url, cookies=cookies, allow_redirects=False)
+>       assert resp.status_code == 200, f"Expected status code 200, got {resp.status_code}"
+E       AssertionError: Expected status code 200, got 301
+E       assert 301 == 200
+E        +  where 301 = <Response [301]>.status_code
+
+/tests/test_final_state.py:200: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+FAILED ../tests/test_final_state.py::test_redirect_on_default_route - Asserti...
+FAILED ../tests/test_final_state.py::test_step1_validation_failure - Assertio...
+FAILED ../tests/test_final_state.py::test_step1_validation_success - Assertio...
+FAILED ../tests/test_final_state.py::test_step2_missing_cookie_redirect - Ass...
+FAILED ../tests/test_final_state.py::test_step2_validation_failure - Assertio...
+FAILED ../tests/test_final_state.py::test_step2_validation_success - Assertio...
+FAILED ../tests/test_final_state.py::test_step3_missing_cookies_redirect - As...
+FAILED ../tests/test_final_state.py::test_step3_render_details - AssertionErr...
+FAILED ../tests/test_final_state.py::test_step3_submit_confirmation - Asserti...
+============================== 9 failed in 1.52s ===============================

@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T16:12:25.579359+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785600743765,
+            "stop": 1785600745579
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_01_initial_state_empty",
+                "status": "passed",
+                "duration": 1311,
+                "start": 1785600743852,
+                "stop": 1785600745163,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_02_add_tasks",
+                "status": "passed",
+                "duration": 18,
+                "start": 1785600745164,
+                "stop": 1785600745182,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_03_move_task_to_another_column",
+                "status": "passed",
+                "duration": 12,
+                "start": 1785600745182,
+                "stop": 1785600745194,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_04_move_task_within_column",
+                "status": "passed",
+                "duration": 9,
+                "start": 1785600745194,
+                "stop": 1785600745203,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_05_validation_and_error_handling",
+                "status": "passed",
+                "duration": 57,
+                "start": 1785600745203,
+                "stop": 1785600745260,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_06_ui_rendering",
+                "status": "passed",
+                "duration": 318,
+                "start": 1785600745260,
+                "stop": 1785600745578,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

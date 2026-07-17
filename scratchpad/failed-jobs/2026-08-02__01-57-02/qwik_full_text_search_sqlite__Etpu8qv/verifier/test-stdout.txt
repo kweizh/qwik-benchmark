@@ -1,0 +1,693 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.3
+collected 7 items
+
+../tests/test_final_state.py EEEEEEE                                     [100%]
+
+==================================== ERRORS ====================================
+________________ ERROR at setup of test_empty_or_missing_query _________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7611e0f49af0>
+
+    @pytest.fixture(scope="session", autouse=True)
+    def start_app(xprocess):
+        """
+        Starts the Qwik City service using xprocess. Confirms readiness via port check.
+        Removes pre-existing db.sqlite to guarantee clean state and deterministic rowids.
+        """
+        # Cleanup DB file if it exists to ensure deterministic rowids
+        db_path = os.path.join(PROJECT_DIR, "db.sqlite")
+        if os.path.isfile(db_path):
+            try:
+                os.remove(db_path)
+            except Exception as e:
+                print(f"Failed to remove db file: {e}")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Ping the search endpoint to confirm HTTP server is responding
+                    resp = requests.get(f"{BASE_URL}/search", timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7611e03ab050>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --host 127.0.0.1
+process 'start_app' started pid=1563
+============================== [FAILED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 580 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [FAILED: End  ] Captured start_app logfile ==============================
+____________________ ERROR at setup of test_standard_search ____________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7611e0f49af0>
+
+    @pytest.fixture(scope="session", autouse=True)
+    def start_app(xprocess):
+        """
+        Starts the Qwik City service using xprocess. Confirms readiness via port check.
+        Removes pre-existing db.sqlite to guarantee clean state and deterministic rowids.
+        """
+        # Cleanup DB file if it exists to ensure deterministic rowids
+        db_path = os.path.join(PROJECT_DIR, "db.sqlite")
+        if os.path.isfile(db_path):
+            try:
+                os.remove(db_path)
+            except Exception as e:
+                print(f"Failed to remove db file: {e}")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Ping the search endpoint to confirm HTTP server is responding
+                    resp = requests.get(f"{BASE_URL}/search", timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7611e03ab050>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+______________ ERROR at setup of test_advanced_fts5_syntax_query _______________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7611e0f49af0>
+
+    @pytest.fixture(scope="session", autouse=True)
+    def start_app(xprocess):
+        """
+        Starts the Qwik City service using xprocess. Confirms readiness via port check.
+        Removes pre-existing db.sqlite to guarantee clean state and deterministic rowids.
+        """
+        # Cleanup DB file if it exists to ensure deterministic rowids
+        db_path = os.path.join(PROJECT_DIR, "db.sqlite")
+        if os.path.isfile(db_path):
+            try:
+                os.remove(db_path)
+            except Exception as e:
+                print(f"Failed to remove db file: {e}")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Ping the search endpoint to confirm HTTP server is responding
+                    resp = requests.get(f"{BASE_URL}/search", timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7611e03ab050>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+_____________ ERROR at setup of test_invalid_fts5_syntax_handling ______________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7611e0f49af0>
+
+    @pytest.fixture(scope="session", autouse=True)
+    def start_app(xprocess):
+        """
+        Starts the Qwik City service using xprocess. Confirms readiness via port check.
+        Removes pre-existing db.sqlite to guarantee clean state and deterministic rowids.
+        """
+        # Cleanup DB file if it exists to ensure deterministic rowids
+        db_path = os.path.join(PROJECT_DIR, "db.sqlite")
+        if os.path.isfile(db_path):
+            try:
+                os.remove(db_path)
+            except Exception as e:
+                print(f"Failed to remove db file: {e}")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Ping the search endpoint to confirm HTTP server is responding
+                    resp = requests.get(f"{BASE_URL}/search", timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7611e03ab050>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+__________________ ERROR at setup of test_insert_new_article ___________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7611e0f49af0>
+
+    @pytest.fixture(scope="session", autouse=True)
+    def start_app(xprocess):
+        """
+        Starts the Qwik City service using xprocess. Confirms readiness via port check.
+        Removes pre-existing db.sqlite to guarantee clean state and deterministic rowids.
+        """
+        # Cleanup DB file if it exists to ensure deterministic rowids
+        db_path = os.path.join(PROJECT_DIR, "db.sqlite")
+        if os.path.isfile(db_path):
+            try:
+                os.remove(db_path)
+            except Exception as e:
+                print(f"Failed to remove db file: {e}")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Ping the search endpoint to confirm HTTP server is responding
+                    resp = requests.get(f"{BASE_URL}/search", timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7611e03ab050>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+_____________ ERROR at setup of test_search_newly_inserted_article _____________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7611e0f49af0>
+
+    @pytest.fixture(scope="session", autouse=True)
+    def start_app(xprocess):
+        """
+        Starts the Qwik City service using xprocess. Confirms readiness via port check.
+        Removes pre-existing db.sqlite to guarantee clean state and deterministic rowids.
+        """
+        # Cleanup DB file if it exists to ensure deterministic rowids
+        db_path = os.path.join(PROJECT_DIR, "db.sqlite")
+        if os.path.isfile(db_path):
+            try:
+                os.remove(db_path)
+            except Exception as e:
+                print(f"Failed to remove db file: {e}")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Ping the search endpoint to confirm HTTP server is responding
+                    resp = requests.get(f"{BASE_URL}/search", timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7611e03ab050>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+______________ ERROR at setup of test_validation_errors_on_insert ______________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x7611e0f49af0>
+
+    @pytest.fixture(scope="session", autouse=True)
+    def start_app(xprocess):
+        """
+        Starts the Qwik City service using xprocess. Confirms readiness via port check.
+        Removes pre-existing db.sqlite to guarantee clean state and deterministic rowids.
+        """
+        # Cleanup DB file if it exists to ensure deterministic rowids
+        db_path = os.path.join(PROJECT_DIR, "db.sqlite")
+        if os.path.isfile(db_path):
+            try:
+                os.remove(db_path)
+            except Exception as e:
+                print(f"Failed to remove db file: {e}")
+    
+        class Starter(ProcessStarter):
+            name = "start_app"
+            args = ["npm", "run", "dev", "--", "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 180
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                """
+                Custom check: returns True if port is accepting connections.
+                """
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                try:
+                    # Ping the search endpoint to confirm HTTP server is responding
+                    resp = requests.get(f"{BASE_URL}/search", timeout=5)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            if not os.path.exists(info.logpath):
+                return
+            with open(info.logpath, "r") as f:
+                all_lines = f.readlines()
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(f"============================== [{tag}: Begin] Captured {Starter.name} logfile ==============================")
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(f"============================== [{tag}: End  ] Captured {Starter.name} logfile ==============================")
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x7611e03ab050>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 180                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+=========================== short test summary info ============================
+ERROR ../tests/test_final_state.py::test_empty_or_missing_query - TimeoutErro...
+ERROR ../tests/test_final_state.py::test_standard_search - TimeoutError: The ...
+ERROR ../tests/test_final_state.py::test_advanced_fts5_syntax_query - Timeout...
+ERROR ../tests/test_final_state.py::test_invalid_fts5_syntax_handling - Timeo...
+ERROR ../tests/test_final_state.py::test_insert_new_article - TimeoutError: T...
+ERROR ../tests/test_final_state.py::test_search_newly_inserted_article - Time...
+ERROR ../tests/test_final_state.py::test_validation_errors_on_insert - Timeou...
+======================== 7 errors in 180.36s (0:03:00) =========================

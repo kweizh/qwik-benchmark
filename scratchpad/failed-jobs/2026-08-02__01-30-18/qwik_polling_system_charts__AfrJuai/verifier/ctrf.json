@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-08-01T17:44:29.298823+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 2,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1785606140205,
+            "stop": 1785606269298
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_get_poll_pages",
+                "status": "passed",
+                "duration": 1919,
+                "start": 1785606140286,
+                "stop": 1785606142205,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vote_api_validation",
+                "status": "passed",
+                "duration": 12,
+                "start": 1785606142205,
+                "stop": 1785606142217,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_vote_flow_and_rate_limiting",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 45,
+                "start": 1785606142217,
+                "stop": 1785606142262,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_vote_flow_and_rate_limiting(start_app):\n        \"\"\"Verify voting success, database persistence, and rate limiting.\"\"\"\n        # Reset any previous votes for option 1 (Qwik) in SQLite for determinism\n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n        cursor.execute(\"UPDATE options SET votes = 0 WHERE id = 1;\")\n        cursor.execute(\"DELETE FROM votes_log WHERE poll_id = 'frameworks';\")\n        conn.commit()\n        conn.close()\n    \n        # Vote 1: IP 1.2.3.4\n        resp = requests.post(\n            f\"{BASE_URL}/poll/frameworks/vote\",\n            json={\"optionId\": 1},\n            headers={\"X-Forwarded-For\": \"1.2.3.4\"}\n        )\n>       assert resp.status_code == 200, f\"First vote failed: {resp.text}\"\nE       AssertionError: First vote failed: {\"error\":\"Internal server error\"}\nE       assert 500 == 200\nE        +  where 500 = <Response [500]>.status_code\n\n/tests/test_final_state.py:153: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_concurrency",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 27,
+                "start": 1785606142262,
+                "stop": 1785606142289,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_concurrency(start_app):\n        \"\"\"Verify that concurrent votes from different IPs are processed correctly without race conditions.\"\"\"\n        # Reset votes for option 3 (Vue)\n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n        cursor.execute(\"UPDATE options SET votes = 0 WHERE id = 3;\")\n        cursor.execute(\"DELETE FROM votes_log WHERE poll_id = 'frameworks';\")\n        conn.commit()\n        conn.close()\n    \n        num_threads = 20\n        ips = [f\"10.0.0.{i}\" for i in range(1, num_threads + 1)]\n    \n        def cast_vote(ip):\n            try:\n                resp = requests.post(\n                    f\"{BASE_URL}/poll/frameworks/vote\",\n                    json={\"optionId\": 3},\n                    headers={\"X-Forwarded-For\": ip},\n                    timeout=5\n                )\n                return resp.status_code\n            except Exception as e:\n                return str(e)\n    \n        with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:\n            results = list(executor.map(cast_vote, ips))\n    \n        # Assert all concurrent requests succeeded with 200\n>       assert results == [200] * num_threads, f\"Some concurrent requests failed: {results}\"\nE       AssertionError: Some concurrent requests failed: [500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500]\nE       assert [500, 500, 50...500, 500, ...] == [200, 200, 20...200, 200, ...]\nE         At index 0 diff: 500 != 200\nE         Use -v to get more diff\n\n/tests/test_final_state.py:216: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_browser_ui_verification",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 127008,
+                "start": 1785606142290,
+                "stop": 1785606269298,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\nbrowser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x737ccdc9e2a0>\n\n    def test_browser_ui_verification(start_app, browser_verifier):\n        \"\"\"Verify frontend rendering and dynamic updates using PochiVerifier.\"\"\"\n        # Reset votes for poll 'colors' to 0 for option 5 (Red)\n        conn = sqlite3.connect(DB_PATH)\n        cursor = conn.cursor()\n        cursor.execute(\"UPDATE options SET votes = 0 WHERE id = 5;\")\n        cursor.execute(\"DELETE FROM votes_log WHERE poll_id = 'colors';\")\n        conn.commit()\n        conn.close()\n    \n        reason = \"The poll page should render the question, an SVG bar chart of results, and allow casting a vote which dynamically updates the SVG chart.\"\n        truth = (\n            f\"Navigate to {BASE_URL}/poll/colors. \"\n            \"Verify that the element with id 'poll-question' contains 'What is your favorite primary color?'. \"\n            \"Verify that the SVG with id 'poll-chart' is visible. \"\n            \"Find the vote button with data-option-id '5' (for Red) and click it. \"\n            \"Verify that the vote count text with data-option-id '5' inside the SVG chart is updated to '1' or contains '1'. \"\n            \"Verify that the SVG rect with data-option-id '5' now has a width greater than 0.\"\n        )\n    \n        result = browser_verifier.verify(\n            reason=reason,\n            truth=truth,\n            use_browser_agent=True,\n            trajectory_dir=\"/logs/verifier/pochi/test_polling_system_ui\"\n        )\n>       assert result.status == \"pass\", f\"Browser verification failed: {result.reason}\"\nE       AssertionError: Browser verification failed: The test failed because clicking the vote button with data-option-id '5' (for Red) resulted in an 'Internal server error' on the page. As a result, the vote count text inside the SVG chart was not updated to '1' or contains '1', and the SVG rect with data-option-id '5' did not have its width updated to greater than 0 as required by the verification steps.\nE       assert 'fail' == 'pass'\nE         - pass\nE         + fail\n\n/tests/test_final_state.py:253: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}
