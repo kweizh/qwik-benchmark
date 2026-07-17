@@ -1,62 +1,90 @@
-# Technical Research & Benchmark Specification: Qwik (qwik.dev) & Typesense Integration
+# Qwik Framework Benchmark Research Report
 
-This specification provides a comprehensive technical overview, project setup guides, core API details, developer friction points, and evaluation/benchmark ideas for **Qwik** and its integration with **Typesense** running inside a container.
+This report provides a comprehensive, technically detailed analysis of the **Qwik** web framework (`http://qwik.dev/`) to support the creation of robust, high-quality evaluation datasets and container-friendly benchmark tasks for AI coding agents.
 
 ---
 
 ## 1. Library Overview
 
 ### Description
-[Qwik](https://qwik.dev/) is a modern frontend framework designed to deliver instant-loading web applications of any scale. Unlike traditional frameworks that rely on hydration (downloading and executing all JavaScript to make server-rendered HTML interactive), Qwik introduces **Resumability**. Qwik serializes the execution state of the application and the framework on the server and resumes it on the client with virtually zero initial JavaScript execution (typically ~1kb on boot).
+Qwik is a modern, high-performance web framework designed to deliver instant page loads (regardless of application size or complexity) by completely eliminating eager hydration. Instead, Qwik introduces **Resumability**—the ability to pause execution on the server (during Server-Side Rendering) and resume it seamlessly on the client without executing eager JavaScript on startup. It achieves this by serializing the application's execution state, reactivity graph, and event listeners directly into the HTML, downloading and executing JavaScript code strictly on-demand (e.g., when a user interacts with a component).
 
 ### Ecosystem Role
-Qwik sits as a high-performance alternative to Next.js, Nuxt, and SvelteKit. It is paired with **Qwik City**, its official meta-framework, which handles directory-based routing, server-side data loading (`routeLoader$`), form actions (`routeAction$`), and middleware. The Qwik compiler is powered by an Optimizer written in Rust, which splits code aggressively into tiny, lazy-loadable chunks triggered on-demand by user interactions.
+Qwik fits into the meta-framework space alongside Next.js, Nuxt, and SvelteKit. It is split into two primary layers:
+*   **Qwik Core**: The underlying rendering engine and reactivity system that defines components, reactive state (`useSignal`, `useStore`), and lifecycle hooks (`useTask$`, `useVisibleTask$`).
+*   **Qwik City**: The official meta-framework that provides directory-based routing, layout management, middleware, server-side data loading (`routeLoader$`), form actions (`routeAction$`), and static site generation (SSG).
 
-### Project Setup
-A Qwik project can be initialized interactively or via non-interactive automated commands suitable for containerized and CI/CD environments.
+### Project Setup (Container-Friendly, Non-Interactive)
+In non-interactive environments (such as autonomous agents running inside a Docker container), interactive prompts must be bypassed. There are three primary paths to initialize a Qwik City project without user intervention:
 
-#### Non-Interactive CLI Setup
-To scaffold a new Qwik City application non-interactively, use the `create-qwik` command-line mode:
+#### Option A: Command-Line Arguments (Preferred)
+The official `create-qwik` CLI supports a non-interactive command mode where the starter ID and directory name are specified directly:
 ```bash
-# Command Syntax: npm create qwik@latest <starterId> <projectName>
-# We use the "empty" starter (Empty App with Qwik City routing) and name it "qwik-app"
-npm create qwik@latest empty qwik-app
+# Syntax: npm create qwik@latest <starter> <projectName> [flags]
+# Common starters: 'empty' (routing included, no demo code), 'basic' (includes simple demo)
+npm create qwik@latest empty qwik-app -- --yes --no-git --no-install
 ```
-*Note: In non-interactive environments, this command scaffolds the project without prompting for wizard inputs.*
+*Note: The `--` separator passes flags like `--yes` (accept all defaults), `--no-git` (skip Git repository initialization), and `--no-install` (skip immediate package installation) directly to the underlying generator.*
 
-#### Programmatic Node API Setup
-Alternatively, you can scaffold a project programmatically using the Node.js API:
-```javascript
-// setup.cjs
-const { createApp } = require('create-qwik');
-const path = require('path');
+Once scaffolded, you can install the dependencies and build manually:
+```bash
+cd qwik-app
+npm install
+npm run build
+```
 
-async function run() {
-  const result = await createApp({
-    projectName: 'qwik-app',
-    starterId: 'empty', // options: 'empty', 'playground', 'todo', 'library'
-    outDir: path.join(__dirname, 'qwik-app'),
-  });
-  console.log('Project created successfully:', result);
+#### Option B: Fully Non-Interactive Vite Template
+An alternative that is 100% non-interactive and does not require the `create-qwik` CLI wizard is using the official Vite template:
+```bash
+npm create vite@latest qwik-app -- --template qwik-ts
+cd qwik-app
+npm install
+```
+*Note: This creates a client-only, single-page Qwik application without Qwik City routing. For full-stack meta-framework tasks, Option A or manual scaffolding is preferred.*
+
+#### Option C: Manual Scaffolding (Boilerplate)
+For complete control, an agent can manually write the configuration files. Below is the minimum configuration required to boot a Qwik City app:
+
+`package.json`:
+```json
+{
+  "name": "qwik-app",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite --mode ssr",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "dependencies": {
+    "@builder.io/qwik": "^1.11.0",
+    "@builder.io/qwik-city": "^1.11.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "vite-tsconfig-paths": "^4.0.0"
+  }
 }
-run();
 ```
 
-#### Boilerplate Structure
-The generated project structure follows this layout:
-```text
-qwik-app/
-├── public/                 # Static assets (images, robots.txt, etc.)
-├── src/
-│   ├── components/         # Reusable presentation components
-│   ├── routes/             # Directory-based routing (Qwik City)
-│   │   ├── layout.tsx      # Root layout / middleware
-│   │   └── index.tsx       # Homepage route (/)
-│   ├── entry.ssr.tsx       # SSR entry point
-│   └── root.tsx            # Root component rendering the HTML shell
-├── package.json
-├── tsconfig.json
-└── vite.config.ts          # Vite configuration with Qwik and Qwik City plugins
+`vite.config.ts`:
+```typescript
+import { defineConfig } from 'vite';
+import { qwikVite } from '@builder.io/qwik/optimizer';
+import { qwikCity } from '@builder.io/qwik-city/vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+
+export default defineConfig(() => {
+  return {
+    plugins: [
+      qwikCity(),
+      qwikVite(),
+      tsconfigPaths()
+    ]
+  };
+});
 ```
 
 ---
@@ -64,124 +92,179 @@ qwik-app/
 ## 2. Core Primitives & APIs
 
 ### Key Concepts & Documentation Links
-
-| Concept / API | Specific Documentation Link | Description |
-| :--- | :--- | :--- |
-| `component$` | [Qwik Component Docs](https://qwik.dev/docs/core/overview/) | Declares a lazy-loadable Qwik component. |
-| `$` | [Qwik Optimizer Docs](https://qwik.dev/docs/core/rendering/) | Tells the Rust Optimizer to extract expressions into lazy-loadable chunks (`QRL`s). |
-| `useSignal` | [Qwik Signal Docs](https://qwik.dev/docs/core/state/) | Creates a reactive single-value cell (using `.value` access). |
-| `useStore` | [Qwik Store Docs](https://qwik.dev/docs/core/state/) | Creates a reactive proxy object for complex, nested states. |
-| `useTask$` | [Qwik Tasks Docs](https://qwik.dev/docs/core/tasks/) | Runs synchronous/asynchronous side effects during initialization or state changes. |
-| `useVisibleTask$` | [Qwik Visible Tasks Docs](https://qwik.dev/docs/core/tasks/) | Client-only hook that executes after rendering when a component enters the viewport. |
-| `server$` | [Qwik Server$ Docs](https://qwik.dev/docs/server$/) | Creates a strongly-typed RPC (Remote Procedure Call) endpoint executing only on the server. |
-| `routeLoader$` | [Qwik City Route Loader Docs](https://qwik.dev/docs/route-loader/) | Pre-fetches data on the server during navigation before rendering. |
-| `routeAction$` | [Qwik City Route Action Docs](https://qwik.dev/docs/action/) | Handles form submissions and updates state on the server. |
+*   [`component$()`](https://qwik.dev/docs/core/overview/): Declares a Qwik component. The trailing `$` signals to the Optimizer that this is a lazy-loading boundary.
+*   [`useSignal()`](https://qwik.dev/docs/core/state/): Declares reactive state for a single primitive value or flat object.
+*   [`useStore()`](https://qwik.dev/docs/core/state/): Declares a deeply reactive JavaScript object, ideal for nested objects and arrays.
+*   [`useTask$()`](https://qwik.dev/docs/core/tasks/): Runs synchronous or asynchronous work during component initialization or when tracked state changes (executes on both server and client).
+*   [`useVisibleTask$()`](https://qwik.dev/docs/core/tasks/): Runs code exclusively on the client after the component becomes visible in the viewport.
+*   [`useResource$()`](https://qwik.dev/docs/core/state/#useresource): Resolves asynchronous data fetching without blocking the initial rendering pipeline.
+*   [`routeLoader$()`](https://qwik.dev/docs/route-loader/): Server-only loader that fetches data before rendering the route.
+*   [`routeAction$()`](https://qwik.dev/docs/action/): Server-only form action handler that processes form submissions and mutations.
+*   [`server$()`](https://qwik.dev/docs/server$/): Defines an RPC (Remote Procedure Call) function that executes exclusively on the server but is callable from the client.
+*   [`$()`](https://qwik.dev/docs/advanced/qrl/): The optimizer marker that manually wraps a function into a serializable QRL (Qwik Reference Language) reference.
 
 ---
 
 ### Detailed Explanations & Code Snippets
 
-#### 1. State Management and Lazy-loaded Event Handlers
-This snippet demonstrates the declaration of a component, reactive state management using `useSignal` and `useStore`, and event binding using the `$` suffix.
+#### 1. Reactivity & State (`useSignal` & `useStore`)
+Qwik's reactivity is fine-grained. When a signal value changes, Qwik re-renders only the DOM nodes that directly reference that signal, bypassing component-tree re-rendering entirely.
 
 ```typescript
-// src/components/counter.tsx
-import { component$, useSignal, useStore } from '@builder.io/qwik';
+import { component$, useSignal, useStore, useComputed$ } from '@builder.io/qwik';
 
-// Key Object Definition: Component is declared with component$
-export const Counter = component$(() => {
-  // useSignal is for primitive types
-  const count = useSignal(0);
+// Definition of the state structure
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
 
-  // useStore is for complex objects and nested reactivity
-  const state = useStore({
-    title: 'Counter Store',
-    history: [] as number[],
+interface CartStore {
+  items: CartItem[];
+  couponApplied: boolean;
+}
+
+export const ShoppingCart = component$(() => {
+  // useSignal: best for primitives, flat objects, or DOM element references
+  const customerName = useSignal<string>('Guest');
+
+  // useStore: best for arrays, nested structures, and complex objects
+  const cart = useStore<CartStore>({
+    items: [
+      { id: '1', name: 'Qwik Book', price: 29.99, quantity: 1 },
+      { id: '2', name: 'Resumability Poster', price: 9.99, quantity: 2 }
+    ],
+    couponApplied: false
+  });
+
+  // useComputed$: synchronous derived state (automatically tracks dependencies)
+  const cartTotal = useComputed$(() => {
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return cart.couponApplied ? subtotal * 0.9 : subtotal;
   });
 
   return (
-    <div class="p-4 border rounded">
-      <h2>{state.title}</h2>
-      <p>Current Count: {count.value}</p>
-      
-      {/* onClick$ compiles to a lazy-loaded QRL boundary */}
-      <button 
-        onClick$={() => {
-          count.value++;
-          state.history.push(count.value);
-        }}
-        class="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Increment
-      </button>
+    <div class="p-4 border rounded-lg shadow-sm">
+      <h2 class="text-xl font-bold">Cart for {customerName.value}</h2>
 
-      <div class="mt-2 text-sm text-gray-500">
-        History: {state.history.join(', ')}
+      <ul class="my-4 space-y-2">
+        {cart.items.map((item) => (
+          <li key={item.id} class="flex justify-between items-center">
+            <span>{item.name} (${item.price})</span>
+            <div class="flex items-center gap-2">
+              <button
+                class="px-2 py-1 bg-gray-200 rounded"
+                onClick$={() => {
+                  if (item.quantity > 1) item.quantity--;
+                }}
+              >
+                -
+              </button>
+              <span>{item.quantity}</span>
+              <button
+                class="px-2 py-1 bg-gray-200 rounded"
+                onClick$={() => item.quantity++}
+              >
+                +
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-4 pt-4 border-t flex justify-between items-center">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={cart.couponApplied}
+            onChange$={(e, currentTarget) => {
+              cart.couponApplied = currentTarget.checked;
+            }}
+          />
+          Apply 10% Coupon
+        </label>
+        <span class="font-bold text-lg">Total: ${cartTotal.value.toFixed(2)}</span>
       </div>
     </div>
   );
 });
 ```
-*Note: In other language surfaces (e.g., pure JavaScript), the `$` symbol indicates code-splitting boundaries that the compiler splits into distinct files. Since Qwik is strictly TypeScript/JavaScript, there are no separate language SDKs, but the Optimizer CLI provides options to inspect these outputs.*
 
 ---
 
-#### 2. Server-Client RPC with `server$`
-The `server$` primitive allows developers to execute code strictly on the server (e.g., database queries or secured API calls) while providing a typed asynchronous function proxy to the client.
+#### 2. Component Lifecycles & Side-Effects (`useTask$` vs `useVisibleTask$`)
+Understanding the execution boundary of tasks is crucial. `useTask$` runs before rendering (and can block it), whereas `useVisibleTask$` executes only in the browser after the component becomes visible.
 
 ```typescript
-// src/components/search.tsx
-import { component$, useSignal, useTask$ } from '@builder.io/qwik';
-import { server$ } from '@builder.io/qwik';
+import { component$, useSignal, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 
-// Key Object Definition: server$ wraps a server-only execution function
-const fetchSearchResultsOnServer = server$(async (query: string) => {
-  // This code runs strictly on the Node/Edge server environment
-  console.log(`Searching for "${query}" on the server...`);
-  
-  // Example: Querying a database or secure external API
-  const response = await fetch(`https://api.example.com/search?q=${encodeURIComponent(query)}`);
-  const data = await response.json();
-  return data.results as string[];
-});
+export const DelayedLogger = component$(() => {
+  const count = useSignal<number>(0);
+  const logHistory = useSignal<string[]>([]);
+  const timerActive = useSignal<boolean>(false);
 
-export default component$(() => {
-  const query = useSignal('');
-  const results = useSignal<string[]>([]);
-
-  // useTask$ handles reactive changes and executes on both SSR and client
+  // useTask$: Runs on the server during SSR, and on the client when tracked state changes.
+  // Can be asynchronous, and blocks rendering until resolved if run during initial load.
   useTask$(({ track, cleanup }) => {
-    track(() => query.value); // Track changes to query.value
+    // Explicitly track changes to 'count'
+    const currentCount = track(() => count.value);
 
-    const controller = new AbortController();
-    const id = setTimeout(async () => {
-      if (query.value.trim() === '') {
-        results.value = [];
-        return;
-      }
-      // Call the server function transparently via RPC
-      results.value = await fetchSearchResultsOnServer(query.value);
-    }, 300); // 300ms debounce
+    logHistory.value = [...logHistory.value, `Count changed to: ${currentCount} (Server/Client)`];
+
+    // Cleanup function: runs before the next task execution or when the component is unmounted
+    cleanup(() => {
+      console.log('useTask$ cleanup executed');
+    });
+  });
+
+  // useVisibleTask$: Runs ONLY on the client after the component becomes visible in the viewport.
+  // Used for DOM manipulation, timers, and browser-only APIs. Does NOT block initial SSR rendering.
+  useVisibleTask$(({ track, cleanup }) => {
+    const isTimerRunning = track(() => timerActive.value);
+    let intervalId: any;
+
+    if (isTimerRunning) {
+      logHistory.value = [...logHistory.value, 'Timer started (Client-only)'];
+      intervalId = setInterval(() => {
+        count.value++;
+      }, 1000);
+    }
 
     cleanup(() => {
-      clearTimeout(id);
-      controller.abort();
+      if (intervalId) {
+        clearInterval(intervalId);
+        logHistory.value = [...logHistory.value, 'Timer stopped (Client-only)'];
+      }
     });
   });
 
   return (
-    <div class="p-4">
-      <input
-        type="text"
-        bind:value={query}
-        placeholder="Type to search..."
-        class="border p-2 w-full rounded"
-      />
-      <ul class="mt-4 space-y-1">
-        {results.value.map((item) => (
-          <li key={item} class="p-2 bg-gray-100 rounded">{item}</li>
+    <div class="p-4 border border-dashed rounded-md">
+      <h3 class="text-lg font-semibold">Lifecycle Logger</h3>
+      <p class="text-2xl font-mono my-2">Value: {count.value}</p>
+
+      <div class="flex gap-2 my-2">
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick$={() => count.value++}
+        >
+          Increment
+        </button>
+        <button
+          class="px-4 py-2 bg-purple-500 text-white rounded"
+          onClick$={() => timerActive.value = !timerActive.value}
+        >
+          {timerActive.value ? 'Stop Auto-Timer' : 'Start Auto-Timer'}
+        </button>
+      </div>
+
+      <div class="mt-4 bg-gray-100 p-2 rounded h-40 overflow-y-auto font-mono text-xs">
+        {logHistory.value.map((log, index) => (
+          <div key={index}>{log}</div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 });
@@ -189,82 +272,119 @@ export default component$(() => {
 
 ---
 
-#### 3. Qwik City Routing, Loaders, and Actions
-This example exhibits directory-based routing integration, loading data before page rendering with `routeLoader$`, and handling submissions securely using `routeAction$`.
+#### 3. Server-Side Data Flow & Actions (`routeLoader$`, `routeAction$`, `server$`)
+Qwik City provides robust server-side abstractions that keep server-only code (like SQL queries, file system access, or secure API keys) separated from browser-side bundles.
 
 ```typescript
-// src/routes/products/index.tsx
 import { component$ } from '@builder.io/qwik';
-import { routeLoader$, routeAction$, Form } from '@builder.io/qwik-city';
+import { routeLoader$, routeAction$, Form, zod$, z } from '@builder.io/qwik-city';
 
-interface Product {
-  id: string;
+// Mock database interface
+interface User {
+  id: number;
   name: string;
-  price: number;
+  email: string;
 }
 
-// Key Object Definition: routeLoader$ pre-fetches data on the server during SSR
-export const useProductList = routeLoader$(async () => {
-  // Executed on server before component render
-  const products: Product[] = [
-    { id: '1', name: 'Resumable Frameworks Guide', price: 29 },
-    { id: '2', name: 'Typesense Container Handbook', price: 19 },
-  ];
-  return products;
+const mockUsersDb: User[] = [
+  { id: 1, name: 'Alice', email: 'alice@qwik.dev' },
+  { id: 2, name: 'Bob', email: 'bob@qwik.dev' }
+];
+
+// 1. routeLoader$: Fetches data on the server before rendering the route.
+// Access to 'RequestEvent' provides request headers, parameters, and env variables.
+export const useUsersLoader = routeLoader$(async (requestEvent) => {
+  // Safe to perform DB queries or read secret environment variables here
+  const apiKey = requestEvent.env.get('PRIVATE_API_KEY');
+  console.log(`Fetching users server-side. Private Key present: ${!!apiKey}`);
+  return mockUsersDb;
 });
 
-// Key Object Definition: routeAction$ handles server-side form submissions
-export const useAddProduct = routeAction$(async (data) => {
-  const name = data.name as string;
-  const price = parseFloat(data.price as string);
+// 2. routeAction$: Handles form submissions or mutations on the server.
+// Built-in validation via 'zod$' ensures data safety.
+export const useCreateUserAction = routeAction$(
+  async (formData, requestEvent) => {
+    // This code executes strictly on the server
+    const newUser: User = {
+      id: mockUsersDb.length + 1,
+      name: formData.name,
+      email: formData.email
+    };
+    mockUsersDb.push(newUser);
 
-  if (!name || isNaN(price)) {
-    return { success: false, error: 'Invalid product details.' };
-  }
-
-  // Perform database insert or API call here
-  console.log(`Adding product to database: ${name} ($${price})`);
-  return { success: true, productId: '3' };
-});
+    return {
+      success: true,
+      user: newUser
+    };
+  },
+  // Zod schema validator
+  zod$({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Invalid email address')
+  })
+);
 
 export default component$(() => {
-  const productsSignal = useProductList(); // Read-only Signal
-  const addProductAction = useAddProduct(); // Action execution state
+  // Call the loader and action hooks to get reactive signals
+  const usersSignal = useUsersLoader();
+  const createUserAction = useCreateUserAction();
 
   return (
     <div class="p-6 max-w-lg mx-auto">
-      <h1 class="text-2xl font-bold mb-4">Product Catalog</h1>
-      
-      <ul class="mb-6 space-y-2">
-        {productsSignal.value.map((product) => (
-          <li key={product.id} class="p-3 bg-slate-50 border rounded flex justify-between">
-            <span>{product.name}</span>
-            <span class="font-semibold">${product.price}</span>
+      <h1 class="text-2xl font-bold mb-4">User Directory</h1>
+
+      {/* List users fetched by the loader */}
+      <ul class="mb-6 divide-y">
+        {usersSignal.value.map((user) => (
+          <li key={user.id} class="py-2 flex justify-between">
+            <span class="font-medium">{user.name}</span>
+            <span class="text-gray-500">{user.email}</span>
           </li>
         ))}
       </ul>
 
-      <h2 class="text-xl font-semibold mb-2">Add New Product</h2>
-      {/* Qwik City Form handles submission progressively (works without JS) */}
-      <Form action={addProductAction} class="space-y-4">
+      {/* Form Submission using Qwik City's progressive enhancement <Form> component */}
+      <h2 class="text-xl font-semibold mb-2">Add New User</h2>
+      <Form action={createUserAction} class="space-y-4">
         <div>
-          <label class="block text-sm font-medium">Product Name</label>
-          <input type="text" name="name" class="border p-2 w-full rounded" required />
+          <label class="block text-sm font-medium">Name</label>
+          <input
+            type="text"
+            name="name"
+            class="w-full border p-2 rounded"
+            value={createUserAction.formData?.get('name')}
+          />
+          {createUserAction.value?.failed && (
+            <p class="text-red-500 text-xs">{createUserAction.value.fieldErrors?.name}</p>
+          )}
         </div>
+
         <div>
-          <label class="block text-sm font-medium">Price</label>
-          <input type="number" name="price" step="0.01" class="border p-2 w-full rounded" required />
+          <label class="block text-sm font-medium">Email</label>
+          <input
+            type="email"
+            name="email"
+            class="w-full border p-2 rounded"
+            value={createUserAction.formData?.get('email')}
+          />
+          {createUserAction.value?.failed && (
+            <p class="text-red-500 text-xs">{createUserAction.value.fieldErrors?.email}</p>
+          )}
         </div>
-        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">
-          Add Product
+
+        <button
+          type="submit"
+          disabled={createUserAction.isRunning}
+          class="px-4 py-2 bg-green-600 text-white rounded disabled:bg-gray-400"
+        >
+          {createUserAction.isRunning ? 'Adding...' : 'Add User'}
         </button>
       </Form>
 
-      {addProductAction.value?.success && (
-        <p class="mt-4 text-green-600">Product added with ID: {addProductAction.value.productId}</p>
-      )}
-      {addProductAction.value?.error && (
-        <p class="mt-4 text-red-600">{addProductAction.value.error}</p>
+      {createUserAction.value?.success && (
+        <div class="mt-4 p-3 bg-green-100 text-green-800 rounded">
+          Successfully added user: {createUserAction.value.user?.name}!
+        </div>
       )}
     </div>
   );
@@ -275,64 +395,74 @@ export default component$(() => {
 
 ## 3. Real-World Use Cases & Templates
 
-### Showcase Projects and Starters
-*   **Qwind (Tailwind CSS Integration)**: [Qwind Template](https://github.com/onwidget/qwind) is a full-featured template combining Qwik City and Tailwind CSS, demonstrating production-ready SEO optimization, layouts, and image optimization.
-*   **Storefront Qwik Starter**: [Storefront Qwik](https://github.com/onwidget/awesome-qwik) represents an e-commerce storefront starter built with Qwik and Vendure, showcasing complex state management, basket logic, and fast edge delivery.
-*   **Official TodoMVC**: [Classic TodoMVC](https://github.com/QwikDev/qwik/tree/main/starters/apps/todo-test) shows a classic, standardized task management app demonstrating serialization, stores, and client-side interactions.
+### Representative Templates & Example Projects
+*   [Qwik TodoMVC Starter](https://github.com/onwidget/awesome-qwik): Standard, self-contained implementation of TodoMVC showcasing Qwik's fine-grained reactivity, store management, and event handling.
+*   [Qwik City Basic App Demo](https://qwik.dev/docs/project-structure/): Scaffolds with a structured directory layout (`src/routes/`), showing layout nesting, route parameters, and global scoped styling.
+*   [Qwik Tailwind Starter](https://qwik.dev/docs/integrations/tailwind/): Demonstrates how to integrate Tailwind CSS v4 using Vite's native `@tailwindcss/vite` plugin inside a Qwik application.
 
-### Common Integration Patterns
-*   **Edge Middleware Database Connectivity**: Using Qwik City's middleware hooks (`onRequest` or `onGet`) to connect to serverless databases (Prisma, Supabase, Kysely) at the edge.
-*   **Instant Search Integrations**: Coupling input listeners (`onInput$`) with debounced RPC server functions (`server$`) to perform fast remote search queries on search engines like Algolia or Typesense without exposing API admin keys to the client.
+### Container-Friendly Integration Patterns
+For running apps inside a containerized environment (e.g., Docker, local Kubernetes, or CI environments) without external cloud dependencies:
+*   **Database**: SQLite integrated via **Prisma** or **better-sqlite3**. Database writes and reads are executed inside server-only boundaries (`routeLoader$` or `routeAction$`), using a local SQLite file (e.g., `file:./dev.db`) mounted in the container.
+*   **REST/JSON Endpoints**: Qwik City's `index.ts` files act as direct HTTP handlers (using `RequestHandler` exports like `onGet`, `onPost`). This allows the container to serve pure RESTful APIs without needing an external Express/NestJS server.
+*   **Asset Storage**: Local file system storage using Node's `fs/promises` accessed inside `routeAction$` handlers, writing files directly to a mounted public directory (`/public/uploads`).
 
 ---
 
 ## 4. Developer Friction Points
 
-### 1. Cookie Mutation during Response Streaming in `useTask$`
-*   **Symptom**: Calling a `server$` function within `useTask$` during the initial SSR render to set or update cookies fails silently or throws errors, and cookies are not received by the browser.
-*   **Underlying Cause**: Qwik streams the HTML response eagerly to the client during SSR. HTTP headers (including `Set-Cookie`) must be sent *before* the body stream begins. Since `useTask$` runs as part of the rendering cycle, the headers have already been flushed by the time the cookie mutation is called.
-*   **Resolution**: Move cookie modifications to Qwik City `onRequest` middleware, `routeLoader$`, or `routeAction$` which execute *prior* to response streaming. Alternatively, trigger the cookie setter inside `useVisibleTask$` (which runs exclusively on the client).
-*   **Link**: [Qwik Issue #5951](https://github.com/QwikDev/qwik/issues/5951)
+### 1. Code(3) Serialization Error (Lexical Boundary Cross)
+*   **Symptom/Error String**: `Code(3): Only primitive and object literals can be serialized, but got <value>` or `Trying to serialize a function...`
+*   **Underlying Cause**: Qwik's Optimizer extracts code blocks following a `$` into separate, lazy-loaded chunks. Any variables captured from the outer scope must cross a serialization boundary. Custom class instances, Maps, Sets, and standard functions are not JSON-serializable by default, causing compilation or runtime crashes.
+*   **Resolution**:
+    1.  Convert custom classes or maps into plain, flat JSON-serializable objects or array structures.
+    2.  Wrap callback functions in the `$()` optimizer helper to turn them into serializable QRLs.
+    3.  Wrap strictly browser-only non-serializable objects (like third-party library instances) in `noSerialize()` to exclude them from the serialization graph.
+*   **Link**: [Strange Behaviour: Code(3) Serialization Issue #4371](https://github.com/QwikDev/qwik/issues/4371)
 
-### 2. Complex Object and Circular Reference Serialization
-*   **Symptom**: Runtime crash with error: `"Only primitive and object literals can be serialized"` or `"Identifier can not be captured inside the scope because it is not serializable"`.
-*   **Underlying Cause**: Qwik serializes all component properties and stores to JSON in the HTML to support resumability. Storing non-serializable objects (such as active database clients, Axios instances, circular references, or third-party class instances) in a Qwik store or capturing them in a lexical scope (`$`) violates this constraint.
-*   **Resolution**: Wrap non-serializable properties using the `noSerialize()` wrapper from `@builder.io/qwik`. This instructs the serializer to ignore the property during SSR serialization and restore it on the client as `undefined` or re-instantiated.
-*   **Link**: [Qwik Issue #417](https://github.com/QwikDev/qwik/issues/417), [Qwik Issue #2083](https://github.com/QwikDev/qwik/issues/2083)
+### 2. Code(20) Asynchronous Hook Invocation Error
+*   **Symptom/Error String**: `Code(20): Calling a 'use*()' method outside 'component$(() => { HERE })' is not allowed.`
+*   **Underlying Cause**: Qwik hooks (e.g., `useSignal`, `useStore`, `useTask$`) rely on the synchronous execution of a component's render function to track the active component instance and bind dependencies. Attempting to call a hook inside an asynchronous callback (e.g., inside `setTimeout`, after an `await`), or inside a non-component function (e.g., inside `routeLoader$`), violates this lifecycle constraint.
+*   **Resolution**: Always declare and execute all `use*` hooks synchronously at the top level of the `component$` body or within custom hooks that are themselves invoked synchronously during component rendering.
+*   **Link**: [Calling use* inside routeLoader$ Issue #61](https://github.com/QwikDev/qwik-evolution/issues/61)
 
-### 3. Out-of-Order State Mutation Warning during SSR
-*   **Symptom**: Warning displayed in CLI console: `QWIK WARN Serializing dirty watch. Looks like an internal error`.
-*   **Underlying Cause**: This occurs when a `useTask$` tracks a reactive state and mutates that same state (or a state rendered earlier in the HTML stream) during the initial SSR rendering. Because of eager streaming, Qwik cannot re-render elements whose serialized HTML has already been sent to the client, leading to a "dirty" state mismatch.
-*   **Resolution**: Avoid mutating tracked state inside `useTask$` during the initial server render if that mutation affects elements already rendered. Ensure state changes are triggered by user actions (`onClick$`) or deferred to `useVisibleTask$`.
-*   **Link**: [Qwik Issue #2715](https://github.com/QwikDev/qwik/issues/2715)
+### 3. Server-Only Module Leaks into Client-Side Bundles
+*   **Symptom/Error String**: `Module externalized for browser compatibility: ...` or `Error: Cannot find module 'fs'` during Vite production builds.
+*   **Underlying Cause**: When importing node-specific modules (e.g., `fs`, `path`, or native database drivers) at the top level of a component file, the bundler analyzes these imports. If any client-side code (like an event handler or JSX template) references those modules or variables that depend on them, the optimizer drags the server-only module into the client chunk, causing a build failure.
+*   **Resolution**: Keep server-only imports and logic strictly inside `routeLoader$`, `routeAction$`, or `server$` scopes. Alternatively, place server-only code in a separate `.server.ts` file and import it; the Qwik Optimizer automatically tree-shakes `.server` imports from client-side bundles.
+*   **Link**: [Storybook/Vite Node Module Externalization Issue #7325](https://github.com/QwikDev/qwik/issues/7325)
 
 ---
 
 ## 5. Evaluation Ideas (Benchmark Tasks)
 
-These tasks are designed for downstream AI coding agents to execute in a Docker environment. They focus heavily on running **Typesense in a local container** without external dependencies and integrating it with **Qwik**.
+Here is a list of benchmark tasks designed for execution inside self-contained, non-interactive Docker containers (using local SQLite and state):
 
-### Simple Tier
-1.  **Local Typesense Container Initialization Script**: Write a standalone bash script that runs a Typesense server inside a Docker container with a specific API key (`dev-api-key`), custom data directory (`./typesense-data`), and CORS enabled, validating its health status using `curl http://localhost:8108/health`.
-2.  **Typesense Collection Bootstrapping**: Create a Node.js script that uses the `typesense` package to define a `books` schema (fields: `title`, `author`, `year`) and creates the collection inside the running Typesense container.
-3.  **Basic Qwik Static Search Component**: Implement a simple Qwik component containing a search input and a static list of items that filters on the client using `useSignal` and a computed property.
+### Simple
+1.  **Reactive Click Multiplier**: Create a component that multiplies its step increment factor dynamically using `useSignal` and synchronous derived state with `useComputed$`. (Difficulty: Simple)
+2.  **Product Search Filter**: Implement a client-side text search filter that filters a static array of products in real-time as the user types, using `useSignal`. (Difficulty: Simple)
 
-### Medium Tier
-4.  **Qwik City Search Pre-fetching with routeLoader$**: Implement a Qwik City route `/search` that reads a `q` URL query parameter, queries a local Typesense container from the server using `routeLoader$`, and displays the search results during SSR.
-5.  **Debounced Typesense Autocomplete Input**: Create an instant autocomplete input in Qwik that queries a local Typesense container on the client. The agent must implement a debouncer inside `useTask$` to prevent spamming the Typesense container on every keystroke.
-6.  **Typesense Container Health Dashboard**: Build a Qwik City dashboard route `/health` that queries the local Typesense server health API and displays CPU, memory, and collection document counts dynamically.
+### Medium
+3.  **Local Storage Persistent Todo**: Build a Todo application that persists items to the browser's `localStorage` using `useVisibleTask$` to handle client-side initialization and updates. (Difficulty: Medium)
+4.  **Mock Weather Widget**: Create a component that fetches weather metrics from a local Qwik City JSON endpoint (`/api/weather`) using `useResource$` and renders the loading, resolved, and rejected states using `<Resource />`. (Difficulty: Medium)
+5.  **Multi-Step Registration Form**: Implement a multi-step user registration form that uses a Qwik City `routeAction$` to validate inputs (e.g., password strength and email match) and returns field-specific validation errors. (Difficulty: Medium)
 
-### Complex Tier
-7.  **Progressive Indexing Pipeline via routeAction$**: Implement a "Create Book" form page in Qwik City. Submitting the form must trigger a `routeAction$` that validates the input, indexes the new document in the local Typesense container via the SDK, and updates the search results on the page without a full-page reload.
-8.  **Resumable Multi-Facet Search UI**: Build a comprehensive search portal in Qwik (including text search, category facet filters, and sorting) connected to a local Typesense container. The UI must be fully resumable, ensuring that facet selections are preserved and lazy-loaded dynamically when clicked.
+### Complex
+6.  **SQLite Blog System**: Build a self-contained blog using a local SQLite file and Prisma where `routeLoader$` fetches all posts on the server, and a progressive `routeAction$` creates new posts, ensuring no database modules leak into client bundles. (Difficulty: Complex)
+7.  **SSE Collaborative Notepad**: Create a shared text notepad component that establishes a Server-Sent Events (SSE) connection with a local Qwik City endpoint inside a `useVisibleTask$`, synchronizing real-time changes across browser tabs. (Difficulty: Complex)
 
 ---
 
 ## 6. Sources
 
-1.  [Qwik Official Website](https://qwik.dev/) - Core documentation, concept guides, and API specifications.
-2.  [Qwik City Documentation](https://qwik.dev/docs/qwikcity/) - File-system routing, loaders, actions, and middleware docs.
-3.  [Qwik GitHub Repository](https://github.com/QwikDev/qwik) - Source code, issue tracker, and discussion boards.
-4.  [Typesense Official Installation Guide](https://typesense.org/docs/guide/install-typesense.html) - Docker setup instructions and CLI parameters.
-5.  [Typesense JavaScript SDK Repository](https://github.com/typesense/typesense-js) - Client initialization, collection creation, and search query examples.
-6.  [NPM create-qwik Package](https://www.npmjs.com/package/create-qwik) - CLI usage details, command modes, and programmatic API options.
+1.  [Qwik Getting Started Guide](https://qwik.dev/docs/getting-started/): Official guide for installing Qwik, running the CLI, and understanding initial project structure.
+2.  [Qwik Project Structure](https://qwik.dev/docs/project-structure/): Structure of a standard Qwik City application, including configuration files and routing directories.
+3.  [Qwik State Management](https://qwik.dev/docs/core/state/): Detailed documentation on reactivity, `useSignal`, `useStore`, and context APIs.
+4.  [Qwik Tasks and Lifecycle](https://qwik.dev/docs/core/tasks/): Explains the differences, timing, and execution rules of `useTask$` and `useVisibleTask$`.
+5.  [Qwik City Route Loaders](https://qwik.dev/docs/route-loader/): Documentation on server-side data loading, RequestEvent, and route integration.
+6.  [Qwik City Route Actions](https://qwik.dev/docs/action/): Form submissions, server actions, and schema validations.
+7.  [Qwik City Server$ RPC](https://qwik.dev/docs/server$/): RPC mechanism mapping client-side calls to server-side executions.
+8.  [Qwik Optimizer Advanced Rules](https://qwik.dev/docs/advanced/optimizer/): Deep dive into Rust-based compiler transformations, the `$` suffix, and code extraction.
+9.  [Qwik Serialization Guidelines](https://qwik.dev/docs/guides/serialization/): Explanation of serialization boundaries, lexical scopes, and serializable data rules.
+10. [Qwik City Endpoints](https://qwik.dev/docs/endpoints/): Creating custom API handlers (`onGet`, `onPost`) and handling request events.
+11. [GitHub Issue #4371](https://github.com/QwikDev/qwik/issues/4371): Discussion and analysis of the `Code(3)` serialization error.
+12. [GitHub Issue #61 (Qwik-Evolution)](https://github.com/QwikDev/qwik-evolution/issues/61): Discussion on the hook context rules and `Code(20)` errors.
