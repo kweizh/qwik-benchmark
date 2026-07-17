@@ -1,0 +1,40 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 7 items
+
+../tests/test_final_state.py .......                                     [100%]
+
+==================================== PASSES ====================================
+_______________________________ test_seed_board ________________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/kanban_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'kanban_app' started pid=1681
+kanban_app process startup detected
+===================== [STARTED: Begin] kanban_app logfile =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 512 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+===================== [STARTED: End  ] kanban_app logfile =====================
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] kanban_app logfile =====================
+(skipped 9 already-printed lines)
+
+===================== [TEARDOWN: End  ] kanban_app logfile =====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_seed_board
+PASSED ../tests/test_final_state.py::test_move_across_columns
+PASSED ../tests/test_final_state.py::test_reorder_within_column
+PASSED ../tests/test_final_state.py::test_clamp_out_of_range_index
+PASSED ../tests/test_final_state.py::test_persistence_and_rehydration_html
+PASSED ../tests/test_final_state.py::test_error_handling
+PASSED ../tests/test_final_state.py::test_rendered_board_ssr
+============================== 7 passed in 1.48s ===============================

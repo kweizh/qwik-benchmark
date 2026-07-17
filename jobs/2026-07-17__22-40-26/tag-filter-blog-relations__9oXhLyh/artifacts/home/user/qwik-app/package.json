@@ -1,0 +1,26 @@
+{
+  "name": "qwik-app",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "qwik build",
+    "build.client": "vite build",
+    "build.preview": "vite build --ssr src/entry.preview.tsx",
+    "build.types": "tsc --incremental --noEmit",
+    "preview": "qwik build preview && node server/entry.preview.js"
+  },
+  "dependencies": {
+    "@builder.io/qwik": "1.5.7",
+    "@builder.io/qwik-city": "1.5.7",
+    "better-sqlite3": "11.3.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "7.6.11",
+    "@types/node": "20.14.11",
+    "typescript": "5.5.4",
+    "undici": "*",
+    "vite": "5.3.5",
+    "vite-tsconfig-paths": "4.3.2"
+  }
+}

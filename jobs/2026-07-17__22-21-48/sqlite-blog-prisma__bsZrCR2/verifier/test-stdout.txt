@@ -1,0 +1,168 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 6 items
+
+../tests/test_final_state.py F.....                                      [100%]
+
+=================================== FAILURES ===================================
+______________________ test_client_bundle_has_no_db_leak _______________________
+
+    def test_client_bundle_has_no_db_leak():
+        """A production client build must succeed and must not contain server-only
+        DB references (Prisma / SQLite driver)."""
+        result = subprocess.run(
+            ["npm", "run", "build"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True,
+            timeout=600,
+        )
+>       assert result.returncode == 0, (
+            f"'npm run build' failed (exit {result.returncode}).\n"
+            f"STDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: 'npm run build' failed (exit 1).
+E         STDOUT:
+E         
+E         > build
+E         > qwik build
+E         
+E         
+E               ............
+E             .::: :--------:.
+E            .::::  .:-------:.
+E           .:::::.   .:-------.
+E           ::::::.     .:------.
+E          ::::::.        :-----:
+E          ::::::.       .:-----.
+E           :::::::.     .-----.
+E            ::::::::..   ---:.
+E             .:::::::::. :-:.
+E              ..::::::::::::
+E                      ...::::
+E              
+E         
+E         
+E         npm run build.types
+E         npm run build.client
+E         npm run lint
+E         
+E         
+E         > build.client
+E         > vite build
+E         
+E         
+E         > build.types
+E         > tsc --incremental --noEmit
+E         
+E         vite v7.3.1 building client environment for production...
+E         transforming...
+E         ✓ 52 modules transformed.
+E         rendering chunks...
+E         computing gzip size...
+E         dist/assets/CLKBRSbL-bundle-graph.json   1.07 kB │ gzip:  0.63 kB
+E         dist/q-manifest.json                    21.14 kB │ gzip:  3.09 kB
+E         dist/build/q-CAbPpxsg.js                 0.15 kB │ gzip:  0.13 kB
+E         dist/build/q-DN-7p4Q_.js                 0.17 kB │ gzip:  0.15 kB
+E         dist/build/q-DG9W2GRt.js                 0.17 kB │ gzip:  0.15 kB
+E         dist/build/q-B9cMOj_W.js                 0.17 kB │ gzip:  0.15 kB
+E         dist/build/q-Dtlx9yR4.js                 0.20 kB │ gzip:  0.16 kB
+E         dist/build/q-CovZCDRk.js                 0.28 kB │ gzip:  0.23 kB
+E         dist/build/q-D4kG4217.js                 0.34 kB │ gzip:  0.26 kB
+E         dist/build/q-UGH-ooet.js                 0.38 kB │ gzip:  0.25 kB
+E         dist/build/q-BtVOIAV8.js                 0.40 kB │ gzip:  0.26 kB
+E         dist/build/q-JJi5HGok.js                 0.44 kB │ gzip:  0.33 kB
+E         dist/build/q-sGa6qhGt.js                 0.54 kB │ gzip:  0.38 kB
+E         dist/build/q-BLiZIqhe.js                 0.81 kB │ gzip:  0.48 kB
+E         dist/build/q-Bpq1rQCk.js                 0.83 kB │ gzip:  0.42 kB
+E         dist/build/q-byOzReEt.js                 0.96 kB │ gzip:  0.55 kB
+E         dist/build/q-WrsdZDHH.js                 1.12 kB │ gzip:  0.52 kB
+E         dist/build/q-CNdESYrN.js                 1.30 kB │ gzip:  0.72 kB
+E         dist/build/q-BPJd1A0S.js                 1.31 kB │ gzip:  0.68 kB
+E         dist/build/q-D7KkETIC.js                 1.53 kB │ gzip:  0.77 kB
+E         dist/build/q-DZwFBXtN.js                 2.02 kB │ gzip:  0.99 kB
+E         dist/build/q-BihhsMc7.js                 2.24 kB │ gzip:  1.09 kB
+E         dist/build/q-naDMFAHy.js                 3.10 kB │ gzip:  1.68 kB
+E         dist/build/q-BKZ00VYc.js                 3.73 kB │ gzip:  2.00 kB
+E         dist/build/q-DPrDtHjA.js                 7.00 kB │ gzip:  2.82 kB
+E         dist/build/q-DL86glJ4.js                 9.32 kB │ gzip:  4.22 kB
+E         dist/build/q-tityoFBA.js                50.51 kB │ gzip: 20.41 kB
+E         ✓ built in 2.39s
+E         
+E         ✓ Built client modules
+E         
+E         > lint
+E         > eslint "src/**/*.ts*"
+E         
+E         src/routes/index.tsx(74,12): error TS18048: 'createAction.value.fieldErrors' is possibly 'undefined'.
+E         src/routes/index.tsx(81,12): error TS18048: 'createAction.value.fieldErrors' is possibly 'undefined'.
+E         
+E         
+E         Error: Type check failed: 
+E             at /home/user/qwik-blog/node_modules/@builder.io/qwik/dist/cli.cjs:11944:13
+E             at async Promise.all (index 0)
+E             at async runBuildCommand (/home/user/qwik-blog/node_modules/@builder.io/qwik/dist/cli.cjs:12084:5)
+E             at async runCommand2 (/home/user/qwik-blog/node_modules/@builder.io/qwik/dist/cli.cjs:12828:7)
+E             at async Object.runCli (/home/user/qwik-blog/node_modules/@builder.io/qwik/dist/cli.cjs:12816:5)
+E         
+E         
+E         STDERR:
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['npm', 'run', 'build'], returncode=1, stdout='\n> build\n> qwik build\n\n\n      ............\n...\n    at async Object.runCli (/home/user/qwik-blog/node_modules/@builder.io/qwik/dist/cli.cjs:12816:5)\n\n', stderr='').returncode
+
+/tests/test_final_state.py:139: AssertionError
+==================================== PASSES ====================================
+_________________________ test_home_lists_seeded_posts _________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_blog$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_blog' started pid=2201
+qwik_blog process startup detected
+===== [STARTED: Begin] qwik_blog log =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 529 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===== [STARTED: End] qwik_blog log =====
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN: Begin] qwik_blog log =====
+ERROR: Zod validation failed [
+  {
+    code: 'too_small',
+    minimum: 3,
+    type: 'string',
+    inclusive: true,
+    exact: false,
+    message: 'Title must be at least 3 characters',
+    path: [ 'title' ]
+  },
+  {
+    code: 'too_small',
+    minimum: 10,
+    type: 'string',
+    inclusive: true,
+    exact: false,
+    message: 'Content must be at least 10 characters',
+    path: [ 'content' ]
+  }
+]
+
+===== [TEARDOWN: End] qwik_blog log =====
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_home_lists_seeded_posts
+PASSED ../tests/test_final_state.py::test_single_post_detail_route
+PASSED ../tests/test_final_state.py::test_missing_post_returns_404
+PASSED ../tests/test_final_state.py::test_create_post_via_form
+PASSED ../tests/test_final_state.py::test_invalid_submission_rejected_by_zod
+FAILED ../tests/test_final_state.py::test_client_bundle_has_no_db_leak - Asse...
+========================= 1 failed, 5 passed in 14.08s =========================

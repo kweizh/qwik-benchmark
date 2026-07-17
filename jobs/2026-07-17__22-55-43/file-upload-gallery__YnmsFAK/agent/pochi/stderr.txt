@@ -1,0 +1,125 @@
+[37m2026-07-17 14:55:59.648[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	pochi v0.6.20
+[37m2026-07-17 14:55:59.654[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	PochiConfigManager[39m[22m[0m[0m	add workspace config: /root/.pochi/config.jsonc
+[37m2026-07-17 14:55:59.925[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	BuiltInBundle[39m[22m[0m[0m	Materializing 16 built-in files to /tmp/pochi-builtin-ef402bc2bbe8f440
+[37m2026-07-17 14:56:00.178[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:532913[39m[0m[0m[1m[37m	loadAgents[39m[22m[0m[0m	Loaded 6 custom agents (6 valid, 0 invalid)
+[37m2026-07-17 14:56:00.270[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:532914[39m[0m[0m[1m[37m	loadSkills[39m[22m[0m[0m	Loaded 3 skills (3 valid, 0 invalid)
+[37m2026-07-17 14:56:00.342[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:443306[39m[0m[0m[1m[37m	PochiVendor[39m[22m[0m[0m	JWT is expiring or missing, fetching a new one
+[37m2026-07-17 14:56:01.873[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:419194[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	MCP servers configuration changed via signal:
+[37m2026-07-17 14:56:01.873[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:419306[39m[0m[0m[1m[37m	MCPHub[39m[22m[0m[0m	Build MCPHub Status
+[37m2026-07-17 14:56:01.999[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Starting task runner...
+[37m2026-07-17 14:56:02.089[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: null, new: # Image Upload Gallery with Qwik City
+[37m2026-07-17 14:56:11.514[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531016[39m[0m[0m[1m[37m	listFiles[39m[22m[0m[0m	handling listFile with dirPath /home/user/qwik-gallery and recursive [33mtrue[39m
+[37m2026-07-17 14:56:11.589[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:463969[39m[0m[0m[1m[37m	ignoreWalk[39m[22m[0m[0m	MaxScanItems (10000) reached or exceeded. Halting traversal.
+[37m2026-07-17 14:56:13.752[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:490790[39m[0m[0m[1m[37m	generateTaskTitle[39m[22m[0m[0m	Generating task title, old: # Image Upload Gallery with Qwik City, new: Build server-side image upload gallery in Qwik City
+[37m2026-07-17 14:56:14.503[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-gallery/src/routes/index.tsx" resolvedPath="/home/user/qwik-gallery/src/routes/index.tsx" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-07-17 14:56:14.503[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-07-17 14:56:14.504[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-gallery/package.json" resolvedPath="/home/user/qwik-gallery/package.json" isVirtual=false cacheExists=true shouldCache=true startLine=undefined endLine=undefined
+[37m2026-07-17 14:56:14.504[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-07-17 14:56:14.505[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-gallery/src/routes/index.tsx" mtime=1784297007671 contentLen=474
+[37m2026-07-17 14:56:14.506[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-gallery/package.json" mtime=1784297007671 contentLen=1368
+[37m2026-07-17 14:56:34.450[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city export declare (const|function) (routeAction\$|routeLoader\$|zod\$|z\b) [90mundefined[39m
+[37m2026-07-17 14:56:34.450[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'export declare (const|function) (routeAction\\$|routeLoader\\$|zod\\$|z\\b)'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city'[39m
+]
+[37m2026-07-17 14:56:34.452[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city fieldErrors [90mundefined[39m
+[37m2026-07-17 14:56:34.452[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'fieldErrors'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city'[39m
+]
+[37m2026-07-17 14:56:38.310[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts" resolvedPath="/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts" isVirtual=false cacheExists=true shouldCache=true startLine=760 endLine=815
+[37m2026-07-17 14:56:38.310[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState=undefined
+[37m2026-07-17 14:56:38.313[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts" mtime=1784297020748 contentLen=2240
+[37m2026-07-17 14:56:47.203[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts fail(<|\()|ActionConstructor|interface RequestEventAction|type RequestEventAction [90mundefined[39m
+[37m2026-07-17 14:56:47.203[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'fail(<|\\()|ActionConstructor|interface RequestEventAction|type RequestEventAction'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts'[39m
+]
+[37m2026-07-17 14:56:50.553[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: path="/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts" resolvedPath="/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts" isVirtual=false cacheExists=true shouldCache=true startLine=1 endLine=75
+[37m2026-07-17 14:56:50.553[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: existingState={startLine=760, endLine=815, timestamp=1784297020748}
+[37m2026-07-17 14:56:50.554[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531688[39m[0m[0m[1m[37m	FileStateCache[39m[22m[0m[0m	withReadFileCache: populating cache for "/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts" mtime=1784297020748 contentLen=6849
+[37m2026-07-17 14:57:07.733[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city/middleware/request-handler fail<|FailReturn|interface RequestEventAction [90mundefined[39m
+[37m2026-07-17 14:57:07.734[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'fail<|FailReturn|interface RequestEventAction'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/middleware/request-handler'[39m
+]
+[37m2026-07-17 14:57:07.740[39m[0m[0m	[33m[1mWARN[22m[39m[0m[0m	[37mevents:98[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	rg command stderr:  rg: /home/user/qwik-gallery/node_modules/@builder.io/qwik-city/middleware/request-handler: IO error for operation on /home/user/qwik-gallery/node_modules/@builder.io/qwik-city/middleware/request-handler: No such file or directory (os error 2)
+
+[37m2026-07-17 14:57:11.387[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:530993[39m[0m[0m[1m[37m	globFiles[39m[22m[0m[0m	handling globFiles with searchPath: /home/user/qwik-gallery/node_modules/@builder.io/qwik-city and pattern **/request-handler*.d.ts
+[37m2026-07-17 14:57:11.401[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	globFiles[39m[22m[0m[0m	Found 1 files matching pattern **/request-handler*.d.ts
+[37m2026-07-17 14:57:15.369[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city/middleware/request-handler.d.ts fail<|FailReturn|interface RequestEventAction|fail\( [90mundefined[39m
+[37m2026-07-17 14:57:15.369[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'fail<|FailReturn|interface RequestEventAction|fail\\('[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/middleware/request-handler.d.ts'[39m
+]
+[37m2026-07-17 14:57:20.956[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city fail<STATUS|fail\(status|readonly fail: [90mundefined[39m
+[37m2026-07-17 14:57:20.957[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'fail<STATUS|fail\\(status|readonly fail:'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city'[39m
+]
+[37m2026-07-17 14:57:24.200[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city \bfail\b *.d.ts
+[37m2026-07-17 14:57:24.200[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'--glob'[39m,
+  [32m'*.d.ts'[39m,
+  [32m'\\bfail\\b'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city'[39m
+]
+[37m2026-07-17 14:57:27.662[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts FailReturn|ActionStore|interface ActionStore|type ActionStore [90mundefined[39m
+[37m2026-07-17 14:57:27.662[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'FailReturn|ActionStore|interface ActionStore|type ActionStore'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.d.ts'[39m
+]
+[37m2026-07-17 14:58:55.887[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	searchFiles /home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.qwik.mjs qwik-city-form|QACTION|q:action|FORM_ACTION [90mundefined[39m
+[37m2026-07-17 14:58:55.888[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m/$bunfs/pochi:531736[39m[0m[0m[1m[37m	RipgrepUtils[39m[22m[0m[0m	command /usr/bin/rg [
+  [32m'--json'[39m,
+  [32m'--case-sensitive'[39m,
+  [32m'--binary'[39m,
+  [32m'--sortr'[39m,
+  [32m'modified'[39m,
+  [32m'qwik-city-form|QACTION|q:action|FORM_ACTION'[39m,
+  [32m'/home/user/qwik-gallery/node_modules/@builder.io/qwik-city/lib/index.qwik.mjs'[39m
+]
+[37m2026-07-17 15:00:40.352[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Task runner finished successfully.
+[37m2026-07-17 15:00:40.353[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutting down...
+[37m2026-07-17 15:00:40.372[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37mnative:7[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Shutdown completed. Process will exit.
+[37m2026-07-17 15:00:40.372[39m[0m[0m	[32m[1mDEBUG[22m[39m[0m[0m	[37m[39m[0m[0m[1m[37m	Pochi[39m[22m[0m[0m	Process exiting with code 0

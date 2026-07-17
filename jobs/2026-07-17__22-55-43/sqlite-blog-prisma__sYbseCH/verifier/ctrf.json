@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T15:03:53.505175+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784300621773,
+            "stop": 1784300633505
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_client_bundle_has_no_db_leak",
+                "status": "passed",
+                "duration": 9866,
+                "start": 1784300621839,
+                "stop": 1784300631705,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_home_lists_seeded_posts",
+                "status": "passed",
+                "duration": 1694,
+                "start": 1784300631705,
+                "stop": 1784300633399,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_single_post_detail_route",
+                "status": "passed",
+                "duration": 15,
+                "start": 1784300633400,
+                "stop": 1784300633415,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_missing_post_returns_404",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784300633415,
+                "stop": 1784300633421,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_create_post_via_form",
+                "status": "passed",
+                "duration": 64,
+                "start": 1784300633421,
+                "stop": 1784300633485,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_invalid_submission_rejected_by_zod",
+                "status": "passed",
+                "duration": 18,
+                "start": 1784300633486,
+                "stop": 1784300633504,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

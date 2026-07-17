@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:12:35.636937+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 4,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784297553579,
+            "stop": 1784297555636
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_login_page_renders",
+                "status": "passed",
+                "duration": 1627,
+                "start": 1784297553654,
+                "stop": 1784297555281,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unauthenticated_dashboard_redirects_to_login",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 25,
+                "start": 1784297555281,
+                "stop": 1784297555306,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_unauthenticated_dashboard_redirects_to_login(start_app):\n        s = requests.Session()\n        r = s.get(BASE_URL + \"/dashboard\", allow_redirects=False, timeout=30)\n        assert 300 <= r.status_code < 400, (\n            f\"Unauthenticated GET /dashboard should redirect, got {r.status_code}\"\n        )\n>       assert \"/login\" in _location_path(r), (\n            f\"Unauthenticated /dashboard should redirect to /login, Location={r.headers.get('Location')}\"\n        )\nE       AssertionError: Unauthenticated /dashboard should redirect to /login, Location=/dashboard/\nE       assert '/login' in '/dashboard/'\nE        +  where '/dashboard/' = _location_path(<Response [301]>)\n\n/tests/test_final_state.py:137: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_failed_login_is_rejected",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 82,
+                "start": 1784297555306,
+                "stop": 1784297555388,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_failed_login_is_rejected(start_app):\n        s = requests.Session()\n        r = _do_login(s, VALID_USER, WRONG_PASS, allow_redirects=False)\n        # A failed login must NOT redirect to the dashboard.\n        if 300 <= r.status_code < 400:\n            assert \"/dashboard\" not in _location_path(r), (\n                \"Login with a wrong password must not redirect to /dashboard.\"\n            )\n        # The re-rendered page must show the error message.\n        body = r.text\n        if 300 <= r.status_code < 400:\n            follow = s.get(urljoin(r.url, r.headers.get(\"Location\", \"/login\")), timeout=30)\n            body = follow.text\n        assert \"Invalid username or password\" in body, (\n            \"Failed login should display the message 'Invalid username or password'.\"\n        )\n        # And no valid session should have been established.\n        r2 = s.get(BASE_URL + \"/dashboard\", allow_redirects=False, timeout=30)\n>       assert 300 <= r2.status_code < 400 and \"/login\" in _location_path(r2), (\n            \"After a failed login, /dashboard must still redirect to /login.\"\n        )\nE       AssertionError: After a failed login, /dashboard must still redirect to /login.\nE       assert (301 < 400 and '/login' in '/dashboard/')\nE        +  where 301 = <Response [301]>.status_code\nE        +  and   '/dashboard/' = _location_path(<Response [301]>)\n\n/tests/test_final_state.py:160: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_successful_login_sets_httponly_cookie_and_redirects",
+                "status": "passed",
+                "duration": 48,
+                "start": 1784297555388,
+                "stop": 1784297555436,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_authenticated_dashboard_shows_user",
+                "status": "passed",
+                "duration": 61,
+                "start": 1784297555436,
+                "stop": 1784297555497,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_logout_clears_session",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 90,
+                "start": 1784297555497,
+                "stop": 1784297555587,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_logout_clears_session(start_app):\n        s = requests.Session()\n        _do_login(s, VALID_USER, VALID_PASS, allow_redirects=True)\n        r = s.get(BASE_URL + \"/dashboard\", timeout=30)\n        assert r.status_code == 200, \"Precondition failed: could not reach authenticated dashboard.\"\n    \n        logout_action = _find_form_action(r.text, [\"logout\"])\n        assert logout_action is not None, (\n            \"Could not find a logout <form> on the dashboard page.\"\n        )\n        logout_url = urljoin(r.url, logout_action)\n        rr = s.post(logout_url, allow_redirects=False, timeout=30)\n>       assert 300 <= rr.status_code < 400, (\n            f\"Logout should redirect, got {rr.status_code}\"\n        )\nE       AssertionError: Logout should redirect, got 200\nE       assert 300 <= 200\nE        +  where 200 = <Response [200]>.status_code\n\n/tests/test_final_state.py:210: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_password_is_hashed_at_rest",
+                "status": "passed",
+                "duration": 49,
+                "start": 1784297555587,
+                "stop": 1784297555636,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

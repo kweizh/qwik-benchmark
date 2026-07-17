@@ -1,0 +1,87 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 8 items
+
+../tests/test_final_state.py .....F..                                    [100%]
+
+=================================== FAILURES ===================================
+______________________ test_edit_updates_note_via_browser ______________________
+
+start_app = None
+browser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x7776934134a0>
+
+    def test_edit_updates_note_via_browser(start_app, browser_verifier):
+        """Truth step 6: edit page updates a note via routeAction$."""
+        reason = (
+            "The /notes/<id>/edit page must load the existing note into a form and update "
+            "it through a Qwik City routeAction$, reflecting the change everywhere."
+        )
+        truth = (
+            f"Navigate to {NOTES_URL} and open the editor for the note titled "
+            "'Grocery List' (via its edit page at /notes/<id>/edit). Verify the form is "
+            "pre-filled with the title 'Grocery List'. Change the title field to "
+            "'Weekly Groceries' and submit the form. Then verify that the note now shows "
+            f"the title 'Weekly Groceries', and that on {NOTES_URL} a link with text "
+            "'Weekly Groceries' now exists while 'Grocery List' no longer appears."
+        )
+        result = browser_verifier.verify(
+            reason=reason,
+            truth=truth,
+            use_browser_agent=True,
+            trajectory_dir="/logs/verifier/pochi/test_edit_updates_note_via_browser",
+        )
+>       assert result.status == "pass", f"Browser verification failed: {result.reason}"
+E       AssertionError: Browser verification failed: The browser sub-agent failed to launch or execute, returning an abort error: 'Task aborted: maximum number of retries reached (3)'.
+E       assert 'fail' == 'pass'
+E         - pass
+E         + fail
+
+/tests/test_final_state.py:268: AssertionError
+==================================== PASSES ====================================
+____________________________ test_notes_list_loads _____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_notes$ npm run dev -- --port 5173 --host 127.0.0.1
+process 'qwik_notes' started pid=2038
+qwik_notes process startup detected
+==================== [STARTED: Begin] qwik_notes log ====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 5173 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 627 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+  🚧 Please note that development mode is slower than production.
+
+==================== [STARTED: End  ] qwik_notes log ====================
+--------------------------- Captured stdout teardown ---------------------------
+==================== [TEARDOWN: Begin] qwik_notes log ====================
+(skipped 11 already-printed lines)
+ERROR: Zod validation failed [
+  {
+    code: 'too_small',
+    minimum: 1,
+    type: 'string',
+    inclusive: true,
+    exact: false,
+    message: 'Title cannot be blank',
+    path: [ 'title' ]
+  }
+]
+
+==================== [TEARDOWN: End  ] qwik_notes log ====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_notes_list_loads
+PASSED ../tests/test_final_state.py::test_create_notes_via_browser
+PASSED ../tests/test_final_state.py::test_detail_renders_sanitized_markdown_html
+PASSED ../tests/test_final_state.py::test_detail_sanitizes_dangerous_html
+PASSED ../tests/test_final_state.py::test_create_validation_rejects_blank_title
+PASSED ../tests/test_final_state.py::test_delete_note_via_browser
+PASSED ../tests/test_final_state.py::test_unknown_note_returns_404
+FAILED ../tests/test_final_state.py::test_edit_updates_note_via_browser - Ass...
+=================== 1 failed, 7 passed in 474.31s (0:07:54) ====================

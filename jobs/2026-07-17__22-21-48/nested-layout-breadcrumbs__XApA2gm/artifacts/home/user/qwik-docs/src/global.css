@@ -1,0 +1,165 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Docs layout --------------------------------------------------------- */
+
+.docs-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 3rem;
+}
+
+.breadcrumb-bar ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-bar li {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-bar li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: #9ca3af;
+}
+
+.breadcrumb-bar li:last-child span {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.docs-body {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.sidebar {
+  flex: 0 0 220px;
+  position: sticky;
+  top: 1rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar a {
+  display: block;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  color: #374151;
+}
+
+.sidebar a:hover {
+  background: #f3f4f6;
+  text-decoration: none;
+}
+
+.sidebar a[aria-current="page"] {
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.docs-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Category & page lists ------------------------------------------------ */
+
+.category-list,
+.page-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.category-list li a {
+  display: block;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: inherit;
+}
+
+.category-list li a:hover {
+  border-color: #2563eb;
+  text-decoration: none;
+}
+
+.category-list h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.category-list p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.page-list li a {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+}
+
+/* Article ------------------------------------------------------------- */
+
+article h1 {
+  margin-top: 0;
+}
+
+article p {
+  font-size: 1.05rem;
+  color: #374151;
+}
+
+/* Responsive ----------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .docs-body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    flex: none;
+    width: 100%;
+  }
+}

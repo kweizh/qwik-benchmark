@@ -1,0 +1,57 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 6 items
+
+../tests/test_final_state.py ......                                      [100%]
+
+==================================== PASSES ====================================
+_____________________ test_initial_render_and_reply_counts _____________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_comments$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_comments' started pid=2037
+qwik_comments process startup detected
+===================== [STARTED: Begin] qwik_comments logfile =====================
+@@__xproc_block_delimiter__@@
+
+> qwik-comments@0.0.1 dev
+> vite --mode ssr --host 0.0.0.0 --port 3000 --port 3000 --host 127.0.0.1
+
+(!) Could not auto-determine entry point from rollupOptions or html files and there are no explicit optimizeDeps.include patterns. Skipping dependency pre-bundling.
+
+  VITE v5.4.2  ready in 647 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+===================== [STARTED: End  ] qwik_comments logfile =====================
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] qwik_comments logfile =====================
+(skipped 10 already-printed lines)
+
+  ❗️ Expect significant performance loss in development.
+  ❗️ Disabling the browser's cache results in waterfall requests.
+
+VALIDATION ERROR
+action$() zod validated failed 
+  - Issues: [
+  {
+    code: 'too_small',
+    minimum: 1,
+    type: 'string',
+    inclusive: true,
+    exact: false,
+    message: 'Body is required',
+    path: [ 'body' ]
+  }
+]
+
+===================== [TEARDOWN: End  ] qwik_comments logfile =====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_initial_render_and_reply_counts
+PASSED ../tests/test_final_state.py::test_add_nested_reply
+PASSED ../tests/test_final_state.py::test_reply_persisted_in_sqlite
+PASSED ../tests/test_final_state.py::test_collapse_and_expand_subtree
+PASSED ../tests/test_final_state.py::test_validation_rejects_empty_body
+PASSED ../tests/test_final_state.py::test_invalid_submission_not_persisted
+======================== 6 passed in 350.84s (0:05:50) =========================

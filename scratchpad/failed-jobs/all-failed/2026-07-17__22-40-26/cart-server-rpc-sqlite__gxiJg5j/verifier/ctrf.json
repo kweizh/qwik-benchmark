@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:48:47.527154+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 2,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784299707211,
+            "stop": 1784299727527
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_empty_cart_initial",
+                "status": "passed",
+                "duration": 3821,
+                "start": 1784299707366,
+                "stop": 1784299711187,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cart_add_update_and_persistence",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5360,
+                "start": 1784299711187,
+                "stop": 1784299716547,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>\n\n    def test_cart_add_update_and_persistence(browser):\n        \"\"\"Truth steps 2-5, 7-8: add/increase quantity, totals, reload persistence, removal.\"\"\"\n        context, page = _new_page(browser)\n        try:\n            page.goto(BASE_URL)\n            expect(_testid(page, \"empty-cart\")).to_be_visible()\n    \n            # Step 2: add tshirt -> qty 1, total $20.00\n            _testid(page, \"add-tshirt\").click()\n>           expect(_testid(page, \"cart-item-tshirt\")).to_have_count(1)\nE           AssertionError: Locator expected to have count '1'\nE           Actual value: 0 \nE           Call log:\nE             - Expect \"to_have_count\" with timeout 5000ms\nE             - waiting for locator(\"[data-testid=\\\"cart-item-tshirt\\\"]\")\nE               14 \u00d7 locator resolved to 0 elements\nE                  - unexpected value \"0\"\n\n/tests/test_final_state.py:119: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_decrement_does_not_go_below_one",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5294,
+                "start": 1784299716547,
+                "stop": 1784299721841,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>\n\n    def test_decrement_does_not_go_below_one(browser):\n        \"\"\"Truth step 6: decrement floors quantity at 1.\"\"\"\n        context, page = _new_page(browser)\n        try:\n            page.goto(BASE_URL)\n            _testid(page, \"add-mug\").click()\n>           expect(_testid(page, \"qty-mug\")).to_have_text(\"1\")\nE           AssertionError: Locator expected to have text '1'\nE           Actual value: None\nE           Error: element(s) not found \nE           Call log:\nE             - Expect \"to_have_text\" with timeout 5000ms\nE             - waiting for locator(\"[data-testid=\\\"qty-mug\\\"]\")\nE           \nE           Aria snapshot:\nE           - main:\nE             - heading \"Qwik Shop\" [level=1]\nE             - heading \"Catalog\" [level=2]\nE             - list:\nE               - listitem:\nE                 - text: Qwik T-Shirt \u2014 $20.00\nE                 - button \"Add to cart\"\nE               - listitem:\nE                 - text: Sticker Pack \u2014 $5.00\nE                 - button \"Add to cart\"\nE               - listitem:\nE                 - text: Coffee Mug \u2014 $12.50\nE                 - button \"Add to cart\"\nE             - heading \"Cart\" [level=2]\nE             - paragraph: Your cart is empty.\nE             - paragraph: \"Total: $0.00\"\n\n/tests/test_final_state.py:170: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_session_isolation",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5648,
+                "start": 1784299721841,
+                "stop": 1784299727489,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>\n\n    def test_session_isolation(browser):\n        \"\"\"Truth step 9: a brand-new visitor (no cookies) has an independent empty cart.\"\"\"\n        # First visitor adds an item under its own session cookie.\n        ctx_a, page_a = _new_page(browser)\n        try:\n            page_a.goto(BASE_URL)\n            _testid(page_a, \"add-mug\").click()\n>           expect(_testid(page_a, \"cart-item-mug\")).to_have_count(1)\nE           AssertionError: Locator expected to have count '1'\nE           Actual value: 0 \nE           Call log:\nE             - Expect \"to_have_count\" with timeout 5000ms\nE             - waiting for locator(\"[data-testid=\\\"cart-item-mug\\\"]\")\nE               14 \u00d7 locator resolved to 0 elements\nE                  - unexpected value \"0\"\n\n/tests/test_final_state.py:188: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_local_sqlite_file_exists",
+                "status": "passed",
+                "duration": 36,
+                "start": 1784299727490,
+                "stop": 1784299727526,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,123 @@
+{
+    "id": "160860ff-499e-4e84-9dc3-7e14dafe9167",
+    "task_name": "tag-filter-blog-relations",
+    "trial_name": "tag-filter-blog-relations__9oXhLyh",
+    "trial_uri": "file:///home/kw/code/zealt/pochi-harbor/jobs/2026-07-17__22-40-26/tag-filter-blog-relations__9oXhLyh",
+    "task_id": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/tag-filter-blog-relations"
+    },
+    "source": "pending-tasks",
+    "task_checksum": "440f685a47216f190bb1fe37da7222b4e8b01897e98eb05f1d69466acc7adaa5",
+    "config": {
+        "task": {
+            "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/tag-filter-blog-relations",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": "pending-tasks"
+        },
+        "trial_name": "tag-filter-blog-relations__9oXhLyh",
+        "trials_dir": "jobs/2026-07-17__22-40-26",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "agents.pochi:Pochi",
+            "model_name": "minimax/MiniMax-M3",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {},
+            "env": {
+                "POCHI_API_KEY": "${POCHI_API_KEY}",
+                "MINIMAX_API_KEY": "${MINIMAX_API_KEY}"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "daytona",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": [
+                {
+                    "type": "bind",
+                    "source": "test_initial_state.py",
+                    "target": "/bootstrap/test_initial_state.py"
+                }
+            ],
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [
+            "/home/user"
+        ],
+        "extra_instruction_paths": [],
+        "job_id": "ba4519ca-4dad-49a3-9f25-e386cc1c91cc"
+    },
+    "agent_info": {
+        "name": "pochi",
+        "version": "0.6.20",
+        "model_info": {
+            "name": "MiniMax-M3",
+            "provider": "minimax"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 1231246,
+        "cost_usd": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-17T14:40:30.446654Z",
+    "finished_at": "2026-07-17T14:46:11.298685Z",
+    "environment_setup": {
+        "started_at": "2026-07-17T14:40:30.566585Z",
+        "finished_at": "2026-07-17T14:40:35.521378Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-17T14:40:35.521420Z",
+        "finished_at": "2026-07-17T14:40:41.307121Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-17T14:40:41.307257Z",
+        "finished_at": "2026-07-17T14:45:06.801255Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-17T14:45:33.011874Z",
+        "finished_at": "2026-07-17T14:46:04.078796Z"
+    },
+    "step_results": null
+}

@@ -1,0 +1,372 @@
+/* -----------------------------------------------------------------------
+   Markdown Notes — global styles
+----------------------------------------------------------------------- */
+
+:root {
+  --bg: #f6f7fb;
+  --fg: #1f2933;
+  --muted: #52606d;
+  --border: #e4e7eb;
+  --card: #ffffff;
+  --accent: #2f6feb;
+  --accent-fg: #ffffff;
+  --danger: #c0392b;
+  --danger-fg: #ffffff;
+  --error: #b3261e;
+  --error-bg: #fdecea;
+  --code-bg: #f1f3f5;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.04);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.55;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+.site-header {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 1.25rem;
+}
+
+.site-header nav {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.site-header .brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+}
+
+.site-main {
+  flex: 1;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+}
+
+/* -----------------------------------------------------------------------
+   Hero / landing page
+----------------------------------------------------------------------- */
+
+.hero h1 {
+  font-size: 2.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.hero p {
+  color: var(--muted);
+}
+
+/* -----------------------------------------------------------------------
+   Forms
+----------------------------------------------------------------------- */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+label span {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+input[type="text"],
+textarea {
+  font: inherit;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--fg);
+  resize: vertical;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--fg);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.92rem;
+  text-decoration: none;
+}
+
+.button:hover,
+.button:focus {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.button.primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+
+.button.primary:hover,
+.button.primary:focus {
+  filter: brightness(0.95);
+}
+
+.button.danger {
+  background: var(--danger);
+  color: var(--danger-fg);
+  border-color: var(--danger);
+}
+
+.button.danger:hover,
+.button.danger:focus {
+  filter: brightness(0.95);
+}
+
+.button[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.error {
+  color: var(--error);
+  background: var(--error-bg);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+/* -----------------------------------------------------------------------
+   Notes index page
+----------------------------------------------------------------------- */
+
+.notes-page h1 {
+  margin-top: 0;
+}
+
+.create-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+.create-card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.create-form {
+  margin-top: 0.5rem;
+}
+
+.notes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.note-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.note-title {
+  font-weight: 600;
+  color: var(--fg);
+  font-size: 1.02rem;
+  word-break: break-word;
+}
+
+.note-dates {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.note-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.inline-form {
+  margin: 0;
+  display: inline;
+}
+
+.empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.back-link {
+  margin: 0 0 0.75rem;
+}
+
+/* -----------------------------------------------------------------------
+   Note detail
+----------------------------------------------------------------------- */
+
+.note-detail h1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.note-content {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow);
+  margin-top: 1rem;
+}
+
+.note-content h1,
+.note-content h2,
+.note-content h3 {
+  margin-top: 1.2em;
+}
+
+.note-content pre {
+  background: var(--code-bg);
+  padding: 0.75rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.note-content code {
+  background: var(--code-bg);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.note-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.note-content blockquote {
+  border-left: 4px solid var(--accent);
+  margin: 0;
+  padding: 0.25rem 1rem;
+  color: var(--muted);
+  background: rgba(47, 111, 235, 0.05);
+}
+
+.note-content table {
+  border-collapse: collapse;
+}
+
+.note-content th,
+.note-content td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+}
+
+/* -----------------------------------------------------------------------
+   Note edit
+----------------------------------------------------------------------- */
+
+.note-edit h1 {
+  margin-top: 0.25rem;
+}
+
+.edit-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}

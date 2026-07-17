@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:48:42.127406+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784299707575,
+            "stop": 1784299722127
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_docs_root_lists_categories_and_sidebar",
+                "status": "passed",
+                "duration": 14406,
+                "start": 1784299707663,
+                "stop": 1784299722069,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_category_page_breadcrumb_and_active_highlight",
+                "status": "passed",
+                "duration": 19,
+                "start": 1784299722069,
+                "stop": 1784299722088,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_leaf_page_breadcrumb_and_content",
+                "status": "passed",
+                "duration": 14,
+                "start": 1784299722088,
+                "stop": 1784299722102,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_second_leaf_in_different_category",
+                "status": "passed",
+                "duration": 10,
+                "start": 1784299722103,
+                "stop": 1784299722113,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unknown_category_returns_404",
+                "status": "passed",
+                "duration": 7,
+                "start": 1784299722113,
+                "stop": 1784299722120,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unknown_slug_returns_404",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784299722120,
+                "stop": 1784299722126,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:48:20.984449+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784299689341,
+            "stop": 1784299700984
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_empty_query_state",
+                "status": "passed",
+                "duration": 1336,
+                "start": 1784299689429,
+                "stop": 1784299690765,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_basic_match_and_count",
+                "status": "passed",
+                "duration": 8,
+                "start": 1784299690765,
+                "stop": 1784299690773,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_body_term_match_count",
+                "status": "passed",
+                "duration": 7,
+                "start": 1784299690774,
+                "stop": 1784299690781,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_bm25_ranking_order",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784299690781,
+                "stop": 1784299690787,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_no_results_state",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784299690788,
+                "stop": 1784299690793,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_highlight_is_fts5_output",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784299690793,
+                "stop": 1784299690798,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_server_only_isolation",
+                "status": "passed",
+                "duration": 10186,
+                "start": 1784299690798,
+                "stop": 1784299700984,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:13:46.737981+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 2,
+            "failed": 3,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784297581252,
+            "stop": 1784297626737
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_empty_cart_initial",
+                "status": "passed",
+                "duration": 3053,
+                "start": 1784297581373,
+                "stop": 1784297584426,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cart_add_update_and_persistence",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5527,
+                "start": 1784297584427,
+                "stop": 1784297589954,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>\n\n    def test_cart_add_update_and_persistence(browser):\n        \"\"\"Truth steps 2-5, 7-8: add/increase quantity, totals, reload persistence, removal.\"\"\"\n        context, page = _new_page(browser)\n        try:\n            page.goto(BASE_URL)\n            expect(_testid(page, \"empty-cart\")).to_be_visible()\n    \n            # Step 2: add tshirt -> qty 1, total $20.00\n            _testid(page, \"add-tshirt\").click()\n>           expect(_testid(page, \"cart-item-tshirt\")).to_have_count(1)\nE           AssertionError: Locator expected to have count '1'\nE           Actual value: 0 \nE           Call log:\nE             - Expect \"to_have_count\" with timeout 5000ms\nE             - waiting for locator(\"[data-testid=\\\"cart-item-tshirt\\\"]\")\nE               14 \u00d7 locator resolved to 0 elements\nE                  - unexpected value \"0\"\n\n/tests/test_final_state.py:119: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_decrement_does_not_go_below_one",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 31021,
+                "start": 1784297589954,
+                "stop": 1784297620975,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>\n\n    def test_decrement_does_not_go_below_one(browser):\n        \"\"\"Truth step 6: decrement floors quantity at 1.\"\"\"\n        context, page = _new_page(browser)\n        try:\n            page.goto(BASE_URL)\n            _testid(page, \"add-mug\").click()\n            expect(_testid(page, \"qty-mug\")).to_have_text(\"1\")\n            expect(_testid(page, \"cart-total\")).to_have_text(\"$12.50\")\n>           _testid(page, \"dec-mug\").click()\n\n/tests/test_final_state.py:172: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:17672: in click\n    self._sync(\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_locator.py:163: in click\n    return await self._frame._click(self._selector, strict=True, **params)\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:591: in _click\n    await self._channel.send(\"click\", self._timeout, locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <playwright._impl._connection.Connection object at 0x7ad0aeeea7b0>\ncb = <function Channel.send.<locals>.<lambda> at 0x7ad0ae26dda0>\nis_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -> Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, \"__pw_stack__\", None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n>           raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nE           playwright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.\nE           Call log:\nE             - waiting for locator(\"[data-testid=\\\"dec-mug\\\"]\")\nE               - locator resolved to <button disabled class=\"qty-btn\" data-testid=\"dec-mug\">-</button>\nE             - attempting click action\nE               2 \u00d7 waiting for element to be visible, enabled and stable\nE                 - element is not enabled\nE               - retrying click action\nE               - waiting 20ms\nE               2 \u00d7 waiting for element to be visible, enabled and stable\nE                 - element is not enabled\nE               - retrying click action\nE                 - waiting 100ms\nE               58 \u00d7 waiting for element to be visible, enabled and stable\nE                  - element is not enabled\nE                - retrying click action\nE                  - waiting 500ms\n\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError",
+                "message": "The test failed in the call phase due to an exception"
+            },
+            {
+                "name": "test_final_state.py::test_session_isolation",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5626,
+                "start": 1784297620975,
+                "stop": 1784297626601,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>\n\n    def test_session_isolation(browser):\n        \"\"\"Truth step 9: a brand-new visitor (no cookies) has an independent empty cart.\"\"\"\n        # First visitor adds an item under its own session cookie.\n        ctx_a, page_a = _new_page(browser)\n        try:\n            page_a.goto(BASE_URL)\n            _testid(page_a, \"add-mug\").click()\n>           expect(_testid(page_a, \"cart-item-mug\")).to_have_count(1)\nE           AssertionError: Locator expected to have count '1'\nE           Actual value: 0 \nE           Call log:\nE             - Expect \"to_have_count\" with timeout 5000ms\nE             - waiting for locator(\"[data-testid=\\\"cart-item-mug\\\"]\")\nE               14 \u00d7 locator resolved to 0 elements\nE                  - unexpected value \"0\"\n\n/tests/test_final_state.py:188: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_local_sqlite_file_exists",
+                "status": "passed",
+                "duration": 136,
+                "start": 1784297626601,
+                "stop": 1784297626737,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

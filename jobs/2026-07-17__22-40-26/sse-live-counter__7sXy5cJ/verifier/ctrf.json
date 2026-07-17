@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:53:36.818783+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784299586570,
+            "stop": 1784300016818
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_initial_counter_value",
+                "status": "passed",
+                "duration": 3781,
+                "start": 1784299586648,
+                "stop": 1784299590429,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_stream_content_type_and_initial_frame",
+                "status": "passed",
+                "duration": 90103,
+                "start": 1784299590429,
+                "stop": 1784299680532,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_mutation_broadcasts_to_all_subscribers",
+                "status": "passed",
+                "duration": 90126,
+                "start": 1784299680533,
+                "stop": 1784299770659,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_negative_delta_and_shared_state",
+                "status": "passed",
+                "duration": 90114,
+                "start": 1784299770660,
+                "stop": 1784299860774,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_new_connection_sees_latest_value",
+                "status": "passed",
+                "duration": 90098,
+                "start": 1784299860774,
+                "stop": 1784299950872,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_browser_live_counter",
+                "status": "passed",
+                "duration": 65945,
+                "start": 1784299950873,
+                "stop": 1784300016818,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

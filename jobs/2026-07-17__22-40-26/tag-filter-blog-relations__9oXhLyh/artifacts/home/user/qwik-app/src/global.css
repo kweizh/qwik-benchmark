@@ -1,0 +1,135 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: #222;
+  background: #fafafa;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+nav {
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+nav a {
+  margin-right: 1rem;
+}
+
+.facets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.facet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.facet.active {
+  background: #0066cc;
+  color: #fff;
+  border-color: #0066cc;
+}
+
+.facet-count {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.facet.active .facet-count {
+  opacity: 1;
+}
+
+.active-filters {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.active-tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: #e8f1fc;
+  border: 1px solid #b3d4f0;
+  border-radius: 4px;
+  margin-right: 0.4rem;
+}
+
+.articles {
+  display: grid;
+  gap: 1rem;
+}
+
+.article-card {
+  padding: 1rem 1.2rem;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+
+.article-card h2 {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.2rem;
+}
+
+.article-card .article-tags {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #777;
+  background: #fff;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+}
+
+.tag-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-list li {
+  padding: 0.3rem 0.7rem;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}

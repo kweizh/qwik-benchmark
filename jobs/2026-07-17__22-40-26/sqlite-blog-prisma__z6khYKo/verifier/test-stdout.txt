@@ -1,0 +1,110 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 6 items
+
+../tests/test_final_state.py .FFFFF                                      [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_home_lists_seeded_posts _________________________
+
+start_app = None
+
+    def test_home_lists_seeded_posts(start_app):
+        resp = requests.get(BASE_URL + "/", timeout=30)
+        assert resp.status_code == 200, f"GET / returned {resp.status_code}, expected 200."
+        html = resp.text
+    
+        for title, _content in SEED_POSTS:
+>           assert title in html, f"Expected seeded post title '{title}' to appear on the home page."
+E           AssertionError: Expected seeded post title 'Understanding Resumability' to appear on the home page.
+E           assert 'Understanding Resumability' in '<!DOCTYPE html><html lang="en-us" q:route="/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:base="/bui...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n'
+
+/tests/test_final_state.py:172: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_blog$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_blog' started pid=1498
+qwik_blog process startup detected
+===== [STARTED: Begin] qwik_blog log =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 543 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+===== [STARTED: End] qwik_blog log =====
+________________________ test_single_post_detail_route _________________________
+
+start_app = None
+
+    def test_single_post_detail_route(start_app):
+        resp = requests.get(BASE_URL + "/posts/1", timeout=30)
+        assert resp.status_code == 200, f"GET /posts/1 returned {resp.status_code}, expected 200."
+        html = resp.text
+>       assert SEED_POSTS[0][0] in html, "Post detail page for id 1 is missing its title."
+E       AssertionError: Post detail page for id 1 is missing its title.
+E       assert 'Welcome to Qwik' in 'Not a SSR URL according to Qwik City'
+
+/tests/test_final_state.py:193: AssertionError
+________________________ test_missing_post_returns_404 _________________________
+
+start_app = None
+
+    def test_missing_post_returns_404(start_app):
+        resp = requests.get(BASE_URL + "/posts/999999", timeout=30)
+>       assert resp.status_code == 404, (
+            f"GET /posts/999999 returned {resp.status_code}, expected 404 for a non-existent post."
+        )
+E       AssertionError: GET /posts/999999 returned 200, expected 404 for a non-existent post.
+E       assert 200 == 404
+E        +  where 200 = <Response [200]>.status_code
+
+/tests/test_final_state.py:199: AssertionError
+__________________________ test_create_post_via_form ___________________________
+
+start_app = None
+
+    def test_create_post_via_form(start_app):
+        home = requests.get(BASE_URL + "/", timeout=30)
+        assert home.status_code == 200, f"GET / returned {home.status_code}."
+        form = _find_create_form(home.text)
+>       assert form is not None, (
+            "Could not find a <form> containing inputs named 'title' and 'content' on the home page."
+        )
+E       AssertionError: Could not find a <form> containing inputs named 'title' and 'content' on the home page.
+E       assert None is not None
+
+/tests/test_final_state.py:208: AssertionError
+___________________ test_invalid_submission_rejected_by_zod ____________________
+
+start_app = None
+
+    def test_invalid_submission_rejected_by_zod(start_app):
+        home = requests.get(BASE_URL + "/", timeout=30)
+        assert home.status_code == 200
+        form = _find_create_form(home.text)
+>       assert form is not None, "Create form not found on the home page."
+E       AssertionError: Create form not found on the home page.
+E       assert None is not None
+
+/tests/test_final_state.py:250: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN: Begin] qwik_blog log =====
+not SSR rendering http://127.0.0.1:3000/posts/1 because Qwik City Env data did not populate
+not SSR rendering http://127.0.0.1:3000/posts/999999 because Qwik City Env data did not populate
+
+===== [TEARDOWN: End] qwik_blog log =====
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_client_bundle_has_no_db_leak
+FAILED ../tests/test_final_state.py::test_home_lists_seeded_posts - Assertion...
+FAILED ../tests/test_final_state.py::test_single_post_detail_route - Assertio...
+FAILED ../tests/test_final_state.py::test_missing_post_returns_404 - Assertio...
+FAILED ../tests/test_final_state.py::test_create_post_via_form - AssertionErr...
+FAILED ../tests/test_final_state.py::test_invalid_submission_rejected_by_zod
+========================= 5 failed, 1 passed in 12.66s =========================

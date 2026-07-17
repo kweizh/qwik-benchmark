@@ -1,0 +1,95 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:08:28.949444+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 6,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784297297562,
+            "stop": 1784297308949
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_empty_query_state",
+                "status": "passed",
+                "duration": 1298,
+                "start": 1784297297631,
+                "stop": 1784297298929,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_basic_match_and_count",
+                "status": "passed",
+                "duration": 16,
+                "start": 1784297298929,
+                "stop": 1784297298945,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_body_term_match_count",
+                "status": "passed",
+                "duration": 7,
+                "start": 1784297298946,
+                "stop": 1784297298953,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_bm25_ranking_order",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784297298953,
+                "stop": 1784297298959,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_no_results_state",
+                "status": "passed",
+                "duration": 26,
+                "start": 1784297298959,
+                "stop": 1784297298985,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_highlight_is_fts5_output",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784297298985,
+                "stop": 1784297298990,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_server_only_isolation",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 9957,
+                "start": 1784297298991,
+                "stop": 1784297308948,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_server_only_isolation():\n        \"\"\"The client bundle must not contain the better-sqlite3 server-only driver.\"\"\"\n        build = subprocess.run(\n            [\"npm\", \"run\", \"build\"],\n            cwd=PROJECT_DIR,\n            capture_output=True,\n            text=True,\n            timeout=300,\n        )\n>       assert build.returncode == 0, (\n            f\"'npm run build' failed:\\nstdout:\\n{build.stdout[-2000:]}\\nstderr:\\n{build.stderr[-2000:]}\"\n        )\nE       AssertionError: 'npm run build' failed:\nE         stdout:\nE         js                 0.17 kB \u2502 gzip:  0.15 kB\nE         dist/build/q-DG9W2GRt.js                 0.17 kB \u2502 gzip:  0.15 kB\nE         dist/build/q-BoH_uqBM.js                 0.17 kB \u2502 gzip:  0.15 kB\nE         dist/build/q-D4kG4217.js                 0.34 kB \u2502 gzip:  0.26 kB\nE         dist/build/q-CwKrCQkK.js                 0.40 kB \u2502 gzip:  0.26 kB\nE         dist/build/q-DWqBUbyh.js                 0.40 kB \u2502 gzip:  0.30 kB\nE         dist/build/q-sGa6qhGt.js                 0.54 kB \u2502 gzip:  0.38 kB\nE         dist/build/q-BLiZIqhe.js                 0.81 kB \u2502 gzip:  0.48 kB\nE         dist/build/q-mG6m-ovt.js                 0.83 kB \u2502 gzip:  0.42 kB\nE         dist/build/q-wtCH1TFH.js                 0.96 kB \u2502 gzip:  0.54 kB\nE         dist/build/q-Dfo07eKy.js                 1.30 kB \u2502 gzip:  0.72 kB\nE         dist/build/q-M-Yskphz.js                 1.31 kB \u2502 gzip:  0.68 kB\nE         dist/build/q-osqUKQGH.js                 1.41 kB \u2502 gzip:  0.75 kB\nE         dist/build/q-BLxJoLg6.js                 2.02 kB \u2502 gzip:  0.99 kB\nE         dist/build/q-BihhsMc7.js                 2.24 kB \u2502 gzip:  1.09 kB\nE         dist/build/q-naDMFAHy.js                 3.10 kB \u2502 gzip:  1.68 kB\nE         dist/build/q-BIJTTZnc.js                 3.51 kB \u2502 gzip:  1.49 kB\nE         dist/build/q-BKZ00VYc.js                 3.73 kB \u2502 gzip:  2.00 kB\nE         dist/build/q-7G00gTKn.js                 7.00 kB \u2502 gzip:  2.82 kB\nE         dist/build/q-BBic55q7.js                 8.02 kB \u2502 gzip:  3.77 kB\nE         dist/build/q-tityoFBA.js                50.51 kB \u2502 gzip: 20.41 kB\nE         \u2713 built in 2.70s\nE         \nE         \u2713 Built client modules\nE         \nE         > lint\nE         > eslint \"src/**/*.ts*\"\nE         \nE         src/routes/index.tsx(43,42): error TS7006: Parameter 'docs' implicitly has an 'any' type.\nE         \nE         \nE         Error: Type check failed: \nE             at /home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:11944:13\nE             at async Promise.all (index 0)\nE             at async runBuildCommand (/home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:12084:5)\nE             at async runCommand2 (/home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:12828:7)\nE             at async Object.runCli (/home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:12816:5)\nE         \nE         \nE         stderr:\nE         npm warn Unknown cli config \"--pretty\". This will stop working in the next major version of npm.\nE         \nE       assert 1 == 0\nE        +  where 1 = CompletedProcess(args=['npm', 'run', 'build'], returncode=1, stdout='\\n> build\\n> qwik build\\n\\n\\n      ............\\n...6:5)\\n\\n', stderr='npm warn Unknown cli config \"--pretty\". This will stop working in the next major version of npm.\\n').returncode\n\n/tests/test_final_state.py:193: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,639 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 7 items
+
+../tests/test_final_state.py EEEEEEE                                     [100%]
+
+==================================== ERRORS ====================================
+______________________ ERROR at setup of test_seed_board _______________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x767a86ee20c0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        class Starter(ProcessStarter):
+            name = "kanban_app"
+            # Force the Vite/Qwik dev server to bind the IPv4 loopback so it matches
+            # the address the readiness check and tests connect to.
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 240
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                # The first request triggers on-demand dev bundling, so allow a
+                # generous timeout. Accept any non-5xx status.
+                try:
+                    resp = requests.get(BASE_URL, timeout=60)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            try:
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+            except FileNotFoundError:
+                return
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(
+                f"===================== [{tag}: Begin] {Starter.name} logfile ====================="
+            )
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(
+                f"===================== [{tag}: End  ] {Starter.name} logfile ====================="
+            )
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x767a8636d3a0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 240                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/kanban_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'kanban_app' started pid=1058
+===================== [FAILED: Begin] kanban_app logfile =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+sh: 1: vite: not found
+
+===================== [FAILED: End  ] kanban_app logfile =====================
+__________________ ERROR at setup of test_move_across_columns __________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x767a86ee20c0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        class Starter(ProcessStarter):
+            name = "kanban_app"
+            # Force the Vite/Qwik dev server to bind the IPv4 loopback so it matches
+            # the address the readiness check and tests connect to.
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 240
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                # The first request triggers on-demand dev bundling, so allow a
+                # generous timeout. Accept any non-5xx status.
+                try:
+                    resp = requests.get(BASE_URL, timeout=60)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            try:
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+            except FileNotFoundError:
+                return
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(
+                f"===================== [{tag}: Begin] {Starter.name} logfile ====================="
+            )
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(
+                f"===================== [{tag}: End  ] {Starter.name} logfile ====================="
+            )
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x767a8636d3a0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 240                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+_________________ ERROR at setup of test_reorder_within_column _________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x767a86ee20c0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        class Starter(ProcessStarter):
+            name = "kanban_app"
+            # Force the Vite/Qwik dev server to bind the IPv4 loopback so it matches
+            # the address the readiness check and tests connect to.
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 240
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                # The first request triggers on-demand dev bundling, so allow a
+                # generous timeout. Accept any non-5xx status.
+                try:
+                    resp = requests.get(BASE_URL, timeout=60)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            try:
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+            except FileNotFoundError:
+                return
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(
+                f"===================== [{tag}: Begin] {Starter.name} logfile ====================="
+            )
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(
+                f"===================== [{tag}: End  ] {Starter.name} logfile ====================="
+            )
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x767a8636d3a0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 240                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+_______________ ERROR at setup of test_clamp_out_of_range_index ________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x767a86ee20c0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        class Starter(ProcessStarter):
+            name = "kanban_app"
+            # Force the Vite/Qwik dev server to bind the IPv4 loopback so it matches
+            # the address the readiness check and tests connect to.
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 240
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                # The first request triggers on-demand dev bundling, so allow a
+                # generous timeout. Accept any non-5xx status.
+                try:
+                    resp = requests.get(BASE_URL, timeout=60)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            try:
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+            except FileNotFoundError:
+                return
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(
+                f"===================== [{tag}: Begin] {Starter.name} logfile ====================="
+            )
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(
+                f"===================== [{tag}: End  ] {Starter.name} logfile ====================="
+            )
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x767a8636d3a0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 240                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+___________ ERROR at setup of test_persistence_and_rehydration_html ____________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x767a86ee20c0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        class Starter(ProcessStarter):
+            name = "kanban_app"
+            # Force the Vite/Qwik dev server to bind the IPv4 loopback so it matches
+            # the address the readiness check and tests connect to.
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 240
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                # The first request triggers on-demand dev bundling, so allow a
+                # generous timeout. Accept any non-5xx status.
+                try:
+                    resp = requests.get(BASE_URL, timeout=60)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            try:
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+            except FileNotFoundError:
+                return
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(
+                f"===================== [{tag}: Begin] {Starter.name} logfile ====================="
+            )
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(
+                f"===================== [{tag}: End  ] {Starter.name} logfile ====================="
+            )
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x767a8636d3a0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 240                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+____________________ ERROR at setup of test_error_handling _____________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x767a86ee20c0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        class Starter(ProcessStarter):
+            name = "kanban_app"
+            # Force the Vite/Qwik dev server to bind the IPv4 loopback so it matches
+            # the address the readiness check and tests connect to.
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 240
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                # The first request triggers on-demand dev bundling, so allow a
+                # generous timeout. Accept any non-5xx status.
+                try:
+                    resp = requests.get(BASE_URL, timeout=60)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            try:
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+            except FileNotFoundError:
+                return
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(
+                f"===================== [{tag}: Begin] {Starter.name} logfile ====================="
+            )
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(
+                f"===================== [{tag}: End  ] {Starter.name} logfile ====================="
+            )
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x767a8636d3a0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 240                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+__________________ ERROR at setup of test_rendered_board_ssr ___________________
+
+xprocess = <xprocess.xprocess.XProcess object at 0x767a86ee20c0>
+
+    @pytest.fixture(scope="session")
+    def start_app(xprocess):
+        class Starter(ProcessStarter):
+            name = "kanban_app"
+            # Force the Vite/Qwik dev server to bind the IPv4 loopback so it matches
+            # the address the readiness check and tests connect to.
+            args = ["npm", "run", "dev", "--", "--port", str(PORT), "--host", HOST]
+            env = os.environ.copy()
+            popen_kwargs = {
+                "cwd": PROJECT_DIR,
+                "text": True,
+            }
+            timeout = 240
+            terminate_on_interrupt = True
+    
+            def startup_check(self):
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    if s.connect_ex((HOST, PORT)) != 0:
+                        return False
+                # The first request triggers on-demand dev bundling, so allow a
+                # generous timeout. Accept any non-5xx status.
+                try:
+                    resp = requests.get(BASE_URL, timeout=60)
+                    return resp.status_code < 500
+                except requests.RequestException:
+                    return False
+    
+        info = xprocess.getinfo(Starter.name)
+        printed_log_lines = 0
+    
+        def capture_logs(tag):
+            nonlocal printed_log_lines
+            try:
+                with open(info.logpath, "r") as f:
+                    all_lines = f.readlines()
+            except FileNotFoundError:
+                return
+            new_lines = all_lines[printed_log_lines:]
+            skipped = printed_log_lines
+            printed_log_lines = len(all_lines)
+            print(
+                f"===================== [{tag}: Begin] {Starter.name} logfile ====================="
+            )
+            if skipped > 0:
+                print(f"(skipped {skipped} already-printed lines)")
+            print("".join(new_lines))
+            print(
+                f"===================== [{tag}: End  ] {Starter.name} logfile ====================="
+            )
+    
+        started = False
+        try:
+>           xprocess.ensure(Starter.name, Starter)
+
+/tests/test_final_state.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:284: in ensure
+    if not starter.wait(log_file_handle):
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:413: in wait
+    callback_ok = self.wait_callback()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_final_state.start_app.<locals>.Starter object at 0x767a8636d3a0>
+
+    def wait_callback(self):
+        """Assert that process is ready to answer queries using provided
+        callback funtion. Will raise TimeoutError if self.callback does not
+        return True before self.timeout seconds"""
+        while True:
+            sleep(0.1)
+            if self.startup_check():
+                return True
+            if datetime.now() > self._max_time:
+>               raise TimeoutError(
+                    "The provided startup callback could not assert process\
+                    responsiveness within the specified time interval of {} \
+                    seconds".format(
+                        self.timeout
+                    )
+                )
+E               TimeoutError: The provided startup callback could not assert process                    responsiveness within the specified time interval of 240                     seconds
+
+/usr/local/lib/python3.12/dist-packages/xprocess/xprocess.py:391: TimeoutError
+=========================== short test summary info ============================
+ERROR ../tests/test_final_state.py::test_seed_board - TimeoutError: The provi...
+ERROR ../tests/test_final_state.py::test_move_across_columns - TimeoutError: ...
+ERROR ../tests/test_final_state.py::test_reorder_within_column - TimeoutError...
+ERROR ../tests/test_final_state.py::test_clamp_out_of_range_index - TimeoutEr...
+ERROR ../tests/test_final_state.py::test_persistence_and_rehydration_html - T...
+ERROR ../tests/test_final_state.py::test_error_handling - TimeoutError: The p...
+ERROR ../tests/test_final_state.py::test_rendered_board_ssr - TimeoutError: T...
+======================== 7 errors in 240.23s (0:04:00) =========================

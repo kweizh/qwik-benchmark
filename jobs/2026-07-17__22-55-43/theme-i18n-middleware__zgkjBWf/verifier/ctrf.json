@@ -1,0 +1,77 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T15:01:09.121195+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 4,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784300466850,
+            "stop": 1784300469121
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_default_ssr_light_english",
+                "status": "passed",
+                "duration": 2114,
+                "start": 1784300466926,
+                "stop": 1784300469040,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_cookies_dark_spanish",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 26,
+                "start": 1784300469041,
+                "stop": 1784300469067,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_cookies_dark_spanish(start_app):\n        \"\"\"theme=dark; locale=es -> dark theme + Spanish copy on first response.\"\"\"\n        resp = requests.get(\n            BASE_URL, headers={\"Cookie\": \"theme=dark; locale=es\"}, timeout=60\n        )\n        assert resp.status_code == 200, f\"GET / (dark/es) returned {resp.status_code}\"\n        html = resp.text\n        open_tag = _extract_html_tag(html)\n        assert open_tag, \"No <html> opening tag found in the server response.\"\n        assert _attr_value(open_tag, \"data-theme\") == \"dark\", (\n            f'Expected data-theme=\"dark\" for theme=dark cookie, got: {open_tag}'\n        )\n        assert _attr_value(open_tag, \"lang\") == \"es\", (\n            f'Expected lang=\"es\" for locale=es cookie, got: {open_tag}'\n        )\n        assert \"Preferencias\" in html, \"Expected Spanish title 'Preferencias' for locale=es.\"\n        assert \"Hola\" in html, \"Expected Spanish greeting 'Hola' for locale=es.\"\n>       assert \"Preferences\" not in html, \"Spanish (es) page must not contain English 'Preferences'.\"\nE       AssertionError: Spanish (es) page must not contain English 'Preferences'.\nE       assert 'Preferences' not in '<!DOCTYPE h.../script>\\n\\n'\nE         'Preferences' is contained here:\nE           le q:head>Preferences</title><link rel=\"canonical\" href=\"http://127.0.0.1:3000/\" q:id=\"3\" q:head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" q:head><link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\" q:head><meta name=\"description\" content=\"Qwik site description\" q:head><!--/qv--><!--/qv--><script id=\"qwikloader\" type=\"module\" async=\"true\">const doc = document;\nE         ?           +++++++++++\nE           const win = window;\nE           const events = /* @__PURE__ */ new Set();\nE           const roots = /* @__PURE__ */ new Set([doc]);\nE           let hasInitialized;...\nE         \nE         ...Full output truncated (1406 lines hidden), use '-vv' to show\n\n/tests/test_final_state.py:131: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_cookies_dark_english",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784300469067,
+                "stop": 1784300469073,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_invalid_cookies_fall_back_to_defaults",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784300469074,
+                "stop": 1784300469079,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_action_persists_preferences_round_trip",
+                "status": "passed",
+                "duration": 41,
+                "start": 1784300469079,
+                "stop": 1784300469120,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,147 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    sans-serif;
+  background: #f5f7fa;
+  color: #1f2933;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+h1 {
+  margin: 0 0 1.5rem;
+  font-size: 1.75rem;
+}
+
+.comment {
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  background: #ffffff;
+}
+
+.comment-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #102a43;
+}
+
+.comment-meta {
+  font-size: 0.8rem;
+  color: #627d98;
+}
+
+.toggle-btn {
+  background: #eef4fb;
+  color: #14528e;
+  border: 1px solid #bcccdc;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.toggle-btn:hover {
+  background: #d9e7f5;
+}
+
+.comment-body {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.reply-count {
+  font-size: 0.8rem;
+  color: #486581;
+}
+
+.children {
+  margin-left: 1.25rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid #bcccdc;
+}
+
+.reply-form,
+.root-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #f0f4f8;
+  border-radius: 6px;
+}
+
+.reply-form input,
+.reply-form textarea,
+.root-form input,
+.root-form textarea {
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #bcccdc;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.reply-form textarea,
+.root-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.reply-form button,
+.root-form button {
+  align-self: flex-start;
+  background: #2563eb;
+  color: #fff;
+  border: 0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.reply-form button:hover,
+.root-form button:hover {
+  background: #1d4ed8;
+}
+
+.error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+}
+
+.collapsed-hint {
+  font-style: italic;
+  color: #627d98;
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+}

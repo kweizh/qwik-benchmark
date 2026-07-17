@@ -1,0 +1,200 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 8 items
+
+../tests/test_final_state.py FFFFFFFF                                    [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_export_headers ______________________________
+
+start_app = None
+
+    def test_export_headers(start_app):
+        resp = requests.get(EXPORT_URL, timeout=REQUEST_TIMEOUT)
+        assert resp.status_code == 200, f"GET /reports/export returned {resp.status_code}, expected 200."
+    
+        content_type = resp.headers.get("Content-Type", "")
+>       assert "text/csv" in content_type.lower(), (
+            f"Expected Content-Type to contain 'text/csv', got '{content_type}'."
+        )
+E       AssertionError: Expected Content-Type to contain 'text/csv', got 'text/plain'.
+E       assert 'text/csv' in 'text/plain'
+E        +  where 'text/plain' = <built-in method lower of str object at 0x7ee36e17ca70>()
+E        +    where <built-in method lower of str object at 0x7ee36e17ca70> = 'text/plain'.lower
+
+/tests/test_final_state.py:96: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 5173 --host 127.0.0.1
+process 'start_app' started pid=596
+start_app process startup detected
+===================== [STARTED: Begin] start_app logfile =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 5173 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 721 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+  🚧 Please note that development mode is slower than production.
+
+===================== [STARTED: End  ] start_app logfile =====================
+__________________________ test_export_csv_no_filter ___________________________
+
+start_app = None
+
+    def test_export_csv_no_filter(start_app):
+        resp = requests.get(EXPORT_URL, timeout=REQUEST_TIMEOUT)
+        assert resp.status_code == 200, f"GET /reports/export returned {resp.status_code}, expected 200."
+    
+        body = resp.content.decode("utf-8")
+    
+        # RFC 4180 requires CRLF between records.
+>       assert "\r\n" in body, "Expected CSV records to be separated by CRLF (\\r\\n)."
+E       AssertionError: Expected CSV records to be separated by CRLF (\r\n).
+E       assert '\r\n' in 'Not a SSR URL according to Qwik City'
+
+/tests/test_final_state.py:119: AssertionError
+_________________________ test_export_category_filter __________________________
+
+start_app = None
+
+    def test_export_category_filter(start_app):
+        resp = requests.get(EXPORT_URL, params={"category": "food"}, timeout=REQUEST_TIMEOUT)
+        assert resp.status_code == 200, f"GET /reports/export?category=food returned {resp.status_code}."
+    
+        rows = _parse_csv_rows(resp.content.decode("utf-8"))
+>       assert rows[0] == ["id", "date", "category", "description", "amount"], (
+            f"Expected header row first, got {rows[0]}."
+        )
+E       AssertionError: Expected header row first, got ['Not a SSR URL according to Qwik City'].
+E       assert ['Not a SSR U...to Qwik City'] == ['id', 'date'...on', 'amount']
+E         At index 0 diff: 'Not a SSR URL according to Qwik City' != 'id'
+E         Right contains 4 more items, first extra item: 'date'
+E         Use -v to get more diff
+
+/tests/test_final_state.py:147: AssertionError
+________________________ test_export_date_range_filter _________________________
+
+start_app = None
+
+    def test_export_date_range_filter(start_app):
+        resp = requests.get(
+            EXPORT_URL, params={"from": "2024-02-01", "to": "2024-02-28"}, timeout=REQUEST_TIMEOUT
+        )
+        assert resp.status_code == 200, f"GET /reports/export with date range returned {resp.status_code}."
+    
+        rows = _parse_csv_rows(resp.content.decode("utf-8"))
+        data_ids = [r[0] for r in rows[1:]]
+>       assert data_ids == ["3", "4"], (
+            f"Expected rows with ids 3,4 for Feb 2024 date range, got ids {data_ids}."
+        )
+E       AssertionError: Expected rows with ids 3,4 for Feb 2024 date range, got ids [].
+E       assert [] == ['3', '4']
+E         Right contains 2 more items, first extra item: '3'
+E         Use -v to get more diff
+
+/tests/test_final_state.py:164: AssertionError
+_________________________ test_export_combined_filter __________________________
+
+start_app = None
+
+    def test_export_combined_filter(start_app):
+        resp = requests.get(
+            EXPORT_URL,
+            params={"from": "2024-02-01", "to": "2024-03-31", "category": "travel"},
+            timeout=REQUEST_TIMEOUT,
+        )
+        assert resp.status_code == 200, f"GET /reports/export with combined filter returned {resp.status_code}."
+    
+        rows = _parse_csv_rows(resp.content.decode("utf-8"))
+        data_rows = rows[1:]
+>       assert len(data_rows) == 1, f"Expected exactly one row for combined filter, got {len(data_rows)}."
+E       AssertionError: Expected exactly one row for combined filter, got 0.
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+/tests/test_final_state.py:179: AssertionError
+_________________________ test_report_page_unfiltered __________________________
+
+start_app = None
+
+    def test_report_page_unfiltered(start_app):
+        resp = requests.get(REPORTS_URL, timeout=REQUEST_TIMEOUT)
+        assert resp.status_code == 200, f"GET /reports returned {resp.status_code}, expected 200."
+    
+        html = resp.text
+        for desc in ["Groceries", "Train ticket", "Coffee, tea, and snacks"]:
+>           assert desc in html, f"Expected the report page to list description '{desc}'."
+E           AssertionError: Expected the report page to list description 'Groceries'.
+E           assert 'Groceries' in 'Not a SSR URL according to Qwik City'
+
+/tests/test_final_state.py:196: AssertionError
+________________ test_report_page_filtered_link_carries_filters ________________
+
+start_app = None
+
+    def test_report_page_filtered_link_carries_filters(start_app):
+        resp = requests.get(REPORTS_URL, params={"category": "food"}, timeout=REQUEST_TIMEOUT)
+        assert resp.status_code == 200, f"GET /reports?category=food returned {resp.status_code}."
+    
+        html = resp.text
+>       assert "Groceries" in html, "Expected a food row 'Groceries' to be listed when filtering by category=food."
+E       AssertionError: Expected a food row 'Groceries' to be listed when filtering by category=food.
+E       assert 'Groceries' in 'Not a SSR URL according to Qwik City'
+
+/tests/test_final_state.py:210: AssertionError
+___________________________ test_report_page_browser ___________________________
+
+start_app = None
+browser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x7ee36e1b7aa0>
+
+    def test_report_page_browser(start_app, browser_verifier):
+        reason = (
+            "The /reports page must render transactions from the local SQLite database and, when "
+            "filtered by category, list only the matching rows along with a working 'Download CSV' link."
+        )
+        truth = (
+            f"Navigate to {REPORTS_URL}?category=food. Verify that the page lists the food transaction "
+            "descriptions including 'Coffee, tea, and snacks' and 'Groceries'. Verify that a link with the "
+            "visible text 'Download CSV' is present on the page."
+        )
+        result = browser_verifier.verify(
+            reason=reason,
+            truth=truth,
+            use_browser_agent=True,
+            trajectory_dir="/logs/verifier/pochi/test_report_page_browser",
+        )
+>       assert result.status == "pass", f"Browser verification failed: {result.reason}"
+E       AssertionError: Browser verification failed: The /reports page is not found. Navigating to http://127.0.0.1:5173/reports?category=food returned a 404 error page with '/reports not found.' and listed '/' as the only available route.
+E       assert 'fail' == 'pass'
+E         - pass
+E         + fail
+
+/tests/test_final_state.py:239: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] start_app logfile =====================
+(skipped 11 already-printed lines)
+not SSR rendering http://127.0.0.1:5173/reports/export because Qwik City Env data did not populate
+not SSR rendering http://127.0.0.1:5173/reports/export because Qwik City Env data did not populate
+not SSR rendering http://127.0.0.1:5173/reports/export?category=food because Qwik City Env data did not populate
+not SSR rendering http://127.0.0.1:5173/reports/export?from=2024-02-01&to=2024-02-28 because Qwik City Env data did not populate
+not SSR rendering http://127.0.0.1:5173/reports/export?from=2024-02-01&to=2024-03-31&category=travel because Qwik City Env data did not populate
+not SSR rendering http://127.0.0.1:5173/reports because Qwik City Env data did not populate
+not SSR rendering http://127.0.0.1:5173/reports?category=food because Qwik City Env data did not populate
+
+===================== [TEARDOWN: End  ] start_app logfile =====================
+=========================== short test summary info ============================
+FAILED ../tests/test_final_state.py::test_export_headers - AssertionError: Ex...
+FAILED ../tests/test_final_state.py::test_export_csv_no_filter - AssertionErr...
+FAILED ../tests/test_final_state.py::test_export_category_filter - AssertionE...
+FAILED ../tests/test_final_state.py::test_export_date_range_filter - Assertio...
+FAILED ../tests/test_final_state.py::test_export_combined_filter - AssertionE...
+FAILED ../tests/test_final_state.py::test_report_page_unfiltered - AssertionE...
+FAILED ../tests/test_final_state.py::test_report_page_filtered_link_carries_filters
+FAILED ../tests/test_final_state.py::test_report_page_browser - AssertionErro...
+========================= 8 failed in 86.77s (0:01:26) =========================

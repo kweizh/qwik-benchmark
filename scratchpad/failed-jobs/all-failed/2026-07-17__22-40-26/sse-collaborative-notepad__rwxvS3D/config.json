@@ -1,0 +1,30 @@
+{
+    "task": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/sse-collaborative-notepad",
+        "source": "pending-tasks"
+    },
+    "trial_name": "sse-collaborative-notepad__rwxvS3D",
+    "trials_dir": "jobs/2026-07-17__22-40-26",
+    "agent": {
+        "import_path": "agents.pochi:Pochi",
+        "model_name": "minimax/MiniMax-M3",
+        "env": {
+            "POCHI_API_KEY": "${POCHI_API_KEY}",
+            "MINIMAX_API_KEY": "${MINIMAX_API_KEY}"
+        }
+    },
+    "environment": {
+        "type": "daytona",
+        "mounts": [
+            {
+                "type": "bind",
+                "source": "test_initial_state.py",
+                "target": "/bootstrap/test_initial_state.py"
+            }
+        ]
+    },
+    "artifacts": [
+        "/home/user"
+    ],
+    "job_id": "ba4519ca-4dad-49a3-9f25-e386cc1c91cc"
+}

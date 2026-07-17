@@ -1,0 +1,128 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:15:10.509626+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 11,
+            "passed": 11,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784297684062,
+            "stop": 1784297710509
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_no_filter_lists_all_articles",
+                "status": "passed",
+                "duration": 26312,
+                "start": 1784297684131,
+                "stop": 1784297710443,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_no_filter_article_links",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784297710444,
+                "stop": 1784297710449,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_no_filter_facet_counts",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784297710449,
+                "stop": 1784297710454,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_and_filter_two_tags",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784297710454,
+                "stop": 1784297710459,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_and_filter_two_tags_active_filters",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784297710459,
+                "stop": 1784297710464,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_and_filter_two_tags_facet_counts",
+                "status": "passed",
+                "duration": 4,
+                "start": 1784297710464,
+                "stop": 1784297710468,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_and_filter_three_tags",
+                "status": "passed",
+                "duration": 4,
+                "start": 1784297710468,
+                "stop": 1784297710472,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_filter_no_matches",
+                "status": "passed",
+                "duration": 25,
+                "start": 1784297710472,
+                "stop": 1784297710497,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_detail_page_multi_tag",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784297710497,
+                "stop": 1784297710502,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_detail_page_single_tag",
+                "status": "passed",
+                "duration": 4,
+                "start": 1784297710502,
+                "stop": 1784297710506,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unknown_slug_returns_404",
+                "status": "passed",
+                "duration": 3,
+                "start": 1784297710506,
+                "stop": 1784297710509,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,359 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 5 items
+
+../tests/test_final_state.py FFFFF                                       [100%]
+
+=================================== FAILURES ===================================
+___________________________ test_empty_cart_initial ____________________________
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_empty_cart_initial(browser):
+        """Truth step 1: a fresh visitor sees an empty cart."""
+        context, page = _new_page(browser)
+        try:
+            page.goto(BASE_URL)
+>           expect(_testid(page, "empty-cart")).to_be_visible()
+E           AssertionError: Locator expected to be visible
+E           Actual value: None
+E           Error: element(s) not found 
+E           Call log:
+E             - Expect "to_be_visible" with timeout 5000ms
+E             - waiting for locator("[data-testid=\"empty-cart\"]")
+E           
+E           Aria snapshot:
+E           - text: "$ is not defined File /home/user/qwik-app/src/routes/index.tsx:91:19 Frame 89 | }); 90 | 91 | const refresh = $(async (result: CartItem[]) => { | ^ 92 | cart.items = result; 93 | }); Stack Trace at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19) at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26) at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24) at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27 at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56) at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29 at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27 at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25) at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12) at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22) Not sure how to solve this? Visit https://qwik.dev or connect with the community on Discord. Click outside, press Esc key, or fix the code to dismiss. You can also disable this overlay by setting"
+E           - code: server.hmr.overlay
+E           - text: to
+E           - code: "false"
+E           - text: in
+E           - code: vite.config.ts
+E           - text: .
+
+/tests/test_final_state.py:104: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_dev_server$ npm run dev -- --port 3000 --host 0.0.0.0
+process 'qwik_dev_server' started pid=1671
+qwik_dev_server process startup detected
+===================== [STARTED: Begin] qwik_dev_server log =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 0.0.0.0
+
+
+  VITE v7.3.1   ssr   ready in 716 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://172.20.0.33:3000/
+2:33:49 PM [vite] Internal server error: $ is not defined
+  File: /home/user/qwik-app/src/routes/index.tsx:91:19
+  89 |    });
+  90 |  
+  91 |    const refresh = $(async (result: CartItem[]) => {
+     |                     ^
+  92 |      cart.items = result;
+  93 |    });
+      at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19)
+      at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27
+      at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25)
+      at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12)
+      at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22)
+
+===================== [STARTED: End  ] qwik_dev_server log =====================
+_____________________ test_cart_add_update_and_persistence _____________________
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_cart_add_update_and_persistence(browser):
+        """Truth steps 2-5, 7-8: add/increase quantity, totals, reload persistence, removal."""
+        context, page = _new_page(browser)
+        try:
+            page.goto(BASE_URL)
+>           expect(_testid(page, "empty-cart")).to_be_visible()
+E           AssertionError: Locator expected to be visible
+E           Actual value: None
+E           Error: element(s) not found 
+E           Call log:
+E             - Expect "to_be_visible" with timeout 5000ms
+E             - waiting for locator("[data-testid=\"empty-cart\"]")
+E           
+E           Aria snapshot:
+E           - text: "$ is not defined File /home/user/qwik-app/src/routes/index.tsx:91:19 Frame 89 | }); 90 | 91 | const refresh = $(async (result: CartItem[]) => { | ^ 92 | cart.items = result; 93 | }); Stack Trace at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19) at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26) at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24) at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27 at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56) at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29 at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27 at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25) at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12) at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22) Not sure how to solve this? Visit https://qwik.dev or connect with the community on Discord. Click outside, press Esc key, or fix the code to dismiss. You can also disable this overlay by setting"
+E           - code: server.hmr.overlay
+E           - text: to
+E           - code: "false"
+E           - text: in
+E           - code: vite.config.ts
+E           - text: .
+
+/tests/test_final_state.py:115: AssertionError
+_____________________ test_decrement_does_not_go_below_one _____________________
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_decrement_does_not_go_below_one(browser):
+        """Truth step 6: decrement floors quantity at 1."""
+        context, page = _new_page(browser)
+        try:
+            page.goto(BASE_URL)
+>           _testid(page, "add-mug").click()
+
+/tests/test_final_state.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:17672: in click
+    self._sync(
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_locator.py:163: in click
+    return await self._frame._click(self._selector, strict=True, **params)
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:591: in _click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7c0caa9d20f0>
+cb = <function Channel.send.<locals>.<lambda> at 0x7c0caa127b00>
+is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        st: List[inspect.FrameInfo] = getattr(
+            task, "__pw_stack__", None
+        ) or inspect.stack(0)
+    
+        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid=\"add-mug\"]")
+
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError
+____________________________ test_session_isolation ____________________________
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_session_isolation(browser):
+        """Truth step 9: a brand-new visitor (no cookies) has an independent empty cart."""
+        # First visitor adds an item under its own session cookie.
+        ctx_a, page_a = _new_page(browser)
+        try:
+            page_a.goto(BASE_URL)
+>           _testid(page_a, "add-mug").click()
+
+/tests/test_final_state.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:17672: in click
+    self._sync(
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_locator.py:163: in click
+    return await self._frame._click(self._selector, strict=True, **params)
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:591: in _click
+    await self._channel.send("click", self._timeout, locals_to_params(locals()))
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7c0caa9d20f0>
+cb = <function Channel.send.<locals>.<lambda> at 0x7c0ca9dd84a0>
+is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        st: List[inspect.FrameInfo] = getattr(
+            task, "__pw_stack__", None
+        ) or inspect.stack(0)
+    
+        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid=\"add-mug\"]")
+
+/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_session_isolation(browser):
+        """Truth step 9: a brand-new visitor (no cookies) has an independent empty cart."""
+        # First visitor adds an item under its own session cookie.
+        ctx_a, page_a = _new_page(browser)
+        try:
+            page_a.goto(BASE_URL)
+            _testid(page_a, "add-mug").click()
+            expect(_testid(page_a, "cart-item-mug")).to_have_count(1)
+        finally:
+            # A second, independent visitor must NOT see the first visitor's cart.
+            ctx_b, page_b = _new_page(browser)
+            try:
+                page_b.goto(BASE_URL)
+>               expect(_testid(page_b, "empty-cart")).to_be_visible()
+E               AssertionError: Locator expected to be visible
+E               Actual value: None
+E               Error: element(s) not found 
+E               Call log:
+E                 - Expect "to_be_visible" with timeout 5000ms
+E                 - waiting for locator("[data-testid=\"empty-cart\"]")
+E               
+E               Aria snapshot:
+E               - text: "$ is not defined File /home/user/qwik-app/src/routes/index.tsx:91:19 Frame 89 | }); 90 | 91 | const refresh = $(async (result: CartItem[]) => { | ^ 92 | cart.items = result; 93 | }); Stack Trace at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19) at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26) at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24) at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27 at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56) at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29 at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27 at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25) at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12) at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22) Not sure how to solve this? Visit https://qwik.dev or connect with the community on Discord. Click outside, press Esc key, or fix the code to dismiss. You can also disable this overlay by setting"
+E               - code: server.hmr.overlay
+E               - text: to
+E               - code: "false"
+E               - text: in
+E               - code: vite.config.ts
+E               - text: .
+
+/tests/test_final_state.py:194: AssertionError
+________________________ test_local_sqlite_file_exists _________________________
+
+start_app = None
+
+    def test_local_sqlite_file_exists(start_app):
+        """Truth step 10: a local SQLite database file exists in the project."""
+        db_exts = (".db", ".sqlite", ".sqlite3")
+        found = []
+        for root, dirs, files in os.walk(PROJECT_DIR):
+            if "node_modules" in dirs:
+                dirs.remove("node_modules")
+            if ".git" in dirs:
+                dirs.remove(".git")
+            for name in files:
+                if name.lower().endswith(db_exts):
+                    found.append(os.path.join(root, name))
+>       assert found, (
+            f"Expected a local SQLite database file (*.db / *.sqlite / *.sqlite3) "
+            f"inside {PROJECT_DIR}, but none was found."
+        )
+E       AssertionError: Expected a local SQLite database file (*.db / *.sqlite / *.sqlite3) inside /home/user/qwik-app, but none was found.
+E       assert []
+
+/tests/test_final_state.py:213: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] qwik_dev_server log =====================
+(skipped 28 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+2:33:50 PM [vite] Internal server error: $ is not defined
+  File: /home/user/qwik-app/src/routes/index.tsx:91:19
+  89 |    });
+  90 |  
+  91 |    const refresh = $(async (result: CartItem[]) => {
+     |                     ^
+  92 |      cart.items = result;
+  93 |    });
+      at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19)
+      at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27
+      at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25)
+      at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12)
+      at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22)
+2:33:55 PM [vite] Internal server error: $ is not defined
+  File: /home/user/qwik-app/src/routes/index.tsx:91:19
+  89 |    });
+  90 |  
+  91 |    const refresh = $(async (result: CartItem[]) => {
+     |                     ^
+  92 |      cart.items = result;
+  93 |    });
+      at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19)
+      at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27
+      at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25)
+      at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12)
+      at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22)
+2:34:01 PM [vite] Internal server error: $ is not defined
+  File: /home/user/qwik-app/src/routes/index.tsx:91:19
+  89 |    });
+  90 |  
+  91 |    const refresh = $(async (result: CartItem[]) => {
+     |                     ^
+  92 |      cart.items = result;
+  93 |    });
+      at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19)
+      at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27
+      at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25)
+      at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12)
+      at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22)
+2:34:31 PM [vite] Internal server error: $ is not defined
+  File: /home/user/qwik-app/src/routes/index.tsx:91:19
+  89 |    });
+  90 |  
+  91 |    const refresh = $(async (result: CartItem[]) => {
+     |                     ^
+  92 |      cart.items = result;
+  93 |    });
+      at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19)
+      at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27
+      at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25)
+      at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12)
+      at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22)
+2:35:01 PM [vite] Internal server error: $ is not defined
+  File: /home/user/qwik-app/src/routes/index.tsx:91:19
+  89 |    });
+  90 |  
+  91 |    const refresh = $(async (result: CartItem[]) => {
+     |                     ^
+  92 |      cart.items = result;
+  93 |    });
+      at AsyncFunction.routes_component_B0lqk5IDDy4 [as resolved] (/home/user/qwik-app/src/routes/index.tsx:91:19)
+      at AsyncFunction.invokeApply (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:68:26)
+      at AsyncFunction.invoke (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/use/use-core.js:60:24)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:123:27
+      at maybeThen (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:20:56)
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/qrl/qrl-class.js:115:29
+      at /home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:27
+      at safeCall (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/util/promises.js:7:25)
+      at executeComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/execute-component.js:41:12)
+      at renderSSRComponent (/home/user/qwik-app/node_modules/dist-dev/tsc-out/packages/qwik/src/core/render/ssr/render-ssr.js:247:22)
+
+===================== [TEARDOWN: End  ] qwik_dev_server log =====================
+=========================== short test summary info ============================
+FAILED ../tests/test_final_state.py::test_empty_cart_initial - AssertionError...
+FAILED ../tests/test_final_state.py::test_cart_add_update_and_persistence - A...
+FAILED ../tests/test_final_state.py::test_decrement_does_not_go_below_one - p...
+FAILED ../tests/test_final_state.py::test_session_isolation - AssertionError:...
+FAILED ../tests/test_final_state.py::test_local_sqlite_file_exists - Assertio...
+========================= 5 failed in 79.51s (0:01:19) =========================

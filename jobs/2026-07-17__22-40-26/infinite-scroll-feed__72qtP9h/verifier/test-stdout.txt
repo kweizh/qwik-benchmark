@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 4 items
+
+../tests/test_final_state.py ....                                        [100%]
+
+==================================== PASSES ====================================
+______________________ test_initial_page_server_rendered _______________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'start_app' started pid=3380
+start_app process startup detected
+============================== [STARTED: Begin] Captured start_app logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 609 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [STARTED: End  ] Captured start_app logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] Captured start_app logfile ==============================
+(skipped 11 already-printed lines)
+
+============================== [TEARDOWN: End  ] Captured start_app logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_initial_page_server_rendered
+PASSED ../tests/test_final_state.py::test_only_first_page_server_rendered
+PASSED ../tests/test_final_state.py::test_initial_client_state
+PASSED ../tests/test_final_state.py::test_infinite_scroll_loads_all
+======================== 4 passed in 166.41s (0:02:46) =========================

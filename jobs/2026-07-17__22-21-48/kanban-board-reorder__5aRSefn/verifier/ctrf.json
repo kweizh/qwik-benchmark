@@ -1,0 +1,92 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:30:58.439511+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 7,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784298656903,
+            "stop": 1784298658439
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_seed_board",
+                "status": "passed",
+                "duration": 1380,
+                "start": 1784298656983,
+                "stop": 1784298658363,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_move_across_columns",
+                "status": "passed",
+                "duration": 28,
+                "start": 1784298658363,
+                "stop": 1784298658391,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reorder_within_column",
+                "status": "passed",
+                "duration": 11,
+                "start": 1784298658391,
+                "stop": 1784298658402,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_clamp_out_of_range_index",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784298658402,
+                "stop": 1784298658408,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_persistence_and_rehydration_html",
+                "status": "passed",
+                "duration": 12,
+                "start": 1784298658408,
+                "stop": 1784298658420,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_error_handling",
+                "status": "passed",
+                "duration": 11,
+                "start": 1784298658420,
+                "stop": 1784298658431,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_rendered_board_ssr",
+                "status": "passed",
+                "duration": 8,
+                "start": 1784298658431,
+                "stop": 1784298658439,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

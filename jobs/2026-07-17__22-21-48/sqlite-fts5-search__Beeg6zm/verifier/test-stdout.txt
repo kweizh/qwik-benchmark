@@ -1,0 +1,101 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 7 items
+
+../tests/test_final_state.py ......F                                     [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_server_only_isolation __________________________
+
+    def test_server_only_isolation():
+        """The client bundle must not contain the better-sqlite3 server-only driver."""
+        build = subprocess.run(
+            ["npm", "run", "build"],
+            cwd=PROJECT_DIR,
+            capture_output=True,
+            text=True,
+            timeout=300,
+        )
+>       assert build.returncode == 0, (
+            f"'npm run build' failed:\nstdout:\n{build.stdout[-2000:]}\nstderr:\n{build.stderr[-2000:]}"
+        )
+E       AssertionError: 'npm run build' failed:
+E         stdout:
+E         6qhGt.js                 0.54 kB │ gzip:  0.38 kB
+E         dist/build/q-BLiZIqhe.js                 0.81 kB │ gzip:  0.48 kB
+E         dist/build/q-CIDaXnDT.js                 0.83 kB │ gzip:  0.42 kB
+E         dist/build/q-BSsoTYOn.js                 0.96 kB │ gzip:  0.55 kB
+E         dist/build/q-WMifMqTB.js                 1.30 kB │ gzip:  0.72 kB
+E         dist/build/q-BDQrDD-O.js                 1.31 kB │ gzip:  0.68 kB
+E         dist/build/q-kexLBs2j.js                 1.41 kB │ gzip:  0.75 kB
+E         dist/build/q-Bey6Dzuc.js                 2.02 kB │ gzip:  1.00 kB
+E         dist/build/q-jvj4ovZf.js                 2.21 kB │ gzip:  1.09 kB
+E         dist/build/q-BihhsMc7.js                 2.24 kB │ gzip:  1.09 kB
+E         dist/build/q-naDMFAHy.js                 3.10 kB │ gzip:  1.68 kB
+E         dist/build/q-BKZ00VYc.js                 3.73 kB │ gzip:  2.00 kB
+E         dist/build/q-CRw9sLxs.js                 7.00 kB │ gzip:  2.82 kB
+E         dist/build/q-kNRY2P4X.js                 8.02 kB │ gzip:  3.77 kB
+E         dist/build/q-tityoFBA.js                50.51 kB │ gzip: 20.41 kB
+E         ✓ built in 2.71s
+E         
+E         ✓ Built client modules
+E         
+E         > lint
+E         > eslint "src/**/*.ts*"
+E         
+E         src/routes/index.tsx(65,25): error TS2322: Type '"replaceState"' is not assignable to type '"form" | "link" | "popstate" | undefined'.
+E         src/server/db.ts(8,22): error TS7016: Could not find a declaration file for module 'better-sqlite3'. '/home/user/qwik-fts-search/node_modules/better-sqlite3/lib/index.js' implicitly has an 'any' type.
+E           Try `npm i --save-dev @types/better-sqlite3` if it exists or add a new declaration (.d.ts) file containing `declare module 'better-sqlite3';`
+E         
+E         
+E         Error: Type check failed: 
+E             at /home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:11944:13
+E             at async Promise.all (index 0)
+E             at async runBuildCommand (/home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:12084:5)
+E             at async runCommand2 (/home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:12828:7)
+E             at async Object.runCli (/home/user/qwik-fts-search/node_modules/@builder.io/qwik/dist/cli.cjs:12816:5)
+E         
+E         
+E         stderr:
+E         npm warn Unknown cli config "--pretty". This will stop working in the next major version of npm.
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['npm', 'run', 'build'], returncode=1, stdout='\n> build\n> qwik build\n\n\n      ............\n...6:5)\n\n', stderr='npm warn Unknown cli config "--pretty". This will stop working in the next major version of npm.\n').returncode
+
+/tests/test_final_state.py:193: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN: Begin] qwik_fts_search log =====
+(skipped 9 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+
+===== [TEARDOWN: End] qwik_fts_search log =====
+==================================== PASSES ====================================
+____________________________ test_empty_query_state ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_fts_search$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_fts_search' started pid=1888
+qwik_fts_search process startup detected
+===== [STARTED: Begin] qwik_fts_search log =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 476 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+===== [STARTED: End] qwik_fts_search log =====
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_empty_query_state
+PASSED ../tests/test_final_state.py::test_basic_match_and_count
+PASSED ../tests/test_final_state.py::test_body_term_match_count
+PASSED ../tests/test_final_state.py::test_bm25_ranking_order
+PASSED ../tests/test_final_state.py::test_no_results_state
+PASSED ../tests/test_final_state.py::test_highlight_is_fts5_output
+FAILED ../tests/test_final_state.py::test_server_only_isolation - AssertionEr...
+========================= 1 failed, 6 passed in 11.98s =========================

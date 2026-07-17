@@ -1,0 +1,76 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 5 items
+
+../tests/test_final_state.py .F...                                       [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_cookies_dark_spanish ___________________________
+
+start_app = None
+
+    def test_cookies_dark_spanish(start_app):
+        """theme=dark; locale=es -> dark theme + Spanish copy on first response."""
+        resp = requests.get(
+            BASE_URL, headers={"Cookie": "theme=dark; locale=es"}, timeout=60
+        )
+        assert resp.status_code == 200, f"GET / (dark/es) returned {resp.status_code}"
+        html = resp.text
+        open_tag = _extract_html_tag(html)
+        assert open_tag, "No <html> opening tag found in the server response."
+        assert _attr_value(open_tag, "data-theme") == "dark", (
+            f'Expected data-theme="dark" for theme=dark cookie, got: {open_tag}'
+        )
+        assert _attr_value(open_tag, "lang") == "es", (
+            f'Expected lang="es" for locale=es cookie, got: {open_tag}'
+        )
+        assert "Preferencias" in html, "Expected Spanish title 'Preferencias' for locale=es."
+        assert "Hola" in html, "Expected Spanish greeting 'Hola' for locale=es."
+>       assert "Preferences" not in html, "Spanish (es) page must not contain English 'Preferences'."
+E       AssertionError: Spanish (es) page must not contain English 'Preferences'.
+E       assert 'Preferences' not in '<!DOCTYPE h.../script>\n\n'
+E         'Preferences' is contained here:
+E           le q:head>Preferences</title><link rel="canonical" href="http://127.0.0.1:3000/" q:id="3" q:head><meta name="viewport" content="width=device-width, initial-scale=1.0" q:head><link rel="icon" type="image/svg+xml" href="/favicon.svg" q:head><meta name="description" content="Theme and locale preferences" q:head><!--/qv--><!--/qv--><script id="qwikloader" type="module" async="true">const doc = document;
+E         ?           +++++++++++
+E           const win = window;
+E           const events = /* @__PURE__ */ new Set();
+E           const roots = /* @__PURE__ */ new Set([doc]);
+E           let hasInitialized;...
+E         
+E         ...Full output truncated (1406 lines hidden), use '-vv' to show
+
+/tests/test_final_state.py:131: AssertionError
+==================================== PASSES ====================================
+________________________ test_default_ssr_light_english ________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_dev$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_dev' started pid=1428
+qwik_dev process startup detected
+===================== [STARTED: Begin] qwik_dev logfile =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 656 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===================== [STARTED: End  ] qwik_dev logfile =====================
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] qwik_dev logfile =====================
+(skipped 11 already-printed lines)
+
+===================== [TEARDOWN: End  ] qwik_dev logfile =====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_default_ssr_light_english
+PASSED ../tests/test_final_state.py::test_cookies_dark_english
+PASSED ../tests/test_final_state.py::test_invalid_cookies_fall_back_to_defaults
+PASSED ../tests/test_final_state.py::test_action_persists_preferences_round_trip
+FAILED ../tests/test_final_state.py::test_cookies_dark_spanish - AssertionErr...
+========================= 1 failed, 4 passed in 2.59s ==========================

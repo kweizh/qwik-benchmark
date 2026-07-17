@@ -1,0 +1,98 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:45:00.580154+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 1,
+            "failed": 5,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784299487913,
+            "stop": 1784299500580
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_client_bundle_has_no_db_leak",
+                "status": "passed",
+                "duration": 10976,
+                "start": 1784299487980,
+                "stop": 1784299498956,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_home_lists_seeded_posts",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 1591,
+                "start": 1784299498956,
+                "stop": 1784299500547,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_home_lists_seeded_posts(start_app):\n        resp = requests.get(BASE_URL + \"/\", timeout=30)\n        assert resp.status_code == 200, f\"GET / returned {resp.status_code}, expected 200.\"\n        html = resp.text\n    \n        for title, _content in SEED_POSTS:\n>           assert title in html, f\"Expected seeded post title '{title}' to appear on the home page.\"\nE           AssertionError: Expected seeded post title 'Understanding Resumability' to appear on the home page.\nE           assert 'Understanding Resumability' in '<!DOCTYPE html><html lang=\"en-us\" q:route=\"/\" q:container=\"paused\" q:version=\"1.20.0\" q:render=\"ssr-dev\" q:base=\"/bui...istener(\\'resize\\', updateOverlay);\\n    document.addEventListener(\\'scroll\\', updateOverlay);\\n  })();\\n</script>\\n\\n'\n\n/tests/test_final_state.py:172: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_single_post_detail_route",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 7,
+                "start": 1784299500548,
+                "stop": 1784299500555,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_single_post_detail_route(start_app):\n        resp = requests.get(BASE_URL + \"/posts/1\", timeout=30)\n        assert resp.status_code == 200, f\"GET /posts/1 returned {resp.status_code}, expected 200.\"\n        html = resp.text\n>       assert SEED_POSTS[0][0] in html, \"Post detail page for id 1 is missing its title.\"\nE       AssertionError: Post detail page for id 1 is missing its title.\nE       assert 'Welcome to Qwik' in 'Not a SSR URL according to Qwik City'\n\n/tests/test_final_state.py:193: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_missing_post_returns_404",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5,
+                "start": 1784299500555,
+                "stop": 1784299500560,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_missing_post_returns_404(start_app):\n        resp = requests.get(BASE_URL + \"/posts/999999\", timeout=30)\n>       assert resp.status_code == 404, (\n            f\"GET /posts/999999 returned {resp.status_code}, expected 404 for a non-existent post.\"\n        )\nE       AssertionError: GET /posts/999999 returned 200, expected 404 for a non-existent post.\nE       assert 200 == 404\nE        +  where 200 = <Response [200]>.status_code\n\n/tests/test_final_state.py:199: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_create_post_via_form",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 9,
+                "start": 1784299500561,
+                "stop": 1784299500570,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_create_post_via_form(start_app):\n        home = requests.get(BASE_URL + \"/\", timeout=30)\n        assert home.status_code == 200, f\"GET / returned {home.status_code}.\"\n        form = _find_create_form(home.text)\n>       assert form is not None, (\n            \"Could not find a <form> containing inputs named 'title' and 'content' on the home page.\"\n        )\nE       AssertionError: Could not find a <form> containing inputs named 'title' and 'content' on the home page.\nE       assert None is not None\n\n/tests/test_final_state.py:208: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_invalid_submission_rejected_by_zod",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 9,
+                "start": 1784299500570,
+                "stop": 1784299500579,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_invalid_submission_rejected_by_zod(start_app):\n        home = requests.get(BASE_URL + \"/\", timeout=30)\n        assert home.status_code == 200\n        form = _find_create_form(home.text)\n>       assert form is not None, \"Create form not found on the home page.\"\nE       AssertionError: Create form not found on the home page.\nE       assert None is not None\n\n/tests/test_final_state.py:250: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

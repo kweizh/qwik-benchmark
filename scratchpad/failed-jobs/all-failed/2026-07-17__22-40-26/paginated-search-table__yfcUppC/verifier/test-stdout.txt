@@ -1,0 +1,103 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 12 items
+
+../tests/test_final_state.py ...FFFFF....                                [100%]
+
+=================================== FAILURES ===================================
+______________________________ test_default_view _______________________________
+
+start_app = None
+
+    def test_default_view(start_app):
+        html = _get_html(PRODUCTS_URL)
+>       assert "Total: 24" in html, "Default view must show 'Total: 24'."
+E       AssertionError: Default view must show 'Total: 24'.
+E       assert 'Total: 24' in '<!DOCTYPE html><html lang="en-us" q:route="/products/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:b...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n'
+
+/tests/test_final_state.py:151: AssertionError
+____________________________ test_pagination_page_2 ____________________________
+
+start_app = None
+
+    def test_pagination_page_2(start_app):
+        html = _get_html(f"{PRODUCTS_URL}?page=2")
+>       assert "Page 2 of 3" in html, "Page 2 must show 'Page 2 of 3'."
+E       AssertionError: Page 2 must show 'Page 2 of 3'.
+E       assert 'Page 2 of 3' in '<!DOCTYPE html><html lang="en-us" q:route="/products/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:b...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n'
+
+/tests/test_final_state.py:166: AssertionError
+_______________________ test_pagination_custom_page_size _______________________
+
+start_app = None
+
+    def test_pagination_custom_page_size(start_app):
+        html = _get_html(f"{PRODUCTS_URL}?pageSize=5&page=2")
+>       assert "Total: 24" in html, "Custom page size view must show 'Total: 24'."
+E       AssertionError: Custom page size view must show 'Total: 24'.
+E       assert 'Total: 24' in '<!DOCTYPE html><html lang="en-us" q:route="/products/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:b...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n'
+
+/tests/test_final_state.py:173: AssertionError
+_______________________________ test_search_book _______________________________
+
+start_app = None
+
+    def test_search_book(start_app):
+        html = _get_html(f"{PRODUCTS_URL}?q=book")
+>       assert "Total: 2" in html, "Search q=book must show 'Total: 2'."
+E       AssertionError: Search q=book must show 'Total: 2'.
+E       assert 'Total: 2' in '<!DOCTYPE html><html lang="en-us" q:route="/products/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:b...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n'
+
+/tests/test_final_state.py:191: AssertionError
+_________________________ test_search_case_insensitive _________________________
+
+start_app = None
+
+    def test_search_case_insensitive(start_app):
+        html = _get_html(f"{PRODUCTS_URL}?q=BOOK")
+>       assert "Total: 2" in html, "Search q=BOOK must show 'Total: 2' (case-insensitive)."
+E       AssertionError: Search q=BOOK must show 'Total: 2' (case-insensitive).
+E       assert 'Total: 2' in '<!DOCTYPE html><html lang="en-us" q:route="/products/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:b...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n'
+
+/tests/test_final_state.py:199: AssertionError
+==================================== PASSES ====================================
+______________________ test_sqlite_database_file_created _______________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'start_app' started pid=2043
+start_app process startup detected
+===== [STARTED: Begin] start_app logfile =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 780 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===== [STARTED: End] start_app logfile =====
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN: Begin] start_app logfile =====
+(skipped 11 already-printed lines)
+
+===== [TEARDOWN: End] start_app logfile =====
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_better_sqlite3_is_dependency
+PASSED ../tests/test_final_state.py::test_source_uses_route_loader_and_sqlite
+PASSED ../tests/test_final_state.py::test_sqlite_database_file_created
+PASSED ../tests/test_final_state.py::test_sort_price_desc
+PASSED ../tests/test_final_state.py::test_sort_price_asc
+PASSED ../tests/test_final_state.py::test_debounced_search_updates_url
+PASSED ../tests/test_final_state.py::test_sort_header_and_pagination
+FAILED ../tests/test_final_state.py::test_default_view - AssertionError: Defa...
+FAILED ../tests/test_final_state.py::test_pagination_page_2 - AssertionError:...
+FAILED ../tests/test_final_state.py::test_pagination_custom_page_size - Asser...
+FAILED ../tests/test_final_state.py::test_search_book - AssertionError: Searc...
+FAILED ../tests/test_final_state.py::test_search_case_insensitive - Assertion...
+=================== 5 failed, 7 passed in 156.73s (0:02:36) ====================

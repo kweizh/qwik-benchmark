@@ -1,0 +1,122 @@
+{
+    "id": "d8caf5ff-7f6e-4858-b961-26bec11f07ab",
+    "task_name": "sse-live-counter",
+    "trial_name": "sse-live-counter__R7tZeqy",
+    "trial_uri": "file:///home/kw/code/zealt/pochi-harbor/jobs/2026-07-17__22-21-48/sse-live-counter__R7tZeqy",
+    "task_id": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/sse-live-counter"
+    },
+    "source": "pending-tasks",
+    "task_checksum": "f5d85a9103f7cf853b42df0a8094a108c90bdd20a742077524bfe652ce8f7c2e",
+    "config": {
+        "task": {
+            "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/sse-live-counter",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": "pending-tasks"
+        },
+        "trial_name": "sse-live-counter__R7tZeqy",
+        "trials_dir": "jobs/2026-07-17__22-21-48",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "agents.pochi:Pochi",
+            "model_name": "zai/glm-5.2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {},
+            "env": {
+                "POCHI_API_KEY": "${POCHI_API_KEY}"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "daytona",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": [
+                {
+                    "type": "bind",
+                    "source": "test_initial_state.py",
+                    "target": "/bootstrap/test_initial_state.py"
+                }
+            ],
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [
+            "/home/user"
+        ],
+        "extra_instruction_paths": [],
+        "job_id": "4d70a1c5-1985-4069-9c80-c12c77ee7c1e"
+    },
+    "agent_info": {
+        "name": "pochi",
+        "version": "0.6.20",
+        "model_info": {
+            "name": "glm-5.2",
+            "provider": "zai"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 2411141,
+        "cost_usd": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-17T14:21:52.269910Z",
+    "finished_at": "2026-07-17T14:36:56.329464Z",
+    "environment_setup": {
+        "started_at": "2026-07-17T14:21:52.391594Z",
+        "finished_at": "2026-07-17T14:21:57.479616Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-17T14:21:57.479661Z",
+        "finished_at": "2026-07-17T14:22:04.005482Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-17T14:22:04.005630Z",
+        "finished_at": "2026-07-17T14:29:09.691704Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-17T14:29:40.809642Z",
+        "finished_at": "2026-07-17T14:36:55.230287Z"
+    },
+    "step_results": null
+}

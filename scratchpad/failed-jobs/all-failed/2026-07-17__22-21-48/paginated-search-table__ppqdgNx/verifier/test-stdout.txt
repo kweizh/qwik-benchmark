@@ -1,0 +1,101 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 12 items
+
+../tests/test_final_state.py ..F........F                                [100%]
+
+=================================== FAILURES ===================================
+______________________ test_sqlite_database_file_created _______________________
+
+start_app = None
+
+    def test_sqlite_database_file_created(start_app):
+        # Trigger at least one request so on-demand seeding runs.
+        _get_html(PRODUCTS_URL)
+        db_found = False
+        for root, _dirs, files in os.walk(PROJECT_DIR):
+            if os.sep + "node_modules" + os.sep in root + os.sep:
+                continue
+            for name in files:
+                if name.endswith((".db", ".sqlite", ".sqlite3")):
+                    db_found = True
+                    break
+            if db_found:
+                break
+>       assert db_found, "Expected a local SQLite database file to exist under the project."
+E       AssertionError: Expected a local SQLite database file to exist under the project.
+E       assert False
+
+/tests/test_final_state.py:142: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'start_app' started pid=1898
+start_app process startup detected
+===== [STARTED: Begin] start_app logfile =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 846 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===== [STARTED: End] start_app logfile =====
+_______________________ test_sort_header_and_pagination ________________________
+
+start_app = None
+browser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x73a2eced3470>
+
+    def test_sort_header_and_pagination(start_app, browser_verifier):
+        reason = (
+            "The products table has clickable sortable column headers and pagination controls. "
+            "Clicking a column header sorts by that column and toggles direction; clicking Next "
+            "moves to the next page. All state is reflected in the URL query string."
+        )
+        truth = (
+            f"Navigate to {PRODUCTS_URL}. Click the 'Price' column header once and verify the URL "
+            "query string includes 'sort=price' with ascending direction and that the first data "
+            "row in the table is 'Tau Journal'. Click the 'Price' column header again and verify the "
+            "direction becomes descending in the URL and the first data row becomes 'Gamma Monitor'. "
+            f"Then navigate to {PRODUCTS_URL} again and click the 'Next' pagination control: verify "
+            "the URL query string includes 'page=2' and that the page shows the text 'Page 2 of 3'."
+        )
+        result = browser_verifier.verify(
+            reason=reason,
+            truth=truth,
+            use_browser_agent=True,
+            trajectory_dir="/logs/verifier/pochi/test_sort_header_and_pagination",
+        )
+>       assert result.status == "pass", f"Browser verification failed: {result.reason}"
+E       AssertionError: Browser verification failed: The browser sub-agent failed to complete successfully, aborting with 'Task aborted: maximum number of retries reached (3).'.
+E       assert 'fail' == 'pass'
+E         - pass
+E         + fail
+
+/tests/test_final_state.py:275: AssertionError
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN: Begin] start_app logfile =====
+(skipped 11 already-printed lines)
+
+===== [TEARDOWN: End] start_app logfile =====
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_better_sqlite3_is_dependency
+PASSED ../tests/test_final_state.py::test_source_uses_route_loader_and_sqlite
+PASSED ../tests/test_final_state.py::test_default_view
+PASSED ../tests/test_final_state.py::test_pagination_page_2
+PASSED ../tests/test_final_state.py::test_pagination_custom_page_size
+PASSED ../tests/test_final_state.py::test_search_book
+PASSED ../tests/test_final_state.py::test_search_case_insensitive
+PASSED ../tests/test_final_state.py::test_sort_price_desc
+PASSED ../tests/test_final_state.py::test_sort_price_asc
+PASSED ../tests/test_final_state.py::test_debounced_search_updates_url
+FAILED ../tests/test_final_state.py::test_sqlite_database_file_created - Asse...
+FAILED ../tests/test_final_state.py::test_sort_header_and_pagination - Assert...
+=================== 2 failed, 10 passed in 194.24s (0:03:14) ===================

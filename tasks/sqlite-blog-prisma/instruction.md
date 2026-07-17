@@ -1,0 +1,35 @@
+# Qwik City Blog Backed by Local SQLite (Prisma)
+
+## Background
+You are building a small, self-contained blog with the Qwik framework and its meta-framework Qwik City. All data is stored in a **local SQLite database** accessed through **Prisma**. The application must never depend on any external network service at runtime; everything runs locally inside the container.
+
+A base Qwik City project has already been scaffolded and its dependencies (including `@builder.io/qwik`, `@builder.io/qwik-city`, `prisma`, and `@prisma/client`) are already installed at the project path. Your job is to implement the blog features on top of it.
+
+## Requirements
+- Model blog posts in a local SQLite database using Prisma. A post has a title, a body/content, and a creation timestamp.
+- The home page (`/`) must load **all** posts on the server with a `routeLoader$` and render them, showing newest posts first. Each listed post must link to its own detail page at `/posts/<id>`.
+- The home page must include a progressive-enhancement `<Form>` bound to a `routeAction$` that creates a new post. Validate the submitted data on the server with `zod$`. The form fields are named `title` and `content`.
+- A dynamic route `/posts/[id]` must use a `routeLoader$` to fetch a single post by its id and render its title and content. If the post does not exist, the route must respond with HTTP status `404`.
+- Server-only database code (the Prisma client and any query helpers) must **NOT** be bundled into the client. A production client build must not contain any Prisma or SQLite driver references.
+- The database must be seeded with the exact three posts listed below before the app is used.
+
+## Seed Data (must exist in the database)
+Insert these three posts (in this order, so they receive ids 1, 2, 3):
+1. title: `Welcome to Qwik`, content: `Qwik delivers instant-loading web applications through resumability.`
+2. title: `Understanding Resumability`, content: `Resumability lets the app pause on the server and resume on the client without hydration.`
+3. title: `Server-Side Data with routeLoader`, content: `routeLoader fetches data on the server before rendering the route.`
+
+## Implementation Hints
+- Project path: `/home/user/qwik-blog`
+- Keep all Prisma access inside server-only boundaries (`routeLoader$`, `routeAction$`, `server$`, or a dedicated `*.server.ts` module). Importing native/DB modules at a place reachable from client code will drag them into the client bundle and must be avoided.
+- Use `zod$` to require a non-empty `title` (at least 3 characters) and a non-empty `content` (at least 10 characters). Submissions that fail validation must NOT create a post; a valid submission must persist the new post to SQLite so it appears on the home page afterward.
+- Use the Prisma `Post` model with the default table name (`Post`) so posts persist in the local SQLite file. The SQLite database file must live inside the project (Prisma default `DATABASE_URL="file:./dev.db"`, i.e. `/home/user/qwik-blog/prisma/dev.db`).
+- The newly created post must be reachable at `/posts/<id>` using the id assigned by the database.
+- Start command (the app must serve server-side rendering, run route loaders/actions, and listen on port 3000): `npm run dev -- --port 3000 --host 127.0.0.1`
+- Port: 3000
+- Routes and behavior that will be checked:
+  - `GET /` returns status 200 and HTML containing every post title, newest first, with a hyperlink to `/posts/<id>` for each post.
+  - `GET /posts/<id>` returns status 200 and HTML containing that post's title and content for an existing post, and status 404 for a non-existent id.
+  - The home page contains a `<form>` (rendered by Qwik City's `<Form>`) with text inputs named `title` and `content` that submits to the create `routeAction$` and works as a normal HTML form POST (progressive enhancement, no client JS required).
+- A production client build (`npm run build`) must succeed, and the generated client assets under `dist/` must not contain the strings `PrismaClient`, `@prisma/client`, or `better-sqlite3`.
+

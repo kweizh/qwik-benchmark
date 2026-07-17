@@ -1,0 +1,96 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 7 items
+
+../tests/test_final_state.py F...F..                                     [100%]
+
+=================================== FAILURES ===================================
+_______________________________ test_initial_ui ________________________________
+
+page = <Page url='http://127.0.0.1:5173/'>
+
+    def test_initial_ui(page):
+        page.goto(BASE_URL)
+        expect(page.locator('[data-testid="new-todo-input"]')).to_be_visible()
+        expect(page.locator('[data-testid="add-todo"]')).to_be_visible()
+>       expect(page.locator('[data-testid="todo-list"]')).to_be_visible()
+E       AssertionError: Locator expected to be visible
+E       Actual value: hidden 
+E       Call log:
+E         - Expect "to_be_visible" with timeout 5000ms
+E         - waiting for locator("[data-testid=\"todo-list\"]")
+E           14 × locator resolved to <ul data-testid="todo-list" data-qwik-inspector="/home/user/optimistic-todo/src/routes/index.tsx:338:7"></ul>
+E              - unexpected value "hidden"
+E       
+E       Aria snapshot:
+E       - main:
+E         - heading "Optimistic Todos" [level=1]
+E         - paragraph:
+E           - text: Add a todo. Titles starting with
+E           - code: FAIL
+E           - text: are rejected by the server; titles starting with
+E           - code: SLOW
+E           - text: take ~1.1s to persist so the pending state is observable.
+E         - textbox "What needs to be done?"
+E         - button "Add"
+E         - list
+
+/tests/test_final_state.py:116: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/start_app$ npm run dev -- --host 127.0.0.1 --port 5173
+process 'start_app' started pid=2249
+start_app process startup detected
+===================== [STARTED] start_app log begin =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --host 127.0.0.1 --port 5173
+
+
+  VITE v7.3.1   ssr   ready in 536 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+===================== [STARTED] start_app log end   =====================
+_____________________________ test_toggle_persist ______________________________
+
+page = <Page url='http://127.0.0.1:5173/'>
+
+    def test_toggle_persist(page):
+        page.goto(BASE_URL)
+        checkbox = _item(page, "Buy milk").locator('input[type="checkbox"]')
+        checkbox.check()
+        expect(checkbox).to_be_checked()
+        # Persisted across reload.
+        page.goto(BASE_URL)
+>       expect(_item(page, "Buy milk").locator('input[type="checkbox"]')).to_be_checked()
+E       AssertionError: Locator expected to be checked
+E       Actual value: unchecked 
+E       Call log:
+E         - Expect "to_be_checked" with timeout 5000ms
+E         - waiting for locator("[data-testid=\"todo-item\"][data-title=\"Buy milk\"]").locator("input[type=\"checkbox\"]")
+E           14 × locator resolved to <input q:id="9" type="checkbox" aria-label="Toggle Buy milk" data-qwik-inspector="/home/user/optimistic-todo/src/routes/index.tsx:349:15" on:change="/home/user/optimistic-todo/src/routes/index.tsx_routes_component_main_ul_li_input_onChange_b2vtwOVBNfc.js#routes_component_main_ul_li_input_onChange_b2vtwOVBNfc[0 1]"/>
+E              - unexpected value "unchecked"
+E       
+E       Aria snapshot:
+E       - checkbox "Toggle Buy milk"
+
+/tests/test_final_state.py:169: AssertionError
+==================================== PASSES ====================================
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN] start_app log begin =====================
+
+  🚧 Please note that development mode is slower than production.
+
+===================== [TEARDOWN] start_app log end   =====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_optimistic_add_and_persist
+PASSED ../tests/test_final_state.py::test_failure_rollback
+PASSED ../tests/test_final_state.py::test_pending_state
+PASSED ../tests/test_final_state.py::test_delete_persist
+PASSED ../tests/test_final_state.py::test_sqlite_storage_valid
+FAILED ../tests/test_final_state.py::test_initial_ui - AssertionError: Locato...
+FAILED ../tests/test_final_state.py::test_toggle_persist - AssertionError: Lo...
+========================= 2 failed, 5 passed in 15.70s =========================

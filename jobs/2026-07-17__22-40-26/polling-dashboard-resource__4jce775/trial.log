@@ -1,0 +1,126 @@
+Selected strategy: _DaytonaDirect
+Building environment from /home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/polling-dashboard-resource/environment/Dockerfile
+Running command: set -euo pipefail; mkdir -p /logs/agent/pochi && pochi --version
+Command outputs captured
+Running command: mkdir -p ~/.pochi && cat << 'EOF' | sed -e "s/OPENAI_API_KEY/${OPENAI_API_KEY}/g" -e "s/DEEPINFRA_API_KEY/${DEEPINFRA_API_KEY}/g" -e "s/MINIMAX_API_KEY/${MINIMAX_API_KEY}/g" > ~/.pochi/config.jsonc
+{
+  "providers": {
+    "deepinfra": {
+      "kind": "openai",
+      "baseURL": "https://api.deepinfra.com/v1/openai",
+      "apiKey": "DEEPINFRA_API_KEY",
+      "models": {
+        "zai-org/GLM-4.7-Flash": {
+          "name": "glm-4.7-flash"
+        },
+        "moonshotai/Kimi-K2.6": {
+          "name": "kimi-K2.6"
+        },
+        "deepseek-ai/DeepSeek-V4-Pro": {
+          "name": "DeepSeek-V4-Pro"
+        }
+      }
+    },
+    "openai": {
+      "kind": "openai",
+      "baseURL": "https://api.openai.com/v1",
+      "apiKey": "OPENAI_API_KEY",
+      "models": {
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        }
+      }
+    },
+    "minimax": {
+      "kind": "openai",
+      "baseURL": "https://api.minimax.io/v1",
+      "apiKey": "MINIMAX_API_KEY",
+      "models": {
+        "MiniMax-M3": {
+          "name": "m3"
+        }
+      }
+    }
+  }
+}
+EOF
+Command outputs captured
+Running command: if [ -f /bootstrap/test_initial_state.py ]; then pytest -s --log-cli-level=DEBUG /bootstrap/test_initial_state.py > >(tee /logs/agent/pochi/initial-test-stdout.txt) 2> >(tee /logs/agent/pochi/initial-test-stderr.txt >&2); fi
+Command outputs captured
+Running command: cat > /tmp/pochi_cmd.sh << 'CMD_EOF'
+set -o pipefail
+pochi --model minimax/MiniMax-M3 --max-steps 200 --max-retries 10 --blobs-dir /logs/agent/pochi/blobs --experimental-stream-trajectory /logs/agent/pochi/trajectory.jsonl --experimental-stream-trajectory-strip-duplicates > >(tee /logs/agent/pochi/stdout.txt) 2> >(tee /logs/agent/pochi/stderr.txt >&2) <<'EOF'
+# Live Metrics Dashboard with Qwik City
+
+## Background
+You are building a real-time server metrics dashboard using the [Qwik](https://qwik.dev/) framework and Qwik City. The app must expose a **local** JSON endpoint that returns server-generated statistics, and a component that displays those statistics and automatically polls the endpoint for fresh data on an interval. Everything runs locally; the app must never call any external service or network host.
+
+A Qwik City project has already been scaffolded at the project path. Your job is to implement the metrics endpoint and the dashboard component.
+
+## Requirements
+1. **Local metrics endpoint** at route `/api/metrics` implemented as a Qwik City endpoint using an exported `onGet` `RequestHandler`. It returns a JSON body (HTTP 200) describing current server stats.
+   - The server keeps an **in-memory counter** that increases by exactly 1 on every GET request to this endpoint. The first ever request returns a counter value of `1`.
+   - All metric values are derived **deterministically** from this counter so that the endpoint is reproducible given the same counter value (do not use `Math.random`).
+2. **Dashboard component** rendered at the site root route `/` that:
+   - Uses `useResource$()` together with the `<Resource>` component to fetch `/api/metrics` and render distinct **pending**, **resolved**, and **rejected** UI (all three `onPending`, `onResolved`, and `onRejected` handlers must be provided).
+   - Uses a `useVisibleTask$()` timer that automatically re-triggers the resource to poll for fresh data on a fixed interval, and cleans up the timer with the task `cleanup` callback.
+   - Provides a **manual refresh** control that immediately re-fetches fresh data.
+   - Provides a **pause/resume** control that stops and restarts the automatic polling. When paused, the automatic timer must not fetch new data; when resumed, polling continues.
+
+## Implementation Hints
+- Keep all server-only state (the counter) in module scope inside the endpoint file so it persists across requests within a single server process.
+- To re-trigger a `useResource$` from a timer or a button, `track()` a reactive signal (for example a "tick" counter) inside the resource and change that signal to force a re-fetch.
+- Register the interval inside `useVisibleTask$()` and clear it inside the `cleanup()` callback so no timers leak; gate the interval on the pause/resume state.
+- The dashboard renders during SSR, so the resolved metrics appear in the initial server-rendered HTML.
+- Project path: /home/user/qwik-app
+- Start command: `npm run dev -- --port 3000 --host 127.0.0.1`
+- Port: 3000
+- The dashboard page is served at `GET /` and the endpoint at `GET /api/metrics`.
+
+### Endpoint response shape
+`GET /api/metrics` must return HTTP 200 with `Content-Type: application/json` and exactly these keys:
+```json
+{
+  "requestCount": number,
+  "cpu": number,
+  "memory": number,
+  "activeUsers": number,
+  "timestamp": number
+}
+```
+Where, using `n` = the current value of the in-memory counter after incrementing it for this request:
+- `requestCount` = `n`
+- `cpu` = `(n * 7) % 100`
+- `memory` = `(n * 13) % 100`
+- `activeUsers` = `(n * 3) % 250`
+- `timestamp` = the current time in milliseconds (`Date.now()`)
+
+### Dashboard DOM requirements
+The automated checks locate elements by `data-testid`. The resolved dashboard must render these attributes:
+- The container/heading area includes the visible text `Live Metrics Dashboard`.
+- An element with `data-testid="metric-request-count"` whose text content contains the current `requestCount` value.
+- An element with `data-testid="metric-cpu"` whose text content contains the current `cpu` value.
+- An element with `data-testid="metric-memory"` whose text content contains the current `memory` value.
+- An element with `data-testid="metric-active-users"` whose text content contains the current `activeUsers` value.
+- A button with `data-testid="refresh-button"` that manually re-fetches data.
+- A button with `data-testid="toggle-button"` that pauses/resumes automatic polling.
+- The automatic polling interval must be **2000 milliseconds** (poll every 2 seconds) so timing-based checks behave predictably.
+
+
+EOF
+CMD_EOF
+setsid --wait bash /tmp/pochi_cmd.sh &
+SETSID_PID=$!
+echo $SETSID_PID > /tmp/setsid_bash_pochi_cmd.pid
+wait $SETSID_PID 2>/dev/null
+Command outputs captured
+Running command: if [ -f /tmp/setsid_bash_pochi_cmd.pid ]; then
+SETSID_PID=$(cat /tmp/setsid_bash_pochi_cmd.pid)
+kill -TERM -- -$SETSID_PID 2>/dev/null || true
+sleep 2
+kill -9 -- -$SETSID_PID 2>/dev/null || true
+fi
+rm -f ~/.pochi/config.jsonc /tmp/pochi_cmd.sh /tmp/setsid_bash_pochi_cmd.pid
+Command outputs captured
+Collecting main service artifacts
+The verifier.env contains an API key (often the case for LLM-based verifiers). You will incur costs associated with the API calls.

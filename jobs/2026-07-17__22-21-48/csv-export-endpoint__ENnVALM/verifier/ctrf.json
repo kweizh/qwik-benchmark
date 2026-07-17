@@ -1,0 +1,101 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:29:03.705951+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784298459112,
+            "stop": 1784298543705
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_export_headers",
+                "status": "passed",
+                "duration": 1962,
+                "start": 1784298459186,
+                "stop": 1784298461148,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_export_csv_no_filter",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784298461148,
+                "stop": 1784298461154,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_export_category_filter",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784298461155,
+                "stop": 1784298461160,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_export_date_range_filter",
+                "status": "passed",
+                "duration": 4,
+                "start": 1784298461160,
+                "stop": 1784298461164,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_export_combined_filter",
+                "status": "passed",
+                "duration": 5,
+                "start": 1784298461164,
+                "stop": 1784298461169,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_report_page_unfiltered",
+                "status": "passed",
+                "duration": 18,
+                "start": 1784298461169,
+                "stop": 1784298461187,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_report_page_filtered_link_carries_filters",
+                "status": "passed",
+                "duration": 12,
+                "start": 1784298461187,
+                "stop": 1784298461199,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_report_page_browser",
+                "status": "passed",
+                "duration": 82506,
+                "start": 1784298461199,
+                "stop": 1784298543705,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

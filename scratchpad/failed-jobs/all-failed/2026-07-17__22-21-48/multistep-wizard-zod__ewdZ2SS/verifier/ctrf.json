@@ -1,0 +1,149 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:33:35.836383+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 10,
+            "passed": 0,
+            "failed": 10,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784298814164,
+            "stop": 1784298815836
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_account_step_advances_to_profile",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 1153,
+                "start": 1784298814282,
+                "stop": 1784298815435,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': 'Not a SSR URL according to Qwik City', 'session': <requests.sessions.Session object at 0x7f6da9895be0>, ...}\n\n    def test_account_step_advances_to_profile(alice_registration):\n        resp = alice_registration[\"account\"]\n        assert resp.status_code == 200, (\n            f\"Account submission returned {resp.status_code}, body: {resp.text[:500]}\"\n        )\n>       assert path_of(resp.url) == \"/register/profile\", (\n            f\"Valid account step should redirect to /register/profile/, \"\n            f\"but ended at {resp.url}\"\n        )\nE       AssertionError: Valid account step should redirect to /register/profile/, but ended at http://127.0.0.1:3000/register/\nE       assert '/register' == '/register/profile'\nE         - /register/profile\nE         + /register\n\n/tests/test_final_state.py:205: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_profile_step_advances_to_review",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 63,
+                "start": 1784298815436,
+                "stop": 1784298815499,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': 'Not a SSR URL according to Qwik City', 'session': <requests.sessions.Session object at 0x7f6da9895be0>, ...}\n\n    def test_profile_step_advances_to_review(alice_registration):\n        resp = alice_registration[\"profile\"]\n        assert resp.status_code == 200, (\n            f\"Profile submission returned {resp.status_code}, body: {resp.text[:500]}\"\n        )\n>       assert path_of(resp.url) == \"/register/review\", (\n            f\"Valid profile step should redirect to /register/review/, \"\n            f\"but ended at {resp.url}\"\n        )\nE       AssertionError: Valid profile step should redirect to /register/review/, but ended at http://127.0.0.1:3000/register/profile/\nE       assert '/register/profile' == '/register/review'\nE         - /register/review\nE         + /register/profile\n\n/tests/test_final_state.py:216: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_review_shows_entered_data_but_not_password",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5,
+                "start": 1784298815499,
+                "stop": 1784298815504,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': 'Not a SSR URL according to Qwik City', 'session': <requests.sessions.Session object at 0x7f6da9895be0>, ...}\n\n    def test_review_shows_entered_data_but_not_password(alice_registration):\n        html = alice_registration[\"review_html\"]\n        for expected in [\"alice@verify.test\", \"Alice Tester\", \"30\", \"Wonderland\"]:\n>           assert expected in html, (\n                f\"Review page should display '{expected}' but it was not found.\"\n            )\nE           AssertionError: Review page should display 'alice@verify.test' but it was not found.\nE           assert 'alice@verify.test' in 'Not a SSR URL according to Qwik City'\n\n/tests/test_final_state.py:225: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_final_submit_reaches_success_page",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 4,
+                "start": 1784298815504,
+                "stop": 1784298815508,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': 'Not a SSR URL according to Qwik City', 'session': <requests.sessions.Session object at 0x7f6da9895be0>, ...}\n\n    def test_final_submit_reaches_success_page(alice_registration):\n        resp = alice_registration[\"success\"]\n        assert resp.status_code == 200, (\n            f\"Final submission returned {resp.status_code}, body: {resp.text[:500]}\"\n        )\n>       assert path_of(resp.url) == \"/register/success\", (\n            f\"Final submission should redirect to /register/success/, \"\n            f\"but ended at {resp.url}\"\n        )\nE       AssertionError: Final submission should redirect to /register/success/, but ended at http://127.0.0.1:3000/register/review/\nE       assert '/register/review' == '/register/success'\nE         - /register/success\nE         + /register/review\n\n/tests/test_final_state.py:238: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_user_persisted_to_sqlite",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 5,
+                "start": 1784298815508,
+                "stop": 1784298815513,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': 'Not a SSR URL according to Qwik City', 'session': <requests.sessions.Session object at 0x7f6da9895be0>, ...}\n\n    def test_user_persisted_to_sqlite(alice_registration):\n>       rows = query_users(\"alice@verify.test\")\n\n/tests/test_final_state.py:248: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nemail = 'alice@verify.test'\n\n    def query_users(email):\n>       conn = sqlite3.connect(DB_PATH, timeout=30)\nE       sqlite3.OperationalError: unable to open database file\n\n/tests/test_final_state.py:82: OperationalError",
+                "message": "The test failed in the call phase"
+            },
+            {
+                "name": "test_final_state.py::test_email_uniqueness_rejected",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 293,
+                "start": 1784298815513,
+                "stop": 1784298815806,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': 'Not a SSR URL according to Qwik City', 'session': <requests.sessions.Session object at 0x7f6da9895be0>, ...}\n\n    def test_email_uniqueness_rejected(alice_registration):\n        session = requests.Session()\n        resp = submit_step(\n            session,\n            ACCOUNT_URL,\n            {\n                \"email\": \"alice@verify.test\",\n                \"password\": \"Str0ngPass\",\n                \"confirmPassword\": \"Str0ngPass\",\n            },\n        )\n        assert resp.status_code == 200\n        assert path_of(resp.url) == \"/register\", (\n            \"Registering an already-used email must NOT advance to the profile step; \"\n            f\"ended at {resp.url}\"\n        )\n>       assert 'name=\"email\"' in resp.text, (\n            \"Account step should re-render its form on a uniqueness failure.\"\n        )\nE       AssertionError: Account step should re-render its form on a uniqueness failure.\nE       assert 'name=\"email\"' in 'Not a SSR URL according to Qwik City'\nE        +  where 'Not a SSR URL according to Qwik City' = <Response [200]>.text\n\n/tests/test_final_state.py:281: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_weak_password_rejected",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 9,
+                "start": 1784298815806,
+                "stop": 1784298815815,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "clean_db = None\n\n    def test_weak_password_rejected(clean_db):\n        session = requests.Session()\n        resp = submit_step(\n            session,\n            ACCOUNT_URL,\n            {\n                \"email\": \"weak@verify.test\",\n                \"password\": \"weak\",\n                \"confirmPassword\": \"weak\",\n            },\n        )\n        assert resp.status_code == 200\n        assert path_of(resp.url) == \"/register\", (\n            f\"A weak password must not advance the wizard; ended at {resp.url}\"\n        )\n>       assert 'name=\"email\"' in resp.text, (\n            \"Account step should re-render its form on a password strength failure.\"\n        )\nE       AssertionError: Account step should re-render its form on a password strength failure.\nE       assert 'name=\"email\"' in 'Not a SSR URL according to Qwik City'\nE        +  where 'Not a SSR URL according to Qwik City' = <Response [200]>.text\n\n/tests/test_final_state.py:305: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_password_mismatch_rejected",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1784298815816,
+                "stop": 1784298815822,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "clean_db = None\n\n    def test_password_mismatch_rejected(clean_db):\n        session = requests.Session()\n        resp = submit_step(\n            session,\n            ACCOUNT_URL,\n            {\n                \"email\": \"mismatch@verify.test\",\n                \"password\": \"Str0ngPass\",\n                \"confirmPassword\": \"Different1\",\n            },\n        )\n        assert resp.status_code == 200\n        assert path_of(resp.url) == \"/register\", (\n            f\"Mismatched passwords must not advance the wizard; ended at {resp.url}\"\n        )\n>       assert 'name=\"email\"' in resp.text, (\n            \"Account step should re-render its form on a confirmation mismatch.\"\n        )\nE       AssertionError: Account step should re-render its form on a confirmation mismatch.\nE       assert 'name=\"email\"' in 'Not a SSR URL according to Qwik City'\nE        +  where 'Not a SSR URL according to Qwik City' = <Response [200]>.text\n\n/tests/test_final_state.py:328: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_underage_rejected_on_profile_step",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 6,
+                "start": 1784298815822,
+                "stop": 1784298815828,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "clean_db = None\n\n    def test_underage_rejected_on_profile_step(clean_db):\n        session = requests.Session()\n        account = submit_step(\n            session,\n            ACCOUNT_URL,\n            {\n                \"email\": \"teen@verify.test\",\n                \"password\": \"Str0ngPass\",\n                \"confirmPassword\": \"Str0ngPass\",\n            },\n        )\n>       assert path_of(account.url) == \"/register/profile\", (\n            f\"Valid account step for teen should reach the profile step; got {account.url}\"\n        )\nE       AssertionError: Valid account step for teen should reach the profile step; got http://127.0.0.1:3000/register/\nE       assert '/register' == '/register/profile'\nE         - /register/profile\nE         + /register\n\n/tests/test_final_state.py:347: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_back_navigation_preserves_account_data",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 7,
+                "start": 1784298815829,
+                "stop": 1784298815836,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "clean_db = None\n\n    def test_back_navigation_preserves_account_data(clean_db):\n        session = requests.Session()\n        account = submit_step(\n            session,\n            ACCOUNT_URL,\n            {\n                \"email\": \"carol@verify.test\",\n                \"password\": \"Str0ngPass\",\n                \"confirmPassword\": \"Str0ngPass\",\n            },\n        )\n>       assert path_of(account.url) == \"/register/profile\", (\n            f\"Carol's valid account step should reach the profile step; got {account.url}\"\n        )\nE       AssertionError: Carol's valid account step should reach the profile step; got http://127.0.0.1:3000/register/\nE       assert '/register' == '/register/profile'\nE         - /register/profile\nE         + /register\n\n/tests/test_final_state.py:381: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

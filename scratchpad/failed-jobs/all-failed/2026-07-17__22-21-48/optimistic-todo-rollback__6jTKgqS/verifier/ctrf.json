@@ -1,0 +1,113 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:30:49.273406+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 7,
+            "passed": 0,
+            "failed": 7,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784298565703,
+            "stop": 1784298649273
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_initial_ui",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 7556,
+                "start": 1784298565805,
+                "stop": 1784298573361,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "page = <Page url='http://127.0.0.1:5173/'>\n\n    def test_initial_ui(page):\n        page.goto(BASE_URL)\n>       expect(page.locator('[data-testid=\"new-todo-input\"]')).to_be_visible()\nE       AssertionError: Locator expected to be visible\nE       Actual value: None\nE       Error: element(s) not found \nE       Call log:\nE         - Expect \"to_be_visible\" with timeout 5000ms\nE         - waiting for locator(\"[data-testid=\\\"new-todo-input\\\"]\")\nE       \nE       Aria snapshot:\nE       - heading \"Hi \ud83d\udc4b\" [level=1]\nE       - text: Can't wait to see what you build with qwik! Happy coding.\n\n/tests/test_final_state.py:114: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_optimistic_add_and_persist",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 15183,
+                "start": 1784298573362,
+                "stop": 1784298588545,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "page = <Page url='http://127.0.0.1:5173/'>\n\n    def test_optimistic_add_and_persist(page):\n        page.goto(BASE_URL)\n>       _add_todo(page, \"Buy milk\")\n\n/tests/test_final_state.py:121: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/tests/test_final_state.py:104: in _add_todo\n    page.fill('[data-testid=\"new-todo-input\"]', title)\n/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:11156: in fill\n    self._sync(\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_page.py:925: in fill\n    return await self._main_frame.fill(**locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:632: in fill\n    await self._fill(**locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:644: in _fill\n    await self._channel.send(\"fill\", self._timeout, locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <playwright._impl._connection.Connection object at 0x7c3f04c7cf80>\ncb = <function Channel.send.<locals>.<lambda> at 0x7c3f03877560>\nis_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -> Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, \"__pw_stack__\", None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n>           raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nE           playwright._impl._errors.TimeoutError: Page.fill: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(\"[data-testid=\\\"new-todo-input\\\"]\")\n\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError",
+                "message": "The test failed in the call phase due to an exception"
+            },
+            {
+                "name": "test_final_state.py::test_failure_rollback",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 15140,
+                "start": 1784298588545,
+                "stop": 1784298603685,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "page = <Page url='http://127.0.0.1:5173/'>\n\n    def test_failure_rollback(page):\n        page.goto(BASE_URL)\n>       _add_todo(page, \"FAIL server down\")\n\n/tests/test_final_state.py:135: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/tests/test_final_state.py:104: in _add_todo\n    page.fill('[data-testid=\"new-todo-input\"]', title)\n/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:11156: in fill\n    self._sync(\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_page.py:925: in fill\n    return await self._main_frame.fill(**locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:632: in fill\n    await self._fill(**locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:644: in _fill\n    await self._channel.send(\"fill\", self._timeout, locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <playwright._impl._connection.Connection object at 0x7c3f04c7cf80>\ncb = <function Channel.send.<locals>.<lambda> at 0x7c3f038776a0>\nis_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -> Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, \"__pw_stack__\", None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n>           raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nE           playwright._impl._errors.TimeoutError: Page.fill: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(\"[data-testid=\\\"new-todo-input\\\"]\")\n\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError",
+                "message": "The test failed in the call phase due to an exception"
+            },
+            {
+                "name": "test_final_state.py::test_pending_state",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 15156,
+                "start": 1784298603686,
+                "stop": 1784298618842,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "page = <Page url='http://127.0.0.1:5173/'>\n\n    def test_pending_state(page):\n        page.goto(BASE_URL)\n>       _add_todo(page, \"SLOW upload\")\n\n/tests/test_final_state.py:149: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/tests/test_final_state.py:104: in _add_todo\n    page.fill('[data-testid=\"new-todo-input\"]', title)\n/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:11156: in fill\n    self._sync(\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_page.py:925: in fill\n    return await self._main_frame.fill(**locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:632: in fill\n    await self._fill(**locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:644: in _fill\n    await self._channel.send(\"fill\", self._timeout, locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <playwright._impl._connection.Connection object at 0x7c3f04c7cf80>\ncb = <function Channel.send.<locals>.<lambda> at 0x7c3f03876ac0>\nis_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -> Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, \"__pw_stack__\", None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n>           raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nE           playwright._impl._errors.TimeoutError: Page.fill: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(\"[data-testid=\\\"new-todo-input\\\"]\")\n\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError",
+                "message": "The test failed in the call phase due to an exception"
+            },
+            {
+                "name": "test_final_state.py::test_toggle_persist",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 15145,
+                "start": 1784298618842,
+                "stop": 1784298633987,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "page = <Page url='http://127.0.0.1:5173/'>\n\n    def test_toggle_persist(page):\n        page.goto(BASE_URL)\n        checkbox = _item(page, \"Buy milk\").locator('input[type=\"checkbox\"]')\n>       checkbox.check()\n\n/tests/test_final_state.py:165: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:17576: in check\n    self._sync(\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_locator.py:147: in check\n    return await self._frame.check(self._selector, strict=True, **params)\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:901: in check\n    await self._channel.send(\"check\", self._timeout, locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <playwright._impl._connection.Connection object at 0x7c3f04c7cf80>\ncb = <function Channel.send.<locals>.<lambda> at 0x7c3f03736020>\nis_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -> Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, \"__pw_stack__\", None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n>           raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nE           playwright._impl._errors.TimeoutError: Locator.check: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(\"[data-testid=\\\"todo-item\\\"][data-title=\\\"Buy milk\\\"]\").locator(\"input[type=\\\"checkbox\\\"]\")\n\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError",
+                "message": "The test failed in the call phase due to an exception"
+            },
+            {
+                "name": "test_final_state.py::test_delete_persist",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 15157,
+                "start": 1784298633987,
+                "stop": 1784298649144,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "page = <Page url='http://127.0.0.1:5173/'>\n\n    def test_delete_persist(page):\n        page.goto(BASE_URL)\n>       _item(page, \"Buy milk\").locator('[data-testid=\"delete-todo\"]').click()\n\n/tests/test_final_state.py:177: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/dist-packages/playwright/sync_api/_generated.py:17672: in click\n    self._sync(\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_locator.py:163: in click\n    return await self._frame._click(self._selector, strict=True, **params)\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_frame.py:591: in _click\n    await self._channel.send(\"click\", self._timeout, locals_to_params(locals()))\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <playwright._impl._connection.Connection object at 0x7c3f04c7cf80>\ncb = <function Channel.send.<locals>.<lambda> at 0x7c3f03735e40>\nis_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -> Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, \"__pw_stack__\", None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n>           raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nE           playwright._impl._errors.TimeoutError: Locator.click: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(\"[data-testid=\\\"todo-item\\\"][data-title=\\\"Buy milk\\\"]\").locator(\"[data-testid=\\\"delete-todo\\\"]\")\n\n/usr/local/lib/python3.12/dist-packages/playwright/_impl/_connection.py:563: TimeoutError",
+                "message": "The test failed in the call phase due to an exception"
+            },
+            {
+                "name": "test_final_state.py::test_sqlite_storage_valid",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 129,
+                "start": 1784298649144,
+                "stop": 1784298649273,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "def test_sqlite_storage_valid():\n>       assert os.path.isfile(DB_PATH), f\"Expected SQLite database file at {DB_PATH}.\"\nE       AssertionError: Expected SQLite database file at /home/user/optimistic-todo/data/todos.sqlite.\nE       assert False\nE        +  where False = <function isfile at 0x7c3f05884220>('/home/user/optimistic-todo/data/todos.sqlite')\nE        +    where <function isfile at 0x7c3f05884220> = <module 'posixpath' (frozen)>.isfile\nE        +      where <module 'posixpath' (frozen)> = os.path\n\n/tests/test_final_state.py:187: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

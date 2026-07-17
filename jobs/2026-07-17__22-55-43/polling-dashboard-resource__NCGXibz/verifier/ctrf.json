@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T15:04:29.720469+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784300548921,
+            "stop": 1784300669720
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_endpoint_json_shape",
+                "status": "passed",
+                "duration": 1608,
+                "start": 1784300549009,
+                "stop": 1784300550617,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_deterministic_derivation",
+                "status": "passed",
+                "duration": 3,
+                "start": 1784300550618,
+                "stop": 1784300550621,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_counter_increments_by_one",
+                "status": "passed",
+                "duration": 7,
+                "start": 1784300550621,
+                "stop": 1784300550628,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_no_external_network_dependency",
+                "status": "passed",
+                "duration": 1,
+                "start": 1784300550628,
+                "stop": 1784300550629,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_dashboard_ssr_renders_metrics",
+                "status": "passed",
+                "duration": 12,
+                "start": 1784300550629,
+                "stop": 1784300550641,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_browser_polling_pause_resume_refresh",
+                "status": "passed",
+                "duration": 119079,
+                "start": 1784300550641,
+                "stop": 1784300669720,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

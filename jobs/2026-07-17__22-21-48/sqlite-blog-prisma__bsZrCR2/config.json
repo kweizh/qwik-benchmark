@@ -1,0 +1,29 @@
+{
+    "task": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/sqlite-blog-prisma",
+        "source": "pending-tasks"
+    },
+    "trial_name": "sqlite-blog-prisma__bsZrCR2",
+    "trials_dir": "jobs/2026-07-17__22-21-48",
+    "agent": {
+        "import_path": "agents.pochi:Pochi",
+        "model_name": "zai/glm-5.2",
+        "env": {
+            "POCHI_API_KEY": "${POCHI_API_KEY}"
+        }
+    },
+    "environment": {
+        "type": "daytona",
+        "mounts": [
+            {
+                "type": "bind",
+                "source": "test_initial_state.py",
+                "target": "/bootstrap/test_initial_state.py"
+            }
+        ]
+    },
+    "artifacts": [
+        "/home/user"
+    ],
+    "job_id": "4d70a1c5-1985-4069-9c80-c12c77ee7c1e"
+}

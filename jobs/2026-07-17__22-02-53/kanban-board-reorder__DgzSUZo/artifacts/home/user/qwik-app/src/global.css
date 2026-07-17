@@ -1,0 +1,175 @@
+/* Modern Kanban Board Styles */
+
+:root {
+  --bg-color: #f4f5f7;
+  --board-bg: #ebecf0;
+  --card-bg: #ffffff;
+  --text-color: #172b4d;
+  --text-muted: #5e6c84;
+  --primary-color: #0052cc;
+  --primary-hover: #0077ff;
+  --todo-border: #ff5630;
+  --doing-border: #ffab00;
+  --done-border: #36b37e;
+  --shadow-sm: 0 1px 2px 0 rgba(9, 30, 66, 0.25);
+  --shadow-md: 0 4px 8px -2px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.reset-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reset-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.column {
+  background-color: var(--board-bg);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+}
+
+.column-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.column[data-column="todo"] .column-title {
+  color: var(--todo-border);
+}
+
+.column[data-column="doing"] .column-title {
+  color: var(--doing-border);
+}
+
+.column[data-column="done"] .column-title {
+  color: var(--done-border);
+}
+
+.card-count {
+  background-color: rgba(9, 30, 66, 0.08);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-grow: 1;
+  min-height: 150px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: 6px;
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.column[data-column="todo"] .card {
+  border-left: 4px solid var(--todo-border);
+}
+
+.column[data-column="doing"] .card {
+  border-left: 4px solid var(--doing-border);
+}
+
+.column[data-column="done"] .card {
+  border-left: 4px solid var(--done-border);
+}
+
+.card-id {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .board {
+    grid-template-columns: 1fr;
+  }
+}

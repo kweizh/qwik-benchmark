@@ -1,0 +1,121 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 7 items
+
+../tests/test_final_state.py .FF..F.                                     [100%]
+
+=================================== FAILURES ===================================
+______________ test_unauthenticated_dashboard_redirects_to_login _______________
+
+start_app = None
+
+    def test_unauthenticated_dashboard_redirects_to_login(start_app):
+        s = requests.Session()
+        r = s.get(BASE_URL + "/dashboard", allow_redirects=False, timeout=30)
+        assert 300 <= r.status_code < 400, (
+            f"Unauthenticated GET /dashboard should redirect, got {r.status_code}"
+        )
+>       assert "/login" in _location_path(r), (
+            f"Unauthenticated /dashboard should redirect to /login, Location={r.headers.get('Location')}"
+        )
+E       AssertionError: Unauthenticated /dashboard should redirect to /login, Location=/dashboard/
+E       assert '/login' in '/dashboard/'
+E        +  where '/dashboard/' = _location_path(<Response [301]>)
+
+/tests/test_final_state.py:137: AssertionError
+________________________ test_failed_login_is_rejected _________________________
+
+start_app = None
+
+    def test_failed_login_is_rejected(start_app):
+        s = requests.Session()
+        r = _do_login(s, VALID_USER, WRONG_PASS, allow_redirects=False)
+        # A failed login must NOT redirect to the dashboard.
+        if 300 <= r.status_code < 400:
+            assert "/dashboard" not in _location_path(r), (
+                "Login with a wrong password must not redirect to /dashboard."
+            )
+        # The re-rendered page must show the error message.
+        body = r.text
+        if 300 <= r.status_code < 400:
+            follow = s.get(urljoin(r.url, r.headers.get("Location", "/login")), timeout=30)
+            body = follow.text
+        assert "Invalid username or password" in body, (
+            "Failed login should display the message 'Invalid username or password'."
+        )
+        # And no valid session should have been established.
+        r2 = s.get(BASE_URL + "/dashboard", allow_redirects=False, timeout=30)
+>       assert 300 <= r2.status_code < 400 and "/login" in _location_path(r2), (
+            "After a failed login, /dashboard must still redirect to /login."
+        )
+E       AssertionError: After a failed login, /dashboard must still redirect to /login.
+E       assert (301 < 400 and '/login' in '/dashboard/')
+E        +  where 301 = <Response [301]>.status_code
+E        +  and   '/dashboard/' = _location_path(<Response [301]>)
+
+/tests/test_final_state.py:160: AssertionError
+__________________________ test_logout_clears_session __________________________
+
+start_app = None
+
+    def test_logout_clears_session(start_app):
+        s = requests.Session()
+        _do_login(s, VALID_USER, VALID_PASS, allow_redirects=True)
+        r = s.get(BASE_URL + "/dashboard", timeout=30)
+        assert r.status_code == 200, "Precondition failed: could not reach authenticated dashboard."
+    
+        logout_action = _find_form_action(r.text, ["logout"])
+        assert logout_action is not None, (
+            "Could not find a logout <form> on the dashboard page."
+        )
+        logout_url = urljoin(r.url, logout_action)
+        rr = s.post(logout_url, allow_redirects=False, timeout=30)
+>       assert 300 <= rr.status_code < 400, (
+            f"Logout should redirect, got {rr.status_code}"
+        )
+E       AssertionError: Logout should redirect, got 200
+E       assert 300 <= 200
+E        +  where 200 = <Response [200]>.status_code
+
+/tests/test_final_state.py:210: AssertionError
+==================================== PASSES ====================================
+___________________________ test_login_page_renders ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_auth_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_auth_app' started pid=1693
+qwik_auth_app process startup detected
+===== [STARTED] qwik_auth_app log begin =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 566 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+===== [STARTED] qwik_auth_app log end   =====
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN] qwik_auth_app log begin =====
+
+  🚧 Please note that development mode is slower than production.
+2:12:35 PM [vite] Internal server error: Expected request data for the action id CQQYxFsuIaE to be an object
+      at file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26364:19
+      at async Object.next (file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+
+===== [TEARDOWN] qwik_auth_app log end   =====
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_login_page_renders
+PASSED ../tests/test_final_state.py::test_successful_login_sets_httponly_cookie_and_redirects
+PASSED ../tests/test_final_state.py::test_authenticated_dashboard_shows_user
+PASSED ../tests/test_final_state.py::test_password_is_hashed_at_rest
+FAILED ../tests/test_final_state.py::test_unauthenticated_dashboard_redirects_to_login
+FAILED ../tests/test_final_state.py::test_failed_login_is_rejected - Assertio...
+FAILED ../tests/test_final_state.py::test_logout_clears_session - AssertionEr...
+========================= 3 failed, 4 passed in 2.06s ==========================

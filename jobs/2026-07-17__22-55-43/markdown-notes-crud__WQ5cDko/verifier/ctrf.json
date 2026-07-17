@@ -1,0 +1,104 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T15:09:48.485390+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 7,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784300694063,
+            "stop": 1784300988485
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_notes_list_loads",
+                "status": "passed",
+                "duration": 1745,
+                "start": 1784300694129,
+                "stop": 1784300695874,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_create_notes_via_browser",
+                "status": "passed",
+                "duration": 88057,
+                "start": 1784300695875,
+                "stop": 1784300783932,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_detail_renders_sanitized_markdown_html",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 268,
+                "start": 1784300783932,
+                "stop": 1784300784200,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_detail_renders_sanitized_markdown_html(start_app):\n        \"\"\"Truth step 3: /notes/<id> renders Markdown as real HTML elements.\"\"\"\n        href = _find_href_by_title(\"Grocery List\")\n        assert href is not None, \"Could not find the 'Grocery List' note link on /notes.\"\n        resp = requests.get(BASE_URL + href, timeout=30)\n        assert resp.status_code == 200, (\n            f\"GET {BASE_URL + href} returned {resp.status_code}, expected 200.\"\n        )\n        html = resp.text\n        assert re.search(r\"<h1[^>]*>\\s*Shopping\", html), (\n            \"Expected the Markdown '# Shopping' to render as an <h1> element with text \"\n            \"'Shopping' on the note detail page.\"\n        )\n        assert \"<li\" in html, \"Expected the Markdown list to render as <li> elements.\"\n        assert \"Milk\" in html and \"Eggs\" in html, (\n            \"Expected list item text 'Milk' and 'Eggs' to appear on the detail page.\"\n        )\n        # The raw Markdown source must not be shown verbatim (i.e. it was converted).\n>       assert \"# Shopping\" not in html, (\n            \"Found raw '# Shopping' Markdown text; content was not converted to HTML.\"\n        )\nE       AssertionError: Found raw '# Shopping' Markdown text; content was not converted to HTML.\nE       assert '# Shopping' not in '<!DOCTYPE h.../script>\\n\\n'\nE         '# Shopping' is contained here:\nE             1,\nE               \"# Shopping\\r\\n\\r\\n- Milk\\r\\n- Eggs\",\nE         ?      ++++++++++\nE               \"<h1>Shopping</h1>\\n<ul>\\n<li>Milk</li>\\n<li>Eggs</li>\\n</ul>\\n\",\nE               \"2026-07-17 15:05:48\",\nE               {...\nE         \nE         ...Full output truncated (1118 lines hidden), use '-vv' to show\n\n/tests/test_final_state.py:191: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_detail_sanitizes_dangerous_html",
+                "status": "passed",
+                "duration": 36,
+                "start": 1784300784200,
+                "stop": 1784300784236,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_create_validation_rejects_blank_title",
+                "status": "passed",
+                "duration": 56102,
+                "start": 1784300784236,
+                "stop": 1784300840338,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_edit_updates_note_via_browser",
+                "status": "passed",
+                "duration": 77115,
+                "start": 1784300840338,
+                "stop": 1784300917453,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_delete_note_via_browser",
+                "status": "passed",
+                "duration": 71026,
+                "start": 1784300917453,
+                "stop": 1784300988479,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unknown_note_returns_404",
+                "status": "passed",
+                "duration": 6,
+                "start": 1784300988479,
+                "stop": 1784300988485,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

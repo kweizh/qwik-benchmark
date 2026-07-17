@@ -1,0 +1,83 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:16:46.153887+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784297526679,
+            "stop": 1784297806153
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_initial_render_and_reply_counts",
+                "status": "passed",
+                "duration": 63067,
+                "start": 1784297526737,
+                "stop": 1784297589804,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_add_nested_reply",
+                "status": "passed",
+                "duration": 70911,
+                "start": 1784297589804,
+                "stop": 1784297660715,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_reply_persisted_in_sqlite",
+                "status": "passed",
+                "duration": 2,
+                "start": 1784297660715,
+                "stop": 1784297660717,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_collapse_and_expand_subtree",
+                "status": "passed",
+                "duration": 68913,
+                "start": 1784297660718,
+                "stop": 1784297729631,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_validation_rejects_empty_body",
+                "status": "passed",
+                "duration": 76519,
+                "start": 1784297729631,
+                "stop": 1784297806150,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_invalid_submission_not_persisted",
+                "status": "passed",
+                "duration": 3,
+                "start": 1784297806150,
+                "stop": 1784297806153,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:31:11.904859+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784298660701,
+            "stop": 1784298671904
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_production_build_succeeds",
+                "status": "passed",
+                "duration": 9358,
+                "start": 1784298660774,
+                "stop": 1784298670132,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_index_page_and_form",
+                "status": "passed",
+                "duration": 1644,
+                "start": 1784298670132,
+                "stop": 1784298671776,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_valid_image_upload_stored_and_shown",
+                "status": "passed",
+                "duration": 73,
+                "start": 1784298671777,
+                "stop": 1784298671850,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_wrong_file_type_rejected",
+                "status": "passed",
+                "duration": 18,
+                "start": 1784298671850,
+                "stop": 1784298671868,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_oversized_image_rejected",
+                "status": "passed",
+                "duration": 36,
+                "start": 1784298671868,
+                "stop": 1784298671904,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

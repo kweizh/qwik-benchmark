@@ -1,0 +1,41 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 6 items
+
+../tests/test_final_state.py ......                                      [100%]
+
+==================================== PASSES ====================================
+___________________________ test_endpoint_json_shape ___________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_dev$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_dev' started pid=1541
+qwik_dev process startup detected
+====================== [STARTED: Begin] qwik_dev log ======================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 551 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+====================== [STARTED: End  ] qwik_dev log ======================
+--------------------------- Captured stdout teardown ---------------------------
+====================== [TEARDOWN: Begin] qwik_dev log ======================
+(skipped 9 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+
+====================== [TEARDOWN: End  ] qwik_dev log ======================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_endpoint_json_shape
+PASSED ../tests/test_final_state.py::test_deterministic_derivation
+PASSED ../tests/test_final_state.py::test_counter_increments_by_one
+PASSED ../tests/test_final_state.py::test_no_external_network_dependency
+PASSED ../tests/test_final_state.py::test_dashboard_ssr_renders_metrics
+PASSED ../tests/test_final_state.py::test_browser_polling_pause_resume_refresh
+======================== 6 passed in 118.10s (0:01:58) =========================

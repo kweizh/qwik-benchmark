@@ -1,0 +1,122 @@
+{
+    "id": "8f459d56-0c4f-43b1-a29b-1ebd5c9afa15",
+    "task_name": "infinite-scroll-feed",
+    "trial_name": "infinite-scroll-feed__UwbxJno",
+    "trial_uri": "file:///home/kw/code/zealt/pochi-harbor/jobs/2026-07-17__22-55-43/infinite-scroll-feed__UwbxJno",
+    "task_id": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/infinite-scroll-feed"
+    },
+    "source": "pending-tasks",
+    "task_checksum": "399c1662d4aa1d414556724bcc9e7abc48c9119ac1d6bf92df7feb1e59e8eed2",
+    "config": {
+        "task": {
+            "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/infinite-scroll-feed",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": "pending-tasks"
+        },
+        "trial_name": "infinite-scroll-feed__UwbxJno",
+        "trials_dir": "jobs/2026-07-17__22-55-43",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "agents.pochi:Pochi",
+            "model_name": "anthropic/claude-5-sonnet",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {},
+            "env": {
+                "POCHI_API_KEY": "${POCHI_API_KEY}"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "daytona",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": [
+                {
+                    "type": "bind",
+                    "source": "test_initial_state.py",
+                    "target": "/bootstrap/test_initial_state.py"
+                }
+            ],
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [
+            "/home/user"
+        ],
+        "extra_instruction_paths": [],
+        "job_id": "9fad767f-0133-4896-b1ad-f5e86048ff1e"
+    },
+    "agent_info": {
+        "name": "pochi",
+        "version": "0.6.20",
+        "model_info": {
+            "name": "claude-5-sonnet",
+            "provider": "anthropic"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 1905646,
+        "cost_usd": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-17T14:55:46.508578Z",
+    "finished_at": "2026-07-17T15:07:12.438347Z",
+    "environment_setup": {
+        "started_at": "2026-07-17T14:55:46.656416Z",
+        "finished_at": "2026-07-17T14:55:51.139576Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-17T14:55:51.139617Z",
+        "finished_at": "2026-07-17T14:55:56.712563Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-17T14:55:56.712717Z",
+        "finished_at": "2026-07-17T15:02:46.618887Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-17T15:03:13.094825Z",
+        "finished_at": "2026-07-17T15:07:11.352059Z"
+    },
+    "step_results": null
+}

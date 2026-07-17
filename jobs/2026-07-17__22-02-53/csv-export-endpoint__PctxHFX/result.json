@@ -1,0 +1,122 @@
+{
+    "id": "b206ea81-4282-487f-85a1-00ce49ac453d",
+    "task_name": "csv-export-endpoint",
+    "trial_name": "csv-export-endpoint__PctxHFX",
+    "trial_uri": "file:///home/kw/code/zealt/pochi-harbor/jobs/2026-07-17__22-02-53/csv-export-endpoint__PctxHFX",
+    "task_id": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/csv-export-endpoint"
+    },
+    "source": "pending-tasks",
+    "task_checksum": "7c3de0c34d774218f8dc9a2c913576f811dd303b369298626d77ea2779fbbff8",
+    "config": {
+        "task": {
+            "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/csv-export-endpoint",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": "pending-tasks"
+        },
+        "trial_name": "csv-export-endpoint__PctxHFX",
+        "trials_dir": "jobs/2026-07-17__22-02-53",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "agents.pochi:Pochi",
+            "model_name": "google/gemini-3.5-flash",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {},
+            "env": {
+                "POCHI_API_KEY": "${POCHI_API_KEY}"
+            },
+            "mcp_servers": []
+        },
+        "environment": {
+            "type": "daytona",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": [
+                {
+                    "type": "bind",
+                    "source": "test_initial_state.py",
+                    "target": "/bootstrap/test_initial_state.py"
+                }
+            ],
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [
+            "/home/user"
+        ],
+        "extra_instruction_paths": [],
+        "job_id": "b5fc405d-4d78-4da1-8a48-292f1389237e"
+    },
+    "agent_info": {
+        "name": "pochi",
+        "version": "0.6.20",
+        "model_info": {
+            "name": "gemini-3.5-flash",
+            "provider": "google"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 0,
+        "n_cache_tokens": 0,
+        "n_output_tokens": 2286950,
+        "cost_usd": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "exception_info": null,
+    "started_at": "2026-07-17T14:02:56.852046Z",
+    "finished_at": "2026-07-17T14:14:05.350766Z",
+    "environment_setup": {
+        "started_at": "2026-07-17T14:02:56.996983Z",
+        "finished_at": "2026-07-17T14:06:13.313183Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-07-17T14:06:13.313229Z",
+        "finished_at": "2026-07-17T14:06:18.861527Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-07-17T14:06:18.861685Z",
+        "finished_at": "2026-07-17T14:12:33.680157Z"
+    },
+    "verifier": {
+        "started_at": "2026-07-17T14:13:01.652134Z",
+        "finished_at": "2026-07-17T14:14:04.807001Z"
+    },
+    "step_results": null
+}

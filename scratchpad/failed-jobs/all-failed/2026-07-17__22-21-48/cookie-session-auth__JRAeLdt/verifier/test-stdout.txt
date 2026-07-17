@@ -1,0 +1,72 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 7 items
+
+../tests/test_final_state.py .....F.                                     [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_logout_clears_session __________________________
+
+start_app = None
+
+    def test_logout_clears_session(start_app):
+        s = requests.Session()
+        _do_login(s, VALID_USER, VALID_PASS, allow_redirects=True)
+        r = s.get(BASE_URL + "/dashboard", timeout=30)
+        assert r.status_code == 200, "Precondition failed: could not reach authenticated dashboard."
+    
+        logout_action = _find_form_action(r.text, ["logout"])
+        assert logout_action is not None, (
+            "Could not find a logout <form> on the dashboard page."
+        )
+        logout_url = urljoin(r.url, logout_action)
+        rr = s.post(logout_url, allow_redirects=False, timeout=30)
+>       assert 300 <= rr.status_code < 400, (
+            f"Logout should redirect, got {rr.status_code}"
+        )
+E       AssertionError: Logout should redirect, got 200
+E       assert 300 <= 200
+E        +  where 200 = <Response [200]>.status_code
+
+/tests/test_final_state.py:210: AssertionError
+==================================== PASSES ====================================
+___________________________ test_login_page_renders ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_auth_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_auth_app' started pid=2272
+qwik_auth_app process startup detected
+===== [STARTED] qwik_auth_app log begin =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 633 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+===== [STARTED] qwik_auth_app log end   =====
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN] qwik_auth_app log begin =====
+
+  🚧 Please note that development mode is slower than production.
+2:33:51 PM [vite] Internal server error: Expected request data for the action id BKEefNjA0Gc to be an object
+      at file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26364:19
+      at async Object.next (file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-auth/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+
+===== [TEARDOWN] qwik_auth_app log end   =====
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_login_page_renders
+PASSED ../tests/test_final_state.py::test_unauthenticated_dashboard_redirects_to_login
+PASSED ../tests/test_final_state.py::test_failed_login_is_rejected
+PASSED ../tests/test_final_state.py::test_successful_login_sets_httponly_cookie_and_redirects
+PASSED ../tests/test_final_state.py::test_authenticated_dashboard_shows_user
+PASSED ../tests/test_final_state.py::test_password_is_hashed_at_rest
+FAILED ../tests/test_final_state.py::test_logout_clears_session - AssertionEr...
+========================= 1 failed, 6 passed in 2.13s ==========================

@@ -1,0 +1,42 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 6 items
+
+../tests/test_final_state.py ......                                      [100%]
+
+==================================== PASSES ====================================
+__________________________ test_initial_counter_value __________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_dev_server$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_dev_server' started pid=2334
+qwik_dev_server process startup detected
+===================== [STARTED: Begin] qwik_dev_server logfile =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+3:02:33 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v7.3.1   ssr   ready in 661 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===================== [STARTED: End  ] qwik_dev_server logfile =====================
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] qwik_dev_server logfile =====================
+(skipped 12 already-printed lines)
+
+===================== [TEARDOWN: End  ] qwik_dev_server logfile =====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_initial_counter_value
+PASSED ../tests/test_final_state.py::test_stream_content_type_and_initial_frame
+PASSED ../tests/test_final_state.py::test_mutation_broadcasts_to_all_subscribers
+PASSED ../tests/test_final_state.py::test_negative_delta_and_shared_state
+PASSED ../tests/test_final_state.py::test_new_connection_sees_latest_value
+PASSED ../tests/test_final_state.py::test_browser_live_counter
+======================== 6 passed in 437.11s (0:07:17) =========================

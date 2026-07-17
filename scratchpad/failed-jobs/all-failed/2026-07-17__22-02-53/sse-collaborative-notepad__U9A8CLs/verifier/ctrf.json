@@ -1,0 +1,77 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:10:19.628510+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 5,
+            "passed": 4,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784297404255,
+            "stop": 1784297419628
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_project_builds",
+                "status": "passed",
+                "duration": 12945,
+                "start": 1784297404334,
+                "stop": 1784297417279,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sse_headers_and_initial_snapshot",
+                "status": "passed",
+                "duration": 2245,
+                "start": 1784297417279,
+                "stop": 1784297419524,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_post_ack_and_state_persistence",
+                "status": "passed",
+                "duration": 49,
+                "start": 1784297419524,
+                "stop": 1784297419573,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_realtime_broadcast_to_connected_client",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 51,
+                "start": 1784297419574,
+                "stop": 1784297419625,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_realtime_broadcast_to_connected_client(start_app):\n        reader = open_stream(read_timeout=15)\n        try:\n            # Consume the initial snapshot so we only look for the subsequent update.\n            collect_events(\n                reader, predicate=lambda ev: ev[\"event\"] == \"snapshot\", timeout_s=15\n            )\n    \n            broadcast_text = f\"broadcast-{MARK}\"\n            post = requests.post(\n                API_URL,\n                json={\"text\": broadcast_text, \"clientId\": \"writer\"},\n                timeout=10,\n            )\n            assert post.status_code == 200, (\n                f\"POST broadcast must return 200, got {post.status_code}: {post.text}\"\n            )\n    \n            events = collect_events(\n                reader,\n                predicate=lambda ev: ev[\"event\"] == \"update\",\n                timeout_s=15,\n            )\n        finally:\n            reader.close()\n    \n        update = next((e for e in events if e[\"event\"] == \"update\"), None)\n>       assert update is not None, (\n            \"The open SSE connection did not receive an 'update' event after a POST edit.\"\n        )\nE       AssertionError: The open SSE connection did not receive an 'update' event after a POST edit.\nE       assert None is not None\n\n/tests/test_final_state.py:244: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_component_source_contract",
+                "status": "passed",
+                "duration": 2,
+                "start": 1784297419625,
+                "stop": 1784297419627,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

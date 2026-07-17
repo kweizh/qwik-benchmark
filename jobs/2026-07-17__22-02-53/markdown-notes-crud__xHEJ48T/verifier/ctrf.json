@@ -1,0 +1,104 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:21:29.260619+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 8,
+            "passed": 7,
+            "failed": 1,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784297614947,
+            "stop": 1784298089260
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_notes_list_loads",
+                "status": "passed",
+                "duration": 2011,
+                "start": 1784297615010,
+                "stop": 1784297617021,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_create_notes_via_browser",
+                "status": "passed",
+                "duration": 192504,
+                "start": 1784297617022,
+                "stop": 1784297809526,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_detail_renders_sanitized_markdown_html",
+                "status": "passed",
+                "duration": 125,
+                "start": 1784297809527,
+                "stop": 1784297809652,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_detail_sanitizes_dangerous_html",
+                "status": "passed",
+                "duration": 43,
+                "start": 1784297809653,
+                "stop": 1784297809696,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_create_validation_rejects_blank_title",
+                "status": "passed",
+                "duration": 74358,
+                "start": 1784297809696,
+                "stop": 1784297884054,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_edit_updates_note_via_browser",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 142754,
+                "start": 1784297884055,
+                "stop": 1784298026809,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\nbrowser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x7776934134a0>\n\n    def test_edit_updates_note_via_browser(start_app, browser_verifier):\n        \"\"\"Truth step 6: edit page updates a note via routeAction$.\"\"\"\n        reason = (\n            \"The /notes/<id>/edit page must load the existing note into a form and update \"\n            \"it through a Qwik City routeAction$, reflecting the change everywhere.\"\n        )\n        truth = (\n            f\"Navigate to {NOTES_URL} and open the editor for the note titled \"\n            \"'Grocery List' (via its edit page at /notes/<id>/edit). Verify the form is \"\n            \"pre-filled with the title 'Grocery List'. Change the title field to \"\n            \"'Weekly Groceries' and submit the form. Then verify that the note now shows \"\n            f\"the title 'Weekly Groceries', and that on {NOTES_URL} a link with text \"\n            \"'Weekly Groceries' now exists while 'Grocery List' no longer appears.\"\n        )\n        result = browser_verifier.verify(\n            reason=reason,\n            truth=truth,\n            use_browser_agent=True,\n            trajectory_dir=\"/logs/verifier/pochi/test_edit_updates_note_via_browser\",\n        )\n>       assert result.status == \"pass\", f\"Browser verification failed: {result.reason}\"\nE       AssertionError: Browser verification failed: The browser sub-agent failed to launch or execute, returning an abort error: 'Task aborted: maximum number of retries reached (3)'.\nE       assert 'fail' == 'pass'\nE         - pass\nE         + fail\n\n/tests/test_final_state.py:268: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_delete_note_via_browser",
+                "status": "passed",
+                "duration": 62441,
+                "start": 1784298026810,
+                "stop": 1784298089251,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_unknown_note_returns_404",
+                "status": "passed",
+                "duration": 9,
+                "start": 1784298089251,
+                "stop": 1784298089260,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            }
+        ]
+    }
+}

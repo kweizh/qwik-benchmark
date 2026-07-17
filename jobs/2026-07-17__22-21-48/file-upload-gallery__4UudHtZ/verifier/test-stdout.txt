@@ -1,0 +1,40 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 5 items
+
+../tests/test_final_state.py .....                                       [100%]
+
+==================================== PASSES ====================================
+___________________________ test_index_page_and_form ___________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_gallery$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_gallery' started pid=1684
+qwik_gallery process startup detected
+============================== [STARTED: Begin] qwik_gallery logfile ==============================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 616 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+============================== [STARTED: End  ] qwik_gallery logfile ==============================
+--------------------------- Captured stdout teardown ---------------------------
+============================== [TEARDOWN: Begin] qwik_gallery logfile ==============================
+(skipped 9 already-printed lines)
+
+  🚧 Please note that development mode is slower than production.
+
+============================== [TEARDOWN: End  ] qwik_gallery logfile ==============================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_production_build_succeeds
+PASSED ../tests/test_final_state.py::test_index_page_and_form
+PASSED ../tests/test_final_state.py::test_valid_image_upload_stored_and_shown
+PASSED ../tests/test_final_state.py::test_wrong_file_type_rejected
+PASSED ../tests/test_final_state.py::test_oversized_image_rejected
+============================== 5 passed in 11.20s ==============================

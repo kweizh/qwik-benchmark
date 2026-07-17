@@ -1,0 +1,135 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 7 items
+
+../tests/test_final_state.py .FF.FF.                                     [100%]
+
+=================================== FAILURES ===================================
+______________ test_unauthenticated_dashboard_redirects_to_login _______________
+
+start_app = None
+
+    def test_unauthenticated_dashboard_redirects_to_login(start_app):
+        s = requests.Session()
+        r = s.get(BASE_URL + "/dashboard", allow_redirects=False, timeout=30)
+        assert 300 <= r.status_code < 400, (
+            f"Unauthenticated GET /dashboard should redirect, got {r.status_code}"
+        )
+>       assert "/login" in _location_path(r), (
+            f"Unauthenticated /dashboard should redirect to /login, Location={r.headers.get('Location')}"
+        )
+E       AssertionError: Unauthenticated /dashboard should redirect to /login, Location=/dashboard/
+E       assert '/login' in '/dashboard/'
+E        +  where '/dashboard/' = _location_path(<Response [301]>)
+
+/tests/test_final_state.py:137: AssertionError
+________________________ test_failed_login_is_rejected _________________________
+
+start_app = None
+
+    def test_failed_login_is_rejected(start_app):
+        s = requests.Session()
+        r = _do_login(s, VALID_USER, WRONG_PASS, allow_redirects=False)
+        # A failed login must NOT redirect to the dashboard.
+        if 300 <= r.status_code < 400:
+            assert "/dashboard" not in _location_path(r), (
+                "Login with a wrong password must not redirect to /dashboard."
+            )
+        # The re-rendered page must show the error message.
+        body = r.text
+        if 300 <= r.status_code < 400:
+            follow = s.get(urljoin(r.url, r.headers.get("Location", "/login")), timeout=30)
+            body = follow.text
+        assert "Invalid username or password" in body, (
+            "Failed login should display the message 'Invalid username or password'."
+        )
+        # And no valid session should have been established.
+        r2 = s.get(BASE_URL + "/dashboard", allow_redirects=False, timeout=30)
+>       assert 300 <= r2.status_code < 400 and "/login" in _location_path(r2), (
+            "After a failed login, /dashboard must still redirect to /login."
+        )
+E       AssertionError: After a failed login, /dashboard must still redirect to /login.
+E       assert (301 < 400 and '/login' in '/dashboard/')
+E        +  where 301 = <Response [301]>.status_code
+E        +  and   '/dashboard/' = _location_path(<Response [301]>)
+
+/tests/test_final_state.py:160: AssertionError
+___________________ test_authenticated_dashboard_shows_user ____________________
+
+start_app = None
+
+    def test_authenticated_dashboard_shows_user(start_app):
+        s = requests.Session()
+        _do_login(s, VALID_USER, VALID_PASS, allow_redirects=True)
+        r = s.get(BASE_URL + "/dashboard", timeout=30)
+        assert r.status_code == 200, (
+            f"Authenticated GET /dashboard should return 200, got {r.status_code}"
+        )
+        assert VALID_USER in r.text, (
+            "Authenticated dashboard should display the logged-in username 'alice'."
+        )
+>       assert re.search(r"logout", r.text, re.IGNORECASE), (
+            "Authenticated dashboard should provide a logout control."
+        )
+E       AssertionError: Authenticated dashboard should provide a logout control.
+E       assert None
+E        +  where None = <function search at 0x77120a697ba0>('logout', '<!DOCTYPE html><html lang="en-us" q:route="/dashboard/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n', re.IGNORECASE)
+E        +    where <function search at 0x77120a697ba0> = re.search
+E        +    and   '<!DOCTYPE html><html lang="en-us" q:route="/dashboard/" q:container="paused" q:version="1.20.0" q:render="ssr-dev" q:...istener(\'resize\', updateOverlay);\n    document.addEventListener(\'scroll\', updateOverlay);\n  })();\n</script>\n\n' = <Response [200]>.text
+E        +    and   re.IGNORECASE = re.IGNORECASE
+
+/tests/test_final_state.py:193: AssertionError
+__________________________ test_logout_clears_session __________________________
+
+start_app = None
+
+    def test_logout_clears_session(start_app):
+        s = requests.Session()
+        _do_login(s, VALID_USER, VALID_PASS, allow_redirects=True)
+        r = s.get(BASE_URL + "/dashboard", timeout=30)
+        assert r.status_code == 200, "Precondition failed: could not reach authenticated dashboard."
+    
+        logout_action = _find_form_action(r.text, ["logout"])
+>       assert logout_action is not None, (
+            "Could not find a logout <form> on the dashboard page."
+        )
+E       AssertionError: Could not find a logout <form> on the dashboard page.
+E       assert None is not None
+
+/tests/test_final_state.py:205: AssertionError
+==================================== PASSES ====================================
+___________________________ test_login_page_renders ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_auth_app$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_auth_app' started pid=1854
+qwik_auth_app process startup detected
+===== [STARTED] qwik_auth_app log begin =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+3:02:54 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v7.3.1   ssr   ready in 670 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===== [STARTED] qwik_auth_app log end   =====
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN] qwik_auth_app log begin =====
+
+===== [TEARDOWN] qwik_auth_app log end   =====
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_login_page_renders
+PASSED ../tests/test_final_state.py::test_successful_login_sets_httponly_cookie_and_redirects
+PASSED ../tests/test_final_state.py::test_password_is_hashed_at_rest
+FAILED ../tests/test_final_state.py::test_unauthenticated_dashboard_redirects_to_login
+FAILED ../tests/test_final_state.py::test_failed_login_is_rejected - Assertio...
+FAILED ../tests/test_final_state.py::test_authenticated_dashboard_shows_user
+FAILED ../tests/test_final_state.py::test_logout_clears_session - AssertionEr...
+========================= 4 failed, 3 passed in 2.31s ==========================

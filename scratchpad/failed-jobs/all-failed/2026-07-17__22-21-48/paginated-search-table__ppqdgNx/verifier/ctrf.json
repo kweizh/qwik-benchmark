@@ -1,0 +1,143 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-07-17T14:35:08.135318+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "7.4.4"
+        },
+        "summary": {
+            "tests": 12,
+            "passed": 10,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1784298713893,
+            "stop": 1784298908135
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_final_state.py::test_better_sqlite3_is_dependency",
+                "status": "passed",
+                "duration": 1,
+                "start": 1784298713961,
+                "stop": 1784298713962,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_source_uses_route_loader_and_sqlite",
+                "status": "passed",
+                "duration": 1,
+                "start": 1784298713962,
+                "stop": 1784298713963,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sqlite_database_file_created",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 2339,
+                "start": 1784298713963,
+                "stop": 1784298716302,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\n\n    def test_sqlite_database_file_created(start_app):\n        # Trigger at least one request so on-demand seeding runs.\n        _get_html(PRODUCTS_URL)\n        db_found = False\n        for root, _dirs, files in os.walk(PROJECT_DIR):\n            if os.sep + \"node_modules\" + os.sep in root + os.sep:\n                continue\n            for name in files:\n                if name.endswith((\".db\", \".sqlite\", \".sqlite3\")):\n                    db_found = True\n                    break\n            if db_found:\n                break\n>       assert db_found, \"Expected a local SQLite database file to exist under the project.\"\nE       AssertionError: Expected a local SQLite database file to exist under the project.\nE       assert False\n\n/tests/test_final_state.py:142: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_final_state.py::test_default_view",
+                "status": "passed",
+                "duration": 21,
+                "start": 1784298716302,
+                "stop": 1784298716323,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_pagination_page_2",
+                "status": "passed",
+                "duration": 17,
+                "start": 1784298716324,
+                "stop": 1784298716341,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_pagination_custom_page_size",
+                "status": "passed",
+                "duration": 17,
+                "start": 1784298716342,
+                "stop": 1784298716359,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_search_book",
+                "status": "passed",
+                "duration": 18,
+                "start": 1784298716359,
+                "stop": 1784298716377,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_search_case_insensitive",
+                "status": "passed",
+                "duration": 8,
+                "start": 1784298716378,
+                "stop": 1784298716386,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sort_price_desc",
+                "status": "passed",
+                "duration": 9,
+                "start": 1784298716386,
+                "stop": 1784298716395,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sort_price_asc",
+                "status": "passed",
+                "duration": 33,
+                "start": 1784298716396,
+                "stop": 1784298716429,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_debounced_search_updates_url",
+                "status": "passed",
+                "duration": 69055,
+                "start": 1784298716429,
+                "stop": 1784298785484,
+                "retries": 0,
+                "file_path": "test_final_state.py"
+            },
+            {
+                "name": "test_final_state.py::test_sort_header_and_pagination",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 122650,
+                "start": 1784298785484,
+                "stop": 1784298908134,
+                "retries": 0,
+                "file_path": "test_final_state.py",
+                "trace": "start_app = None\nbrowser_verifier = <pochi_verifier.verifier.PochiVerifier object at 0x73a2eced3470>\n\n    def test_sort_header_and_pagination(start_app, browser_verifier):\n        reason = (\n            \"The products table has clickable sortable column headers and pagination controls. \"\n            \"Clicking a column header sorts by that column and toggles direction; clicking Next \"\n            \"moves to the next page. All state is reflected in the URL query string.\"\n        )\n        truth = (\n            f\"Navigate to {PRODUCTS_URL}. Click the 'Price' column header once and verify the URL \"\n            \"query string includes 'sort=price' with ascending direction and that the first data \"\n            \"row in the table is 'Tau Journal'. Click the 'Price' column header again and verify the \"\n            \"direction becomes descending in the URL and the first data row becomes 'Gamma Monitor'. \"\n            f\"Then navigate to {PRODUCTS_URL} again and click the 'Next' pagination control: verify \"\n            \"the URL query string includes 'page=2' and that the page shows the text 'Page 2 of 3'.\"\n        )\n        result = browser_verifier.verify(\n            reason=reason,\n            truth=truth,\n            use_browser_agent=True,\n            trajectory_dir=\"/logs/verifier/pochi/test_sort_header_and_pagination\",\n        )\n>       assert result.status == \"pass\", f\"Browser verification failed: {result.reason}\"\nE       AssertionError: Browser verification failed: The browser sub-agent failed to complete successfully, aborting with 'Task aborted: maximum number of retries reached (3).'.\nE       assert 'fail' == 'pass'\nE         - pass\nE         + fail\n\n/tests/test_final_state.py:275: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

@@ -1,0 +1,52 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 6 items
+
+../tests/test_final_state.py ......                                      [100%]
+
+==================================== PASSES ====================================
+_____________________ test_initial_render_and_reply_counts _____________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_comments$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_comments' started pid=1924
+qwik_comments process startup detected
+===================== [STARTED: Begin] qwik_comments logfile =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 671 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===================== [STARTED: End  ] qwik_comments logfile =====================
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] qwik_comments logfile =====================
+(skipped 11 already-printed lines)
+ERROR: Zod validation failed [
+  {
+    code: 'too_small',
+    minimum: 1,
+    type: 'string',
+    inclusive: true,
+    exact: false,
+    message: 'Body is required and cannot be empty',
+    path: [ 'body' ]
+  }
+]
+
+===================== [TEARDOWN: End  ] qwik_comments logfile =====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_initial_render_and_reply_counts
+PASSED ../tests/test_final_state.py::test_add_nested_reply
+PASSED ../tests/test_final_state.py::test_reply_persisted_in_sqlite
+PASSED ../tests/test_final_state.py::test_collapse_and_expand_subtree
+PASSED ../tests/test_final_state.py::test_validation_rejects_empty_body
+PASSED ../tests/test_final_state.py::test_invalid_submission_not_persisted
+======================== 6 passed in 279.47s (0:04:39) =========================

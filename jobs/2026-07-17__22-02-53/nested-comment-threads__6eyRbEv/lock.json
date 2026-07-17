@@ -1,0 +1,44 @@
+{
+    "schema_version": 1,
+    "task": {
+        "name": "nested-comment-threads",
+        "type": "local",
+        "digest": "sha256:9c928b4630a6b4f600d6079bbb8e1b7de911afea28b92e21152c64204ad0a2fe",
+        "source": "pending-tasks",
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/nested-comment-threads"
+    },
+    "install_only": false,
+    "timeout_multiplier": 1.0,
+    "agent": {
+        "import_path": "agents.pochi:Pochi",
+        "model_name": "google/gemini-3.5-flash",
+        "skills": [],
+        "extra_allowed_hosts": [],
+        "kwargs": {},
+        "env": {
+            "POCHI_API_KEY": "${POCHI_API_KEY}"
+        },
+        "mcp_servers": []
+    },
+    "skills": [],
+    "environment": {
+        "type": "daytona",
+        "force_build": false,
+        "delete": true,
+        "cpu_enforcement_policy": "auto",
+        "memory_enforcement_policy": "auto",
+        "mounts": [
+            {
+                "type": "bind",
+                "source": "test_initial_state.py",
+                "target": "/bootstrap/test_initial_state.py"
+            }
+        ],
+        "extra_docker_compose": [],
+        "kwargs": {},
+        "extra_allowed_hosts": []
+    },
+    "verifier": {
+        "disable": false
+    }
+}

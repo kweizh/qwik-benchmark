@@ -1,0 +1,140 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5f6f8;
+  color: #1a1a1a;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+h1 {
+  margin-bottom: 8px;
+}
+
+.new-comment {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.new-comment h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+ul.comment-list,
+ul.comment-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.comment-children {
+  padding-left: 20px;
+  border-left: 2px solid #e2e2e2;
+  margin-top: 12px;
+}
+
+li.comment {
+  margin-bottom: 12px;
+}
+
+.comment-card {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.comment-author {
+  font-weight: 600;
+}
+
+.comment-reply-count {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.comment-body {
+  margin: 8px 0;
+  white-space: pre-wrap;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.toggle-button {
+  cursor: pointer;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+}
+
+.reply-details summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #4338ca;
+  margin-top: 4px;
+}
+
+.reply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.reply-form .field label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  gap: 4px;
+}
+
+.reply-form input,
+.reply-form textarea {
+  font: inherit;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.reply-form button {
+  align-self: flex-start;
+  cursor: pointer;
+  background: #4338ca;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+}
+
+.error {
+  color: #b91c1c;
+  font-size: 0.8rem;
+}

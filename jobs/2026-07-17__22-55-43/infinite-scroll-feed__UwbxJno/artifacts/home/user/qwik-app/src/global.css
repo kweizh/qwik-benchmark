@@ -1,0 +1,59 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
+  background: #f4f5f7;
+  color: #1a1a1a;
+}
+
+.feed-container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 3rem;
+}
+
+.feed-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feed-item {
+  background: #fff;
+  border: 1px solid #e2e2e6;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.feed-item h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.feed-item p {
+  margin: 0;
+  color: #4b4b55;
+  line-height: 1.4;
+}
+
+.feed-loading,
+.feed-end {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.feed-sentinel {
+  height: 1px;
+}

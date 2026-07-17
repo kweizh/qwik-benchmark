@@ -1,0 +1,29 @@
+{
+    "task": {
+        "path": "/home/kw/code/zealt/qwik-benchmark/scratchpad/pending-tasks/nested-layout-breadcrumbs",
+        "source": "pending-tasks"
+    },
+    "trial_name": "nested-layout-breadcrumbs__FNznPFG",
+    "trials_dir": "jobs/2026-07-17__22-55-43",
+    "agent": {
+        "import_path": "agents.pochi:Pochi",
+        "model_name": "anthropic/claude-5-sonnet",
+        "env": {
+            "POCHI_API_KEY": "${POCHI_API_KEY}"
+        }
+    },
+    "environment": {
+        "type": "daytona",
+        "mounts": [
+            {
+                "type": "bind",
+                "source": "test_initial_state.py",
+                "target": "/bootstrap/test_initial_state.py"
+            }
+        ]
+    },
+    "artifacts": [
+        "/home/user"
+    ],
+    "job_id": "9fad767f-0133-4896-b1ad-f5e86048ff1e"
+}

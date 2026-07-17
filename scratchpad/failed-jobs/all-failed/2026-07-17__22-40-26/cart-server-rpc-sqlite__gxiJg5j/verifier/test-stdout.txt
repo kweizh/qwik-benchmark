@@ -1,0 +1,123 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 5 items
+
+../tests/test_final_state.py .FFF.                                       [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_cart_add_update_and_persistence _____________________
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_cart_add_update_and_persistence(browser):
+        """Truth steps 2-5, 7-8: add/increase quantity, totals, reload persistence, removal."""
+        context, page = _new_page(browser)
+        try:
+            page.goto(BASE_URL)
+            expect(_testid(page, "empty-cart")).to_be_visible()
+    
+            # Step 2: add tshirt -> qty 1, total $20.00
+            _testid(page, "add-tshirt").click()
+>           expect(_testid(page, "cart-item-tshirt")).to_have_count(1)
+E           AssertionError: Locator expected to have count '1'
+E           Actual value: 0 
+E           Call log:
+E             - Expect "to_have_count" with timeout 5000ms
+E             - waiting for locator("[data-testid=\"cart-item-tshirt\"]")
+E               14 × locator resolved to 0 elements
+E                  - unexpected value "0"
+
+/tests/test_final_state.py:119: AssertionError
+_____________________ test_decrement_does_not_go_below_one _____________________
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_decrement_does_not_go_below_one(browser):
+        """Truth step 6: decrement floors quantity at 1."""
+        context, page = _new_page(browser)
+        try:
+            page.goto(BASE_URL)
+            _testid(page, "add-mug").click()
+>           expect(_testid(page, "qty-mug")).to_have_text("1")
+E           AssertionError: Locator expected to have text '1'
+E           Actual value: None
+E           Error: element(s) not found 
+E           Call log:
+E             - Expect "to_have_text" with timeout 5000ms
+E             - waiting for locator("[data-testid=\"qty-mug\"]")
+E           
+E           Aria snapshot:
+E           - main:
+E             - heading "Qwik Shop" [level=1]
+E             - heading "Catalog" [level=2]
+E             - list:
+E               - listitem:
+E                 - text: Qwik T-Shirt — $20.00
+E                 - button "Add to cart"
+E               - listitem:
+E                 - text: Sticker Pack — $5.00
+E                 - button "Add to cart"
+E               - listitem:
+E                 - text: Coffee Mug — $12.50
+E                 - button "Add to cart"
+E             - heading "Cart" [level=2]
+E             - paragraph: Your cart is empty.
+E             - paragraph: "Total: $0.00"
+
+/tests/test_final_state.py:170: AssertionError
+____________________________ test_session_isolation ____________________________
+
+browser = <Browser type=<BrowserType name=chromium executable_path=/root/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome> version=149.0.7827.55>
+
+    def test_session_isolation(browser):
+        """Truth step 9: a brand-new visitor (no cookies) has an independent empty cart."""
+        # First visitor adds an item under its own session cookie.
+        ctx_a, page_a = _new_page(browser)
+        try:
+            page_a.goto(BASE_URL)
+            _testid(page_a, "add-mug").click()
+>           expect(_testid(page_a, "cart-item-mug")).to_have_count(1)
+E           AssertionError: Locator expected to have count '1'
+E           Actual value: 0 
+E           Call log:
+E             - Expect "to_have_count" with timeout 5000ms
+E             - waiting for locator("[data-testid=\"cart-item-mug\"]")
+E               14 × locator resolved to 0 elements
+E                  - unexpected value "0"
+
+/tests/test_final_state.py:188: AssertionError
+==================================== PASSES ====================================
+___________________________ test_empty_cart_initial ____________________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_dev_server$ npm run dev -- --port 3000 --host 0.0.0.0
+process 'qwik_dev_server' started pid=3142
+qwik_dev_server process startup detected
+===================== [STARTED: Begin] qwik_dev_server log =====================
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 0.0.0.0
+
+
+  VITE v7.3.1   ssr   ready in 682 ms
+
+  ➜  Local:   http://localhost:3000/
+  ➜  Network: http://172.20.0.31:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===================== [STARTED: End  ] qwik_dev_server log =====================
+--------------------------- Captured stdout teardown ---------------------------
+===================== [TEARDOWN: Begin] qwik_dev_server log =====================
+(skipped 12 already-printed lines)
+
+===================== [TEARDOWN: End  ] qwik_dev_server log =====================
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_empty_cart_initial
+PASSED ../tests/test_final_state.py::test_local_sqlite_file_exists
+FAILED ../tests/test_final_state.py::test_cart_add_update_and_persistence - A...
+FAILED ../tests/test_final_state.py::test_decrement_does_not_go_below_one - A...
+FAILED ../tests/test_final_state.py::test_session_isolation - AssertionError:...
+========================= 3 failed, 2 passed in 20.31s =========================

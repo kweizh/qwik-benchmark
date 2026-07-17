@@ -1,0 +1,219 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+rootdir: /tests
+plugins: xprocess-1.0.2, json-ctrf-0.5.2
+collected 10 items
+
+../tests/test_final_state.py ...FFFFFF.                                  [100%]
+
+=================================== FAILURES ===================================
+____________________ test_final_submit_reaches_success_page ____________________
+
+alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': '<!DOCTYPE html><html lang="en-us" q:route="...roll\', updateOverlay);\n  })();\n</script>\n\n', 'session': <requests.sessions.Session object at 0x7bb1bf02b080>, ...}
+
+    def test_final_submit_reaches_success_page(alice_registration):
+        resp = alice_registration["success"]
+        assert resp.status_code == 200, (
+            f"Final submission returned {resp.status_code}, body: {resp.text[:500]}"
+        )
+>       assert path_of(resp.url) == "/register/success", (
+            f"Final submission should redirect to /register/success/, "
+            f"but ended at {resp.url}"
+        )
+E       AssertionError: Final submission should redirect to /register/success/, but ended at http://127.0.0.1:3000/register/review/?qaction=QV0RohfSHs0
+E       assert '/register/review' == '/register/success'
+E         - /register/success
+E         + /register/review
+
+/tests/test_final_state.py:238: AssertionError
+________________________ test_user_persisted_to_sqlite _________________________
+
+alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': '<!DOCTYPE html><html lang="en-us" q:route="...roll\', updateOverlay);\n  })();\n</script>\n\n', 'session': <requests.sessions.Session object at 0x7bb1bf02b080>, ...}
+
+    def test_user_persisted_to_sqlite(alice_registration):
+        rows = query_users("alice@verify.test")
+>       assert len(rows) == 1, (
+            f"Expected exactly one users row for alice@verify.test, found {len(rows)}."
+        )
+E       AssertionError: Expected exactly one users row for alice@verify.test, found 0.
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+/tests/test_final_state.py:249: AssertionError
+________________________ test_email_uniqueness_rejected ________________________
+
+alice_registration = {'account': <Response [200]>, 'profile': <Response [200]>, 'review_html': '<!DOCTYPE html><html lang="en-us" q:route="...roll\', updateOverlay);\n  })();\n</script>\n\n', 'session': <requests.sessions.Session object at 0x7bb1bf02b080>, ...}
+
+    def test_email_uniqueness_rejected(alice_registration):
+        session = requests.Session()
+        resp = submit_step(
+            session,
+            ACCOUNT_URL,
+            {
+                "email": "alice@verify.test",
+                "password": "Str0ngPass",
+                "confirmPassword": "Str0ngPass",
+            },
+        )
+        assert resp.status_code == 200
+>       assert path_of(resp.url) == "/register", (
+            "Registering an already-used email must NOT advance to the profile step; "
+            f"ended at {resp.url}"
+        )
+E       AssertionError: Registering an already-used email must NOT advance to the profile step; ended at http://127.0.0.1:3000/register/profile/
+E       assert '/register/profile' == '/register'
+E         - /register
+E         + /register/profile
+
+/tests/test_final_state.py:277: AssertionError
+_________________________ test_weak_password_rejected __________________________
+
+clean_db = None
+
+    def test_weak_password_rejected(clean_db):
+        session = requests.Session()
+        resp = submit_step(
+            session,
+            ACCOUNT_URL,
+            {
+                "email": "weak@verify.test",
+                "password": "weak",
+                "confirmPassword": "weak",
+            },
+        )
+>       assert resp.status_code == 200
+E       assert 400 == 200
+E        +  where 400 = <Response [400]>.status_code
+
+/tests/test_final_state.py:301: AssertionError
+_______________________ test_password_mismatch_rejected ________________________
+
+clean_db = None
+
+    def test_password_mismatch_rejected(clean_db):
+        session = requests.Session()
+        resp = submit_step(
+            session,
+            ACCOUNT_URL,
+            {
+                "email": "mismatch@verify.test",
+                "password": "Str0ngPass",
+                "confirmPassword": "Different1",
+            },
+        )
+>       assert resp.status_code == 200
+E       assert 400 == 200
+E        +  where 400 = <Response [400]>.status_code
+
+/tests/test_final_state.py:324: AssertionError
+____________________ test_underage_rejected_on_profile_step ____________________
+
+clean_db = None
+
+    def test_underage_rejected_on_profile_step(clean_db):
+        session = requests.Session()
+        account = submit_step(
+            session,
+            ACCOUNT_URL,
+            {
+                "email": "teen@verify.test",
+                "password": "Str0ngPass",
+                "confirmPassword": "Str0ngPass",
+            },
+        )
+        assert path_of(account.url) == "/register/profile", (
+            f"Valid account step for teen should reach the profile step; got {account.url}"
+        )
+        resp = submit_step(
+            session,
+            PROFILE_URL,
+            {"fullName": "Teen User", "age": "15", "country": "Nowhere"},
+        )
+>       assert resp.status_code == 200
+E       assert 400 == 200
+E        +  where 400 = <Response [400]>.status_code
+
+/tests/test_final_state.py:355: AssertionError
+==================================== PASSES ====================================
+____________________ test_account_step_advances_to_profile _____________________
+---------------------------- Captured stdout setup -----------------------------
+/tests/.pytest_cache/d/.xprocess/qwik_wizard$ npm run dev -- --port 3000 --host 127.0.0.1
+process 'qwik_wizard' started pid=1715
+qwik_wizard process startup detected
+===== [STARTED] qwik_wizard log =====
+@@__xproc_block_delimiter__@@
+
+> dev
+> vite --mode ssr --port 3000 --host 127.0.0.1
+
+
+  VITE v7.3.1   ssr   ready in 559 ms
+
+  ➜  Local:   http://127.0.0.1:3000/
+
+  🚧 Please note that development mode is slower than production.
+
+===== [STARTED] end log =====
+--------------------------- Captured stdout teardown ---------------------------
+===== [TEARDOWN] qwik_wizard log =====
+2:12:35 PM [vite] Internal server error: Expected request data for the action id QV0RohfSHs0 to be an object
+      at file:///home/user/qwik-wizard/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:26364:19
+      at async Object.next (file:///home/user/qwik-wizard/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25842:9)
+      at async _runNext (file:///home/user/qwik-wizard/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25735:7)
+      at async runNext (file:///home/user/qwik-wizard/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:25787:12)
+      at async file:///home/user/qwik-wizard/node_modules/@builder.io/qwik-city/lib/vite/index.mjs:27148:26
+ERROR: Zod validation failed [
+  {
+    code: 'too_small',
+    minimum: 8,
+    type: 'string',
+    inclusive: true,
+    exact: false,
+    message: 'Password must be at least 8 characters',
+    path: [ 'password' ]
+  },
+  {
+    validation: 'regex',
+    code: 'invalid_string',
+    message: 'Password must contain at least one uppercase letter',
+    path: [ 'password' ]
+  },
+  {
+    validation: 'regex',
+    code: 'invalid_string',
+    message: 'Password must contain at least one digit',
+    path: [ 'password' ]
+  }
+]
+ERROR: Zod validation failed [
+  {
+    code: 'custom',
+    message: 'Passwords do not match',
+    path: [ 'confirmPassword' ]
+  }
+]
+ERROR: Zod validation failed [
+  {
+    code: 'too_small',
+    minimum: 18,
+    type: 'number',
+    inclusive: true,
+    exact: false,
+    message: 'You must be at least 18 years old',
+    path: [ 'age' ]
+  }
+]
+
+===== [TEARDOWN] end log =====
+=========================== short test summary info ============================
+PASSED ../tests/test_final_state.py::test_account_step_advances_to_profile
+PASSED ../tests/test_final_state.py::test_profile_step_advances_to_review
+PASSED ../tests/test_final_state.py::test_review_shows_entered_data_but_not_password
+PASSED ../tests/test_final_state.py::test_back_navigation_preserves_account_data
+FAILED ../tests/test_final_state.py::test_final_submit_reaches_success_page
+FAILED ../tests/test_final_state.py::test_user_persisted_to_sqlite - Assertio...
+FAILED ../tests/test_final_state.py::test_email_uniqueness_rejected - Asserti...
+FAILED ../tests/test_final_state.py::test_weak_password_rejected - assert 400...
+FAILED ../tests/test_final_state.py::test_password_mismatch_rejected - assert...
+FAILED ../tests/test_final_state.py::test_underage_rejected_on_profile_step
+========================= 6 failed, 4 passed in 2.27s ==========================
