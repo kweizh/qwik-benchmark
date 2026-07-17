@@ -22,9 +22,8 @@ The official `create-qwik` CLI supports a non-interactive command mode where the
 ```bash
 # Syntax: npm create qwik@latest <starter> <projectName> [flags]
 # Common starters: 'empty' (routing included, no demo code), 'basic' (includes simple demo)
-npm create qwik@latest empty qwik-app -- --yes --no-git --no-install
+CI=true npm create qwik@latest empty qwik-app --yes --no-git --no-install
 ```
-*Note: The `--` separator passes flags like `--yes` (accept all defaults), `--no-git` (skip Git repository initialization), and `--no-install` (skip immediate package installation) directly to the underlying generator.*
 
 Once scaffolded, you can install the dependencies and build manually:
 ```bash
@@ -36,7 +35,7 @@ npm run build
 #### Option B: Fully Non-Interactive Vite Template
 An alternative that is 100% non-interactive and does not require the `create-qwik` CLI wizard is using the official Vite template:
 ```bash
-npm create vite@latest qwik-app -- --template qwik-ts
+npm create vite@latest qwik-app -- --template qwik-ts --no-interactive
 cd qwik-app
 npm install
 ```
