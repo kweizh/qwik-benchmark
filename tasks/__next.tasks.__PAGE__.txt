@@ -1,7 +1,7 @@
 1:"$Sreact.fragment"
 2:"$Sreact.suspense"
 3:I[42654,["/qwik-benchmark/_next/static/chunks/babff0e7418ab052.js","/qwik-benchmark/_next/static/chunks/3ecbb78a8ff87549.js","/qwik-benchmark/_next/static/chunks/b7786bc204f070d9.js","/qwik-benchmark/_next/static/chunks/2ee232ed1e88c469.js"],"TasksPageClient"]
-15:I[75049,["/qwik-benchmark/_next/static/chunks/d2c13bb33c4fcd54.js","/qwik-benchmark/_next/static/chunks/c21188132e0e0d48.js"],"OutletBoundary"]
+1a:I[75049,["/qwik-benchmark/_next/static/chunks/d2c13bb33c4fcd54.js","/qwik-benchmark/_next/static/chunks/c21188132e0e0d48.js"],"OutletBoundary"]
 4:Te22,# Qwik City CSV Report & Export Endpoint
 
 ## Background
@@ -334,7 +334,450 @@ The automated checks locate elements by `data-testid`. The resolved dashboard mu
 - A button with `data-testid="toggle-button"` that pauses/resumes automatic polling.
 - The automatic polling interval must be **2000 milliseconds** (poll every 2 seconds) so timing-based checks behave predictably.
 
-c:Tf06,# Rate-Limited JSON API with Qwik City
+c:T1218,# Qwik API Key Manager
+
+## Background
+In modern web applications, exposing internal databases or services directly to third-party developers is a security risk. A common solution is to implement an API Key management system where developers can generate, view, and revoke API keys via a dashboard, and use those keys to authenticate their API requests.
+
+In this task, you will build a secure API Key Management system using the **Qwik** and **Qwik City** meta-framework, backed by a local **SQLite** database.
+
+## Requirements
+
+### 1. Database Schema
+Your application must use a SQLite database located at `/home/user/qwik-app/db.sqlite`. It must contain a table named `api_keys` with the following schema:
+- `id` (INTEGER PRIMARY KEY AUTOINCREMENT)
+- `name` (TEXT NOT NULL) - A user-friendly name/description for the key.
+- `key_prefix` (TEXT NOT NULL) - The prefix of the key (e.g., `qk_abcd`) to help identify it.
+- `hashed_key` (TEXT NOT NULL) - The SHA-256 hash (hex encoded) of the full plain text API key.
+- `status` (TEXT NOT NULL) - The status of the key, which must be either `'active'` or `'revoked'`.
+- `created_at` (TEXT NOT NULL) - An ISO 8601 timestamp representing when the key was created.
+
+### 2. API Key Generation & Security
+- When a new key is generated, it must be a string starting with the prefix `qk_` followed by 32 random alphanumeric characters (total length of 35 characters).
+- The `key_prefix` stored in the database must be the first 7 characters of the generated key (e.g., `qk_` plus the first 4 random characters).
+- The plain text key must be hashed using SHA-256 (hex encoded) and stored in the `hashed_key` column.
+- **CRITICAL SECURITY REQUIREMENT:** The plain text key must **NEVER** be stored in the database. A security audit will check the database contents to verify this.
+
+### 3. REST API Endpoints
+You must implement the following REST API endpoints in your Qwik City application:
+
+#### A. POST `/api/v1/developer/keys`
+Generates a new API key.
+- **Request Body (JSON):**
+  ```json
+  {
+    "name": "string"
+  }
+  ```
+- **Response (201 Created):**
+  ```json
+  {
+    "id": number,
+    "name": "string",
+    "prefix": "string",
+    "key": "string",
+    "status": "active",
+    "created_at": "string"
+  }
+  ```
+  *Note: This is the ONLY time the plain text `key` is returned to the client.*
+
+#### B. GET `/api/v1/developer/keys`
+Lists all generated API keys.
+- **Response (200 OK):**
+  ```json
+  [
+    {
+      "id": number,
+      "name": "string",
+      "prefix": "string",
+      "status": "active" | "revoked",
+      "created_at": "string"
+    }
+  ]
+  ```
+  *Note: The plain text `key` or the `hashed_key` must NOT be returned in this response.*
+
+#### C. POST `/api/v1/developer/keys/:id/revoke`
+Revokes an API key by setting its status to `'revoked'` in the database.
+- **Response (200 OK):**
+  ```json
+  {
+    "success": true,
+    "message": "string"
+  }
+  ```
+  If the key ID does not exist, return a `404 Not Found` status with `{"error": "Key not found"}`.
+
+#### D. GET `/api/v1/hello`
+An authenticated endpoint that requires a valid and active API key passed in the `X-API-Key` header.
+- **Request Header:** `X-API-Key: qk_...`
+- **Response (200 OK) if valid:**
+  ```json
+  {
+    "message": "Hello, authenticated developer!"
+  }
+  ```
+- **Response (401 Unauthorized) if missing, invalid, or revoked:**
+  ```json
+  {
+    "error": "Unauthorized"
+  }
+  ```
+
+### 4. UI Dashboard Route
+Implement a user-friendly UI route at `/developer/keys`:
+- It must display a list of all existing keys showing their name, prefix, status, and creation date.
+- It must include a form with an input field for the key name and a submit button to generate a new key.
+- When a new key is successfully generated, the plain text key must be displayed **exactly once** to the user in a prominent success/alert box (since it cannot be retrieved again).
+- Each listed key must have a button or form to revoke it. Clicking the button must trigger key revocation and update the list dynamically or via page reload.
+
+## Implementation Hints
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev`
+- Port: 3000
+- SQLite database path: `/home/user/qwik-app/db.sqlite`
+- Ensure that all database interactions are safe from SQL injection (use parameterized queries or a secure ORM/query builder).
+- Ensure that concurrent requests to generate or revoke keys do not result in database locking issues (e.g., handle SQLite busy states correctly if needed, or use a single connection pool/appropriate configuration).
+- Do not include any mock data; the application must read and write to the SQLite database.
+
+d:T1134,# Qwik City Full-Text Search with SQLite FTS5
+
+## Background
+SQLite's FTS5 extension provides powerful, high-performance full-text search capabilities directly within a serverless database. In a full-stack meta-framework like Qwik, server-side code (such as database queries) can be safely executed within server-only handlers (like Qwik City API endpoints) without leaking server-only modules or database credentials into client-side browser bundles. This task requires building a self-contained, high-performance article search backend using Qwik City and SQLite FTS5.
+
+## Requirements
+1. **Database Initialization & Seeding**:
+   - Initialize a local SQLite database at `/home/user/qwik-app/db.sqlite`.
+   - Create an FTS5 virtual table named `articles_fts` with the columns `title` and `content` using the following exact schema:
+     ```sql
+     CREATE VIRTUAL TABLE articles_fts USING fts5(title, content);
+     ```
+   - On application startup, if the database is empty or does not exist, initialize and seed it with exactly the following three articles:
+     - **Article 1**:
+       - Title: `Introduction to Qwik`
+       - Content: `Qwik is a new kind of web framework that can deliver instant loading web applications at any scale. It achieves this through resumability, which completely eliminates eager hydration.`
+     - **Article 2**:
+       - Title: `Understanding Resumability`
+       - Content: `Resumability is the core innovation of Qwik. Unlike traditional hydration which downloads and executes all JavaScript on startup, Qwik serializes the application state and resumes execution instantly on user interaction.`
+     - **Article 3**:
+       - Title: `SQLite FTS5 Full-Text Search`
+       - Content: `SQLite's FTS5 extension allows users to perform full-text search on virtual tables. It supports advanced queries, prefix matching, and generating highlighted snippets using the snippet function.`
+
+2. **Search Endpoint (`GET /search`)**:
+   - Implement a Qwik City API endpoint at `GET /search` that accepts a query parameter `q` (e.g., `/search?q=resumability`).
+   - If `q` is empty or missing, return a `200 OK` status with an empty JSON array `[]`.
+   - Query the `articles_fts` table using the FTS5 `MATCH` operator.
+   - Select the `title` and generate a highlighted snippet of the `content` column using SQLite's FTS5 `snippet()` auxiliary function with the following exact signature:
+     `snippet(articles_fts, 1, '<b>', '</b>', '...', 10)`
+     *(Which targets column index 1 (`content`), uses `<b>` and `</b>` as match tags, `...` as ellipsis, and 10 as the maximum number of tokens)*.
+   - The response must be a JSON array of objects containing exactly these keys:
+     - `title`: The title of the article.
+     - `snippet`: The highlighted snippet text returned by the `snippet()` function.
+   - **Error Handling**: SQLite FTS5 queries can throw syntax errors when given invalid search expressions (such as unclosed double quotes, dangling operators like `AND`, `OR`, or trailing `*` in invalid contexts). You must catch these database execution errors and return a `400 Bad Request` status with the JSON body:
+     ```json
+     { "error": "Invalid search query syntax" }
+     ```
+
+3. **Article Creation Endpoint (`POST /articles`)**:
+   - Implement a Qwik City API endpoint at `POST /articles` that accepts a JSON body containing `title` and `content`.
+   - If `title` or `content` is missing or empty, return a `400 Bad Request` status with the JSON body:
+     ```json
+     { "error": "Title and content are required" }
+     ```
+   - Insert the new article into `articles_fts` and return a `201 Created` status with the JSON body containing the newly created article details and its implicit SQLite `rowid`:
+     ```json
+     {
+       "rowid": number,
+       "title": "string",
+       "content": "string"
+     }
+     ```
+
+## Implementation Hints
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev`
+- Port: 3000
+- Qwik City routes:
+  - `GET /search`: Endpoint for performing full-text search queries.
+  - `POST /articles`: Endpoint for inserting new articles.
+- Ensure that all node-specific modules (such as database drivers or file-system utilities) are imported and used strictly within server-only boundaries (e.g., Qwik City endpoint handlers) to prevent them from leaking into client-side browser bundles and causing build or runtime failures.
+
+e:Tebd,# Qwik Image Gallery with Local Optimization
+
+## Background
+In modern web applications, optimizing user-uploaded images is critical for performance and user experience. Qwik, with its focus on instant loading and resumability, is highly suited for high-performance web interfaces. In this task, you will build a self-contained image gallery in a Qwik City application that allows users to upload images, automatically optimizes them on the server, and tracks the metadata in a local SQLite database.
+
+## Requirements
+- Create a fully functional image gallery under the `/gallery` route.
+- Implement a POST `/gallery/upload` endpoint to handle image uploads, resize/optimize them, and save them locally.
+- Implement a GET `/api/images` API endpoint that returns a JSON list of all uploaded images.
+- Store the original and optimized image metadata in a local SQLite database.
+
+## Implementation Hints
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev`
+- Port: 3000
+- **Database Specifications**:
+  - SQLite database file path: `/home/user/qwik-app/gallery.db`
+  - Table name: `images`
+  - Table schema columns:
+    - `id` (INTEGER PRIMARY KEY AUTOINCREMENT)
+    - `original_name` (TEXT, not null - the original name of the uploaded file)
+    - `original_path` (TEXT, not null - the public URL path starting with `/gallery/original/`)
+    - `optimized_path` (TEXT, not null - the public URL path starting with `/gallery/optimized/`)
+    - `width` (INTEGER, not null - the width of the optimized WebP image)
+    - `height` (INTEGER, not null - the height of the optimized WebP image)
+    - `uploaded_at` (TIMESTAMP or TEXT, default current timestamp)
+- **Storage Specifications**:
+  - Original images must be saved to `/home/user/qwik-app/public/gallery/original/` with a unique filename (e.g. using a timestamp or UUID) while preserving the original file extension.
+  - Optimized images must be saved to `/home/user/qwik-app/public/gallery/optimized/` with a unique filename and in WebP format (extension `.webp`).
+- **Optimization Specifications**:
+  - The optimized image must be resized so that its maximum dimension (width or height) is exactly 800 pixels, preserving the aspect ratio.
+  - If the original image is already smaller than 800x800 pixels, do not scale it up; keep its original dimensions but still optimize and convert it to WebP.
+- **Route /gallery (GET)**:
+  - Renders an HTML page.
+  - Contains a file upload form with:
+    - An `<input type="file" name="image" accept="image/*" />` element.
+    - A submit button.
+    - The form should submit to `/gallery/upload` via POST.
+  - Displays a list/gallery of all uploaded images from the database:
+    - For each image, display the original filename.
+    - Display the optimized WebP image using an `<img src="...">` tag pointing to its `optimized_path`.
+    - Provide a link (`<a href="...">`) pointing to its `original_path`.
+    - Display the optimized dimensions in text (format: `width x height`, e.g., `800x600`).
+- **Route /gallery/upload (POST)**:
+  - Accepts a multi-part form-data request containing the file field named `image`.
+  - Saves the original image and the optimized WebP image to their respective directories.
+  - Inserts a new record into the SQLite database table `images`.
+  - Redirects the user back to `/gallery` (HTTP status 302 or 303).
+- **Route /api/images (GET)**:
+  - Returns a JSON array of all image records from the `images` table, ordered by `uploaded_at` DESC.
+  - Response format:
+    ```json
+    [
+      {
+        "id": 1,
+        "original_name": "myphoto.png",
+        "original_path": "/gallery/original/filename.png",
+        "optimized_path": "/gallery/optimized/filename.webp",
+        "width": 800,
+        "height": 600
+      }
+    ]
+    ```
+
+f:T139a,# Qwik Polling System with Dynamic SVG Charts
+
+## Background
+Build a self-contained polling system using Qwik and Qwik City. The application will fetch poll questions and options from a local SQLite database, display them to the user, render a dynamic SVG-based bar chart of the results, and allow users to cast votes. To ensure high-quality engineering, the system must handle concurrent voting requests correctly and enforce an IP-based rate limit to prevent voting spam.
+
+## Requirements
+- **Route `/poll/:id`**:
+  - Fetches the poll and its options from the SQLite database.
+  - Renders the poll question.
+  - Renders the current results as a custom SVG bar chart.
+  - Renders voting buttons/options for the user to cast a vote.
+- **Route POST `/poll/:id/vote`**:
+  - Casts a vote for a specific option of the poll.
+  - Inserts a record or increments the vote count in the SQLite database.
+  - Enforces an IP-based rate limit (1 vote per 5 seconds per poll per IP).
+  - Returns the updated vote counts for all options of that poll.
+- **Dynamic SVG Chart**:
+  - The chart must be rendered directly as SVG elements in the DOM.
+  - It must update dynamically when a vote is cast (either via client-side reactivity or page re-rendering).
+- **Concurrency & Reliability**:
+  - Database updates must be atomic and thread-safe to handle concurrent vote requests without losing votes or locking up the database.
+
+## Implementation Hints
+- Project path: `/home/user/qwik-app`
+- Start command: `npm run dev`
+- Port: 3000
+- **SQLite Database**:
+  - The database file is located at `/home/user/qwik-app/poll.db`.
+  - It contains the following tables:
+    - `polls`: `id` (TEXT PRIMARY KEY), `question` (TEXT NOT NULL)
+    - `options`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `poll_id` (TEXT NOT NULL, FOREIGN KEY REFERENCES polls(id)), `text` (TEXT NOT NULL), `votes` (INTEGER NOT NULL DEFAULT 0)
+    - `votes_log`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `poll_id` (TEXT NOT NULL), `ip` (TEXT NOT NULL), `timestamp` (INTEGER NOT NULL)
+  - The database is pre-seeded with the following data:
+    - Poll `frameworks`: `What is your favorite frontend framework?`
+      - Option `1`: `Qwik` (initial votes: 0)
+      - Option `2`: `React` (initial votes: 0)
+      - Option `3`: `Vue` (initial votes: 0)
+      - Option `4`: `Svelte` (initial votes: 0)
+    - Poll `colors`: `What is your favorite primary color?`
+      - Option `5`: `Red` (initial votes: 0)
+      - Option `6`: `Blue` (initial votes: 0)
+      - Option `7`: `Yellow` (initial votes: 0)
+- **Page `/poll/:id` HTML Structure**:
+  - The question must be rendered in an element with `id="poll-question"`.
+  - The SVG chart must have `id="poll-chart"`, `width="500"`, and `height="300"`.
+  - For each option, the SVG chart must contain:
+    - A `<rect>` element with `class="chart-bar"` and `data-option-id="<option_id>"`. The width of the rect should be proportional to the option's vote percentage (scaled to a maximum width of 400 pixels). If the total votes for the poll are 0, the width must be 0.
+    - A `<text>` element with `class="vote-count"` and `data-option-id="<option_id>"`. Its text content must contain the option's current integer vote count (e.g., "0", "12", etc.).
+  - For each option, there must be a button or element to cast a vote with `class="vote-button"` and `data-option-id="<option_id>"`.
+  - If the poll ID does not exist in the database, the route must return HTTP status code 404 with a "Poll not found" message.
+- **API POST `/poll/:id/vote` Contract**:
+  - Accepts JSON payload: `{"optionId": <number>}`.
+  - On success (200 OK), returns updated vote counts for all options of the poll:
+    ```json
+    {
+      "success": true,
+      "votes": {
+        "<option_id_1>": <votes_1>,
+        "<option_id_2>": <votes_2>,
+        ...
+      }
+    }
+    ```
+    *(Keys in the `votes` object must be the string representation of the option IDs, and values must be integer vote counts)*.
+  - On rate limit violation (429 Too Many Requests), returns:
+    ```json
+    {
+      "error": "Rate limit exceeded"
+    }
+    ```
+  - On missing/invalid `optionId` (400 Bad Request), returns:
+    ```json
+    {
+      "error": "Invalid option ID"
+    }
+    ```
+  - On non-existent poll or option (404 Not Found), returns:
+    ```json
+    {
+      "error": "Poll or option not found"
+    }
+    ```
+- **Rate Limiting Rules**:
+  - The client's IP address must be extracted from the `X-Forwarded-For` header (if present, use the first comma-separated value) or fall back to the connection socket IP.
+  - Each IP is allowed to vote at most once every 5 seconds per poll ID. If a vote is cast within 5 seconds of a previous vote from the same IP for the same poll, the server must reject it with a 429 status code and not increment the database vote count.
+- **Concurrency Requirement**:
+  - Multiple concurrent POST requests to vote must be processed without causing database locks, deadlocks, or lost updates. Ensure transactions or atomic increments are used.
+
+10:T1321,# Qwik Scheduled Tasks Dashboard
+
+## Background
+In modern web applications, managing background scheduled jobs and monitoring their execution status is a common requirement. In this task, you will build a self-contained scheduled tasks dashboard using Qwik (Qwik City) and SQLite.
+
+## Requirements
+- Build a web application using Qwik City that serves as a scheduled tasks manager and dashboard.
+- Store all tasks and their execution history in a local SQLite database.
+- Create a background interval runner within the application process that continuously polls the database and executes active tasks based on their configured interval.
+- Tasks are defined by shell commands. The background runner executes these commands, captures their exit status, and logs the execution results (success or failure) to the database history.
+- Implement a user interface at `/tasks` allowing users to view, create, pause/resume, and manually trigger tasks.
+- Implement a complete set of REST API endpoints under `/api/tasks` to allow programmatic control and automated verification of tasks.
+
+## Implementation Hints
+- **Project Path**: `/home/user/qwik-app`
+- **Start Command**: `npm run dev`
+- **Port**: `3000`
+- **Database File**: `/home/user/qwik-app/tasks.db`
+- **Database Schema**:
+  - Table `tasks`:
+    - `id` (TEXT, PRIMARY KEY) - unique identifier (slug or UUID)
+    - `name` (TEXT, NOT NULL) - human-readable name
+    - `command` (TEXT, NOT NULL) - the shell command to execute
+    - `interval_seconds` (INTEGER, NOT NULL) - execution interval in seconds
+    - `status` (TEXT, NOT NULL) - must be either `'ACTIVE'` or `'PAUSED'`
+  - Table `execution_history`:
+    - `id` (INTEGER, PRIMARY KEY, AUTOINCREMENT)
+    - `task_id` (TEXT, NOT NULL) - foreign key referencing `tasks.id`
+    - `status` (TEXT, NOT NULL) - must be either `'SUCCESS'` or `'FAILED'`
+    - `timestamp` (TEXT, NOT NULL) - ISO8601 UTC timestamp format (e.g., `YYYY-MM-DDTHH:MM:SS.SSSZ`)
+
+- **API Endpoints**:
+  - **GET `/api/tasks`**:
+    - Returns a JSON array of all tasks.
+    - Status: 200 OK
+    - Response schema:
+      ```json
+      [
+        {
+          "id": "task-id",
+          "name": "Task Name",
+          "command": "echo 'hello'",
+          "interval_seconds": 5,
+          "status": "ACTIVE"
+        }
+      ]
+      ```
+  - **POST `/api/tasks`**:
+    - Creates a new task.
+    - Status: 201 Created
+    - Request body schema:
+      ```json
+      {
+        "id": "task-id",
+        "name": "Task Name",
+        "command": "echo 'hello'",
+        "interval_seconds": 5,
+        "status": "ACTIVE"
+      }
+      ```
+    - Response body schema: Same as request body (the created task object).
+    - If validation fails (e.g., missing fields, interval <= 0, invalid status), returns 400 Bad Request with a JSON error object.
+  - **POST `/api/tasks/:id/pause`**:
+    - Pauses an active task.
+    - Status: 200 OK
+    - Response body schema:
+      ```json
+      {
+        "id": "task-id",
+        "status": "PAUSED"
+      }
+      ```
+  - **POST `/api/tasks/:id/resume`**:
+    - Resumes a paused task.
+    - Status: 200 OK
+    - Response body schema:
+      ```json
+      {
+        "id": "task-id",
+        "status": "ACTIVE"
+      }
+      ```
+  - **POST `/api/tasks/:id/trigger`**:
+    - Triggers the task immediately in the background, executing the command and writing to `execution_history`.
+    - Status: 200 OK
+    - Response body schema:
+      ```json
+      {
+        "id": "task-id",
+        "triggered": true
+      }
+      ```
+  - **GET `/api/tasks/:id/history`**:
+    - Returns execution history logs for the specified task, sorted by `timestamp` descending.
+    - Status: 200 OK
+    - Response body schema:
+      ```json
+      [
+        {
+          "id": 1,
+          "task_id": "task-id",
+          "status": "SUCCESS",
+          "timestamp": "2026-08-01T23:46:46.000Z"
+        }
+      ]
+      ```
+
+- **Frontend Routing**:
+  - **GET `/tasks`**:
+    - Renders an HTML page.
+    - Displays all tasks and their current statuses.
+    - Displays a table/list of the recent execution history logs.
+    - Displays a form to create a new task.
+    - Provides buttons or forms to pause, resume, and manually trigger each task.
+
+- **Background Runner Constraints**:
+  - When the Qwik application is running via `npm run dev`, the background runner must be active.
+  - It must execute active tasks' shell commands at least once every `interval_seconds`.
+  - If the command exits with code `0`, log the execution as `'SUCCESS'`. Any other exit code must be logged as `'FAILED'`.
+  - It must insert a row into `execution_history` with the exact task ID, status, and current UTC ISO8601 timestamp for every execution.
+  - It must not block the main server thread or prevent HTTP requests from being handled.
+  - Pausing a task must immediately stop its interval execution. Resuming a task must resume its interval execution.
+11:Tf06,# Rate-Limited JSON API with Qwik City
 
 ## Background
 You are building an abuse-protection layer for a public JSON API using **Qwik City** (the meta-framework built on Qwik). A pre-scaffolded, empty Qwik City project already exists at `/home/user/qwik-app` (dependencies installed, dev server working). Your job is to add a JSON endpoint that is protected by an in-memory, per-client rate limiter implemented as shared route middleware, plus a demo page that reports how much quota a client has left.
@@ -360,7 +803,7 @@ You are building an abuse-protection layer for a public JSON API using **Qwik Ci
   - When the per-IP limit is exceeded: return status `429` with a JSON body containing an `error` key, with `X-RateLimit-Remaining` equal to `0`, a `Retry-After` header set to a positive integer number of seconds, and the same `X-RateLimit-*` headers present.
   - `GET /status`: return an HTML page whose text contains `Limit: 5` and `Remaining: <n>` where `<n>` is the current remaining quota for the requesting client IP. Viewing this page must not change any client's remaining quota.
 
-d:Tfd7,# Qwik City Blog Backed by Local SQLite (Prisma)
+12:Tfd7,# Qwik City Blog Backed by Local SQLite (Prisma)
 
 ## Background
 You are building a small, self-contained blog with the Qwik framework and its meta-framework Qwik City. All data is stored in a **local SQLite database** accessed through **Prisma**. The application must never depend on any external network service at runtime; everything runs locally inside the container.
@@ -395,7 +838,7 @@ Insert these three posts (in this order, so they receive ids 1, 2, 3):
   - The home page contains a `<form>` (rendered by Qwik City's `<Form>`) with text inputs named `title` and `content` that submits to the create `routeAction$` and works as a normal HTML form POST (progressive enhancement, no client JS required).
 - A production client build (`npm run build`) must succeed, and the generated client assets under `dist/` must not contain the strings `PrismaClient`, `@prisma/client`, or `better-sqlite3`.
 
-e:Tfda,# Full-Text Document Search with Qwik City and SQLite FTS5
+13:Tfda,# Full-Text Document Search with Qwik City and SQLite FTS5
 
 ## Background
 You are building a server-rendered full-text search page with the Qwik City meta-framework. The search must run entirely locally against a **SQLite FTS5 virtual table** accessed through the `better-sqlite3` driver. Everything runs inside the container with no external services, APIs, or network access.
@@ -433,7 +876,7 @@ You are building a server-rendered full-text search page with the Qwik City meta
 - Start command: `npm run dev -- --port 3000 --host 0.0.0.0`
 - Search page route: GET `http://localhost:3000/?q=<term>` returns an HTML page containing the rendered search results as described above.
 
-f:T106d,# Qwik City Live Shared Counter over Server-Sent Events
+14:T106d,# Qwik City Live Shared Counter over Server-Sent Events
 
 ## Background
 You are building a real-time "live shared counter" widget for a Qwik City application. The application keeps a single shared integer counter in server memory. Every connected browser subscribes to a Server-Sent Events (SSE) stream and sees the counter change in real time. Any client can increment or decrement the shared counter, and the new value must be pushed to **every** currently connected subscriber (not just the client that made the change).
@@ -469,7 +912,7 @@ Everything must run locally with no external services: the pub/sub broker is an 
 - Current-value endpoint: `GET /api/counter` must respond with status `200` and JSON body `{ "count": <integer> }` containing the current value.
 - The counter is shared process-wide: a mutation from one client must be observable by every other client (via SSE) and via `GET /api/counter`.
 
-10:T1208,# Tag-Filterable Article Listing with Qwik City and SQLite (Many-to-Many)
+15:T1208,# Tag-Filterable Article Listing with Qwik City and SQLite (Many-to-Many)
 
 ## Background
 Build a server-rendered, tag-filterable article listing for a small blog using the **Qwik** framework (Qwik City meta-framework). Articles and tags have a **many-to-many** relationship stored in a **local SQLite** database through a join table. All data loading happens on the server via a `routeLoader$`, and the active tag filters are driven entirely by the page URL's query string so filtered pages are shareable and server-rendered.
@@ -521,7 +964,7 @@ So the results are machine-checkable, render these stable hooks in the HTML:
 - When the filter matches no articles, render zero `data-article` elements (an empty state is fine).
 - On `/articles/<slug>`, render the article title and one element per tag carrying `data-tag="<tag-name>"`.
 
-11:T1070,# Flash-Free Theme & Locale Preferences with Qwik City Middleware
+16:T1070,# Flash-Free Theme & Locale Preferences with Qwik City Middleware
 
 ## Background
 You are building a small Qwik City (Qwik meta-framework) application that lets a visitor choose a color **theme** (`light` or `dark`) and a UI **language / locale** (`en` or `es`). Both preferences must be persisted in **cookies** and resolved **on the server during SSR**, so that the very first HTML the server returns already reflects the correct theme and translated text — with **no client-side flash** and without requiring any JavaScript to run in the browser.
@@ -551,8 +994,8 @@ A scaffolded, dependency-installed Qwik City project already exists at the proje
   - `GET /`: server-renders the home page. The `<html>` tag includes `data-theme="<theme>"` and `lang="<locale>"` matching the request cookies (defaults `light`/`en` when no cookies are sent). The page body includes the `title` and `greeting` strings for the resolved locale, and contains the preference `<Form>`.
   - The `<Form>`'s `routeAction$` accepts a POST with form fields `theme` and `locale`; on success it sets the `theme` and `locale` cookies (with `path=/`) to the submitted values so subsequent requests reflect the new preferences.
 
-0:{"buildId":"wY02znbkPcxf-aQnLnR-a","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-background text-foreground font-sans selection:bg-primary/20","children":[["$","div",null,{"className":"fixed inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#2a2a2a_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-40"}],["$","$2",null,{"fallback":["$","div",null,{"className":"container mx-auto py-8 text-center","children":"Loading tasks..."}],"children":["$","$L3",null,{"tasksData":[{"taskName":"csv-export-endpoint","instruction":"$4","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"csv-export-endpoint__PctxHFX","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":668.498,"latency_breakdown":{"env_setup":196.317,"agent_setup":5.548,"agent_exec":374.819,"verifier":63.155},"taskName":"csv-export-endpoint","exec_duration":374.819},{"job_name":"2026-07-17__22-21-48","trial_name":"csv-export-endpoint__ENnVALM","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":436.738,"latency_breakdown":{"env_setup":4.96,"agent_setup":5.44,"agent_exec":304.546,"verifier":92.671},"taskName":"csv-export-endpoint","exec_duration":304.546},{"job_name":"2026-07-17__22-40-26","trial_name":"csv-export-endpoint__ngwWcmu","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":256.867,"latency_breakdown":{"env_setup":5.697,"agent_setup":5.539,"agent_exec":120.69,"verifier":95.28},"taskName":"csv-export-endpoint","exec_duration":120.69},{"job_name":"2026-07-17__22-55-43","trial_name":"csv-export-endpoint__3K9F44U","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":359.479,"latency_breakdown":{"env_setup":5.554,"agent_setup":5.522,"agent_exec":245.953,"verifier":72.073},"taskName":"csv-export-endpoint","exec_duration":245.953}]},{"taskName":"file-upload-gallery","instruction":"$5","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"file-upload-gallery__gAdQAck","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":393.446,"latency_breakdown":{"env_setup":69.149,"agent_setup":5.535,"agent_exec":271.266,"verifier":16.602},"taskName":"file-upload-gallery","exec_duration":271.266},{"job_name":"2026-07-17__22-21-48","trial_name":"file-upload-gallery__4UudHtZ","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":563.416,"latency_breakdown":{"env_setup":5.383,"agent_setup":5.531,"agent_exec":508.88,"verifier":17.753},"taskName":"file-upload-gallery","exec_duration":508.88},{"job_name":"2026-07-17__22-40-26","trial_name":"file-upload-gallery__nQHpJFR","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":400.686,"latency_breakdown":{"env_setup":5.034,"agent_setup":5.417,"agent_exec":330.626,"verifier":25.596},"taskName":"file-upload-gallery","exec_duration":330.626},{"job_name":"2026-07-17__22-55-43","trial_name":"file-upload-gallery__YnmsFAK","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":357.818,"latency_breakdown":{"env_setup":4.321,"agent_setup":5.473,"agent_exec":288.816,"verifier":17.751},"taskName":"file-upload-gallery","exec_duration":288.816}]},{"taskName":"infinite-scroll-feed","instruction":"$6","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"infinite-scroll-feed__9FNHEUS","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":750.297,"latency_breakdown":{"env_setup":86.385,"agent_setup":5.647,"agent_exec":419.525,"verifier":199.581},"taskName":"infinite-scroll-feed","exec_duration":419.525},{"job_name":"2026-07-17__22-21-48","trial_name":"infinite-scroll-feed__ZBihv2a","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":904.574,"latency_breakdown":{"env_setup":4.889,"agent_setup":5.481,"agent_exec":603.506,"verifier":247.167},"taskName":"infinite-scroll-feed","exec_duration":603.506},{"job_name":"2026-07-17__22-40-26","trial_name":"infinite-scroll-feed__72qtP9h","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":815.729,"latency_breakdown":{"env_setup":4.448,"agent_setup":5.62,"agent_exec":603.508,"verifier":173.487},"taskName":"infinite-scroll-feed","exec_duration":603.508},{"job_name":"2026-07-17__22-55-43","trial_name":"infinite-scroll-feed__UwbxJno","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":685.93,"latency_breakdown":{"env_setup":4.483,"agent_setup":5.573,"agent_exec":409.906,"verifier":238.258},"taskName":"infinite-scroll-feed","exec_duration":409.906}]},{"taskName":"kanban-board-reorder","instruction":"$7","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"kanban-board-reorder__DgzSUZo","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":436.815,"latency_breakdown":{"env_setup":57.605,"agent_setup":5.568,"agent_exec":332.052,"verifier":9.064},"taskName":"kanban-board-reorder","exec_duration":332.052},{"job_name":"2026-07-17__22-21-48","trial_name":"kanban-board-reorder__5aRSefn","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":551.66,"latency_breakdown":{"env_setup":5.439,"agent_setup":5.53,"agent_exec":490.686,"verifier":15.612},"taskName":"kanban-board-reorder","exec_duration":490.686},{"job_name":"2026-07-17__22-40-26","trial_name":"kanban-board-reorder__m5Gau6V","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":516.425,"latency_breakdown":{"env_setup":4.852,"agent_setup":5.565,"agent_exec":247.563,"verifier":247.578},"taskName":"kanban-board-reorder","exec_duration":247.563},{"job_name":"2026-07-17__22-55-43","trial_name":"kanban-board-reorder__rnDtXG4","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":401.224,"latency_breakdown":{"env_setup":4.437,"agent_setup":5.643,"agent_exec":336.233,"verifier":29.158},"taskName":"kanban-board-reorder","exec_duration":336.233}]},{"taskName":"markdown-notes-crud","instruction":"$8","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"markdown-notes-crud__xHEJ48T","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":1118.725,"latency_breakdown":{"env_setup":75.254,"agent_setup":6.091,"agent_exec":509.953,"verifier":484.025},"taskName":"markdown-notes-crud","exec_duration":509.953},{"job_name":"2026-07-17__22-21-48","trial_name":"markdown-notes-crud__TbPyiSe","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":1100.272,"latency_breakdown":{"env_setup":4.677,"agent_setup":6.108,"agent_exec":603.799,"verifier":398.906},"taskName":"markdown-notes-crud","exec_duration":603.799},{"job_name":"2026-07-17__22-40-26","trial_name":"markdown-notes-crud__xqquGTk","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":899.514,"latency_breakdown":{"env_setup":5.035,"agent_setup":5.863,"agent_exec":426.504,"verifier":423.974},"taskName":"markdown-notes-crud","exec_duration":426.504},{"job_name":"2026-07-17__22-55-43","trial_name":"markdown-notes-crud__WQ5cDko","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":846.948,"latency_breakdown":{"env_setup":4.445,"agent_setup":6.03,"agent_exec":493.217,"verifier":309.889},"taskName":"markdown-notes-crud","exec_duration":493.217}]},{"taskName":"nested-comment-threads","instruction":"$9","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"nested-comment-threads__6eyRbEv","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":834.305,"latency_breakdown":{"env_setup":74.956,"agent_setup":5.52,"agent_exec":401.417,"verifier":301.726},"taskName":"nested-comment-threads","exec_duration":401.417},{"job_name":"2026-07-17__22-21-48","trial_name":"nested-comment-threads__MMA2oa7","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":983.764,"latency_breakdown":{"env_setup":4.324,"agent_setup":5.594,"agent_exec":603.543,"verifier":346.864},"taskName":"nested-comment-threads","exec_duration":603.543},{"job_name":"2026-07-17__22-40-26","trial_name":"nested-comment-threads__hBgZwCF","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":707.483,"latency_breakdown":{"env_setup":4.431,"agent_setup":5.604,"agent_exec":299.236,"verifier":364.693},"taskName":"nested-comment-threads","exec_duration":299.236},{"job_name":"2026-07-17__22-55-43","trial_name":"nested-comment-threads__Md9cmjB","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":964.224,"latency_breakdown":{"env_setup":4.445,"agent_setup":5.758,"agent_exec":581.494,"verifier":338.087},"taskName":"nested-comment-threads","exec_duration":581.494}]},{"taskName":"nested-layout-breadcrumbs","instruction":"$a","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"nested-layout-breadcrumbs__Nw79wd3","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":513.848,"latency_breakdown":{"env_setup":68.134,"agent_setup":6.952,"agent_exec":369.125,"verifier":33.403},"taskName":"nested-layout-breadcrumbs","exec_duration":369.125},{"job_name":"2026-07-17__22-21-48","trial_name":"nested-layout-breadcrumbs__XApA2gm","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":611.084,"latency_breakdown":{"env_setup":5.368,"agent_setup":7.408,"agent_exec":530.709,"verifier":34.47},"taskName":"nested-layout-breadcrumbs","exec_duration":530.709},{"job_name":"2026-07-17__22-40-26","trial_name":"nested-layout-breadcrumbs__wDQ8Bzj","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":497.199,"latency_breakdown":{"env_setup":5.507,"agent_setup":7.292,"agent_exec":415.141,"verifier":31.022},"taskName":"nested-layout-breadcrumbs","exec_duration":415.141},{"job_name":"2026-07-17__22-55-43","trial_name":"nested-layout-breadcrumbs__FNznPFG","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":570.705,"latency_breakdown":{"env_setup":4.94,"agent_setup":7.674,"agent_exec":494.296,"verifier":23.852},"taskName":"nested-layout-breadcrumbs","exec_duration":494.296}]},{"taskName":"polling-dashboard-resource","instruction":"$b","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"polling-dashboard-resource__LQgiaAy","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":636.387,"latency_breakdown":{"env_setup":97.715,"agent_setup":5.54,"agent_exec":358.414,"verifier":126.997},"taskName":"polling-dashboard-resource","exec_duration":358.414},{"job_name":"2026-07-17__22-21-48","trial_name":"polling-dashboard-resource__iEmc4zy","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":519.135,"latency_breakdown":{"env_setup":4.668,"agent_setup":5.489,"agent_exec":346.147,"verifier":135.084},"taskName":"polling-dashboard-resource","exec_duration":346.147},{"job_name":"2026-07-17__22-40-26","trial_name":"polling-dashboard-resource__4jce775","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":473.449,"latency_breakdown":{"env_setup":5.131,"agent_setup":5.487,"agent_exec":290.819,"verifier":135.151},"taskName":"polling-dashboard-resource","exec_duration":290.819},{"job_name":"2026-07-17__22-55-43","trial_name":"polling-dashboard-resource__NCGXibz","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":535.797,"latency_breakdown":{"env_setup":4.802,"agent_setup":5.587,"agent_exec":345.35,"verifier":142.517},"taskName":"polling-dashboard-resource","exec_duration":345.35}]},{"taskName":"rate-limited-endpoint","instruction":"$c","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"rate-limited-endpoint__Q2FJD5b","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":479.234,"latency_breakdown":{"env_setup":67.18,"agent_setup":5.581,"agent_exec":357.952,"verifier":22.41},"taskName":"rate-limited-endpoint","exec_duration":357.952},{"job_name":"2026-07-17__22-21-48","trial_name":"rate-limited-endpoint__bvsDz66","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":619.49,"latency_breakdown":{"env_setup":5.148,"agent_setup":5.654,"agent_exec":549.148,"verifier":17.332},"taskName":"rate-limited-endpoint","exec_duration":549.148},{"job_name":"2026-07-17__22-40-26","trial_name":"rate-limited-endpoint__wJm34FS","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":400.717,"latency_breakdown":{"env_setup":4.515,"agent_setup":5.629,"agent_exec":334.24,"verifier":15.198},"taskName":"rate-limited-endpoint","exec_duration":334.24},{"job_name":"2026-07-17__22-55-43","trial_name":"rate-limited-endpoint__4uvhGWo","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":422.304,"latency_breakdown":{"env_setup":4.575,"agent_setup":5.562,"agent_exec":342.771,"verifier":36.382},"taskName":"rate-limited-endpoint","exec_duration":342.771}]},{"taskName":"sqlite-blog-prisma","instruction":"$d","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sqlite-blog-prisma__ZucFof3","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":533.214,"latency_breakdown":{"env_setup":76.368,"agent_setup":5.42,"agent_exec":359.088,"verifier":23.948},"taskName":"sqlite-blog-prisma","exec_duration":359.088},{"job_name":"2026-07-17__22-21-48","trial_name":"sqlite-blog-prisma__bsZrCR2","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":734.246,"latency_breakdown":{"env_setup":4.394,"agent_setup":5.454,"agent_exec":603.512,"verifier":21.642},"taskName":"sqlite-blog-prisma","exec_duration":603.512},{"job_name":"2026-07-17__22-40-26","trial_name":"sqlite-blog-prisma__z6khYKo","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":274.367,"latency_breakdown":{"env_setup":4.477,"agent_setup":5.552,"agent_exec":196.835,"verifier":20.185},"taskName":"sqlite-blog-prisma","exec_duration":196.835},{"job_name":"2026-07-17__22-55-43","trial_name":"sqlite-blog-prisma__sYbseCH","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":496.777,"latency_breakdown":{"env_setup":4.295,"agent_setup":5.534,"agent_exec":410.071,"verifier":19.033},"taskName":"sqlite-blog-prisma","exec_duration":410.071}]},{"taskName":"sqlite-fts5-search","instruction":"$e","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sqlite-fts5-search__zLRwFpo","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":335.773,"latency_breakdown":{"env_setup":56.845,"agent_setup":5.565,"agent_exec":225.167,"verifier":17.869},"taskName":"sqlite-fts5-search","exec_duration":225.167},{"job_name":"2026-07-17__22-21-48","trial_name":"sqlite-fts5-search__Beeg6zm","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":711.297,"latency_breakdown":{"env_setup":4.738,"agent_setup":5.567,"agent_exec":603.457,"verifier":57.655},"taskName":"sqlite-fts5-search","exec_duration":603.457},{"job_name":"2026-07-17__22-40-26","trial_name":"sqlite-fts5-search__JLk85Jn","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":476.498,"latency_breakdown":{"env_setup":4.484,"agent_setup":5.605,"agent_exec":413.763,"verifier":26.454},"taskName":"sqlite-fts5-search","exec_duration":413.763},{"job_name":"2026-07-17__22-55-43","trial_name":"sqlite-fts5-search__yEuEmmh","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":421.742,"latency_breakdown":{"env_setup":5.375,"agent_setup":5.578,"agent_exec":339.177,"verifier":36.106},"taskName":"sqlite-fts5-search","exec_duration":339.177}]},{"taskName":"sse-live-counter","instruction":"$f","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sse-live-counter__CJtNgNy","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":1002.478,"latency_breakdown":{"env_setup":86.523,"agent_setup":5.861,"agent_exec":421.753,"verifier":429.17},"taskName":"sse-live-counter","exec_duration":421.753},{"job_name":"2026-07-17__22-21-48","trial_name":"sse-live-counter__R7tZeqy","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":904.06,"latency_breakdown":{"env_setup":5.088,"agent_setup":6.526,"agent_exec":425.686,"verifier":434.421},"taskName":"sse-live-counter","exec_duration":425.686},{"job_name":"2026-07-17__22-40-26","trial_name":"sse-live-counter__7sXy5cJ","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":791.007,"latency_breakdown":{"env_setup":4.977,"agent_setup":5.747,"agent_exec":297.429,"verifier":438.221},"taskName":"sse-live-counter","exec_duration":297.429},{"job_name":"2026-07-17__22-55-43","trial_name":"sse-live-counter__STyFafC","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":846.889,"latency_breakdown":{"env_setup":5.049,"agent_setup":5.787,"agent_exec":346.589,"verifier":445.734},"taskName":"sse-live-counter","exec_duration":346.589}]},{"taskName":"tag-filter-blog-relations","instruction":"$10","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"tag-filter-blog-relations__rPP7Z3K","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":738.003,"latency_breakdown":{"env_setup":57.004,"agent_setup":5.736,"agent_exec":603.679,"verifier":34.209},"taskName":"tag-filter-blog-relations","exec_duration":603.679},{"job_name":"2026-07-17__22-21-48","trial_name":"tag-filter-blog-relations__uAvxZkZ","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":440.998,"latency_breakdown":{"env_setup":9.669,"agent_setup":5.732,"agent_exec":337.387,"verifier":42.665},"taskName":"tag-filter-blog-relations","exec_duration":337.387},{"job_name":"2026-07-17__22-40-26","trial_name":"tag-filter-blog-relations__9oXhLyh","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":340.852,"latency_breakdown":{"env_setup":4.955,"agent_setup":5.786,"agent_exec":265.494,"verifier":31.067},"taskName":"tag-filter-blog-relations","exec_duration":265.494},{"job_name":"2026-07-17__22-55-43","trial_name":"tag-filter-blog-relations__smcPEou","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":639.663,"latency_breakdown":{"env_setup":4.608,"agent_setup":6.245,"agent_exec":558.485,"verifier":36.568},"taskName":"tag-filter-blog-relations","exec_duration":558.485}]},{"taskName":"theme-i18n-middleware","instruction":"$11","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"theme-i18n-middleware__QtSLwpV","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":366.142,"latency_breakdown":{"env_setup":67.142,"agent_setup":5.578,"agent_exec":258.497,"verifier":8.96},"taskName":"theme-i18n-middleware","exec_duration":258.497},{"job_name":"2026-07-17__22-21-48","trial_name":"theme-i18n-middleware__RQLzz9e","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":715.986,"latency_breakdown":{"env_setup":4.825,"agent_setup":5.633,"agent_exec":603.503,"verifier":47.212},"taskName":"theme-i18n-middleware","exec_duration":603.503},{"job_name":"2026-07-17__22-40-26","trial_name":"theme-i18n-middleware__yFSTJNF","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":498.765,"latency_breakdown":{"env_setup":4.688,"agent_setup":5.594,"agent_exec":432.738,"verifier":9.153},"taskName":"theme-i18n-middleware","exec_duration":432.738},{"job_name":"2026-07-17__22-55-43","trial_name":"theme-i18n-middleware__zgkjBWf","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":332.519,"latency_breakdown":{"env_setup":4.822,"agent_setup":5.613,"agent_exec":275.669,"verifier":15.252},"taskName":"theme-i18n-middleware","exec_duration":275.669}]}]}]}]]}],["$L12","$L13"],"$L14"]}],"loading":null,"isPartial":false}
-12:["$","script","script-0",{"src":"/qwik-benchmark/_next/static/chunks/b7786bc204f070d9.js","async":true}]
-13:["$","script","script-1",{"src":"/qwik-benchmark/_next/static/chunks/2ee232ed1e88c469.js","async":true}]
-14:["$","$L15",null,{"children":["$","$2",null,{"name":"Next.MetadataOutlet","children":"$@16"}]}]
-16:null
+0:{"buildId":"b31Pn3_Q0QVWpG1XFnLOG","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-background text-foreground font-sans selection:bg-primary/20","children":[["$","div",null,{"className":"fixed inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#2a2a2a_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:opacity-40"}],["$","$2",null,{"fallback":["$","div",null,{"className":"container mx-auto py-8 text-center","children":"Loading tasks..."}],"children":["$","$L3",null,{"tasksData":[{"taskName":"csv-export-endpoint","instruction":"$4","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"csv-export-endpoint__PctxHFX","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":668.498,"latency_breakdown":{"env_setup":196.317,"agent_setup":5.548,"agent_exec":374.819,"verifier":63.155},"taskName":"csv-export-endpoint","exec_duration":374.819},{"job_name":"2026-07-17__22-21-48","trial_name":"csv-export-endpoint__ENnVALM","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":436.738,"latency_breakdown":{"env_setup":4.96,"agent_setup":5.44,"agent_exec":304.546,"verifier":92.671},"taskName":"csv-export-endpoint","exec_duration":304.546},{"job_name":"2026-07-17__22-40-26","trial_name":"csv-export-endpoint__ngwWcmu","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":256.867,"latency_breakdown":{"env_setup":5.697,"agent_setup":5.539,"agent_exec":120.69,"verifier":95.28},"taskName":"csv-export-endpoint","exec_duration":120.69},{"job_name":"2026-07-17__22-55-43","trial_name":"csv-export-endpoint__3K9F44U","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":359.479,"latency_breakdown":{"env_setup":5.554,"agent_setup":5.522,"agent_exec":245.953,"verifier":72.073},"taskName":"csv-export-endpoint","exec_duration":245.953}]},{"taskName":"file-upload-gallery","instruction":"$5","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"file-upload-gallery__gAdQAck","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":393.446,"latency_breakdown":{"env_setup":69.149,"agent_setup":5.535,"agent_exec":271.266,"verifier":16.602},"taskName":"file-upload-gallery","exec_duration":271.266},{"job_name":"2026-07-17__22-21-48","trial_name":"file-upload-gallery__4UudHtZ","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":563.416,"latency_breakdown":{"env_setup":5.383,"agent_setup":5.531,"agent_exec":508.88,"verifier":17.753},"taskName":"file-upload-gallery","exec_duration":508.88},{"job_name":"2026-07-17__22-40-26","trial_name":"file-upload-gallery__nQHpJFR","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":400.686,"latency_breakdown":{"env_setup":5.034,"agent_setup":5.417,"agent_exec":330.626,"verifier":25.596},"taskName":"file-upload-gallery","exec_duration":330.626},{"job_name":"2026-07-17__22-55-43","trial_name":"file-upload-gallery__YnmsFAK","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":357.818,"latency_breakdown":{"env_setup":4.321,"agent_setup":5.473,"agent_exec":288.816,"verifier":17.751},"taskName":"file-upload-gallery","exec_duration":288.816}]},{"taskName":"infinite-scroll-feed","instruction":"$6","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"infinite-scroll-feed__9FNHEUS","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":750.297,"latency_breakdown":{"env_setup":86.385,"agent_setup":5.647,"agent_exec":419.525,"verifier":199.581},"taskName":"infinite-scroll-feed","exec_duration":419.525},{"job_name":"2026-07-17__22-21-48","trial_name":"infinite-scroll-feed__ZBihv2a","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":904.574,"latency_breakdown":{"env_setup":4.889,"agent_setup":5.481,"agent_exec":603.506,"verifier":247.167},"taskName":"infinite-scroll-feed","exec_duration":603.506},{"job_name":"2026-07-17__22-40-26","trial_name":"infinite-scroll-feed__72qtP9h","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":815.729,"latency_breakdown":{"env_setup":4.448,"agent_setup":5.62,"agent_exec":603.508,"verifier":173.487},"taskName":"infinite-scroll-feed","exec_duration":603.508},{"job_name":"2026-07-17__22-55-43","trial_name":"infinite-scroll-feed__UwbxJno","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":685.93,"latency_breakdown":{"env_setup":4.483,"agent_setup":5.573,"agent_exec":409.906,"verifier":238.258},"taskName":"infinite-scroll-feed","exec_duration":409.906}]},{"taskName":"kanban-board-reorder","instruction":"$7","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"kanban-board-reorder__DgzSUZo","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":436.815,"latency_breakdown":{"env_setup":57.605,"agent_setup":5.568,"agent_exec":332.052,"verifier":9.064},"taskName":"kanban-board-reorder","exec_duration":332.052},{"job_name":"2026-07-17__22-21-48","trial_name":"kanban-board-reorder__5aRSefn","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":551.66,"latency_breakdown":{"env_setup":5.439,"agent_setup":5.53,"agent_exec":490.686,"verifier":15.612},"taskName":"kanban-board-reorder","exec_duration":490.686},{"job_name":"2026-07-17__22-40-26","trial_name":"kanban-board-reorder__m5Gau6V","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":516.425,"latency_breakdown":{"env_setup":4.852,"agent_setup":5.565,"agent_exec":247.563,"verifier":247.578},"taskName":"kanban-board-reorder","exec_duration":247.563},{"job_name":"2026-07-17__22-55-43","trial_name":"kanban-board-reorder__rnDtXG4","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":401.224,"latency_breakdown":{"env_setup":4.437,"agent_setup":5.643,"agent_exec":336.233,"verifier":29.158},"taskName":"kanban-board-reorder","exec_duration":336.233}]},{"taskName":"markdown-notes-crud","instruction":"$8","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"markdown-notes-crud__xHEJ48T","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":1118.725,"latency_breakdown":{"env_setup":75.254,"agent_setup":6.091,"agent_exec":509.953,"verifier":484.025},"taskName":"markdown-notes-crud","exec_duration":509.953},{"job_name":"2026-07-17__22-21-48","trial_name":"markdown-notes-crud__TbPyiSe","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":1100.272,"latency_breakdown":{"env_setup":4.677,"agent_setup":6.108,"agent_exec":603.799,"verifier":398.906},"taskName":"markdown-notes-crud","exec_duration":603.799},{"job_name":"2026-07-17__22-40-26","trial_name":"markdown-notes-crud__xqquGTk","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":899.514,"latency_breakdown":{"env_setup":5.035,"agent_setup":5.863,"agent_exec":426.504,"verifier":423.974},"taskName":"markdown-notes-crud","exec_duration":426.504},{"job_name":"2026-07-17__22-55-43","trial_name":"markdown-notes-crud__WQ5cDko","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":846.948,"latency_breakdown":{"env_setup":4.445,"agent_setup":6.03,"agent_exec":493.217,"verifier":309.889},"taskName":"markdown-notes-crud","exec_duration":493.217}]},{"taskName":"nested-comment-threads","instruction":"$9","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"nested-comment-threads__6eyRbEv","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":834.305,"latency_breakdown":{"env_setup":74.956,"agent_setup":5.52,"agent_exec":401.417,"verifier":301.726},"taskName":"nested-comment-threads","exec_duration":401.417},{"job_name":"2026-07-17__22-21-48","trial_name":"nested-comment-threads__MMA2oa7","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":983.764,"latency_breakdown":{"env_setup":4.324,"agent_setup":5.594,"agent_exec":603.543,"verifier":346.864},"taskName":"nested-comment-threads","exec_duration":603.543},{"job_name":"2026-07-17__22-40-26","trial_name":"nested-comment-threads__hBgZwCF","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":707.483,"latency_breakdown":{"env_setup":4.431,"agent_setup":5.604,"agent_exec":299.236,"verifier":364.693},"taskName":"nested-comment-threads","exec_duration":299.236},{"job_name":"2026-07-17__22-55-43","trial_name":"nested-comment-threads__Md9cmjB","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":964.224,"latency_breakdown":{"env_setup":4.445,"agent_setup":5.758,"agent_exec":581.494,"verifier":338.087},"taskName":"nested-comment-threads","exec_duration":581.494}]},{"taskName":"nested-layout-breadcrumbs","instruction":"$a","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"nested-layout-breadcrumbs__Nw79wd3","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":513.848,"latency_breakdown":{"env_setup":68.134,"agent_setup":6.952,"agent_exec":369.125,"verifier":33.403},"taskName":"nested-layout-breadcrumbs","exec_duration":369.125},{"job_name":"2026-07-17__22-21-48","trial_name":"nested-layout-breadcrumbs__XApA2gm","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":611.084,"latency_breakdown":{"env_setup":5.368,"agent_setup":7.408,"agent_exec":530.709,"verifier":34.47},"taskName":"nested-layout-breadcrumbs","exec_duration":530.709},{"job_name":"2026-07-17__22-40-26","trial_name":"nested-layout-breadcrumbs__wDQ8Bzj","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":497.199,"latency_breakdown":{"env_setup":5.507,"agent_setup":7.292,"agent_exec":415.141,"verifier":31.022},"taskName":"nested-layout-breadcrumbs","exec_duration":415.141},{"job_name":"2026-07-17__22-55-43","trial_name":"nested-layout-breadcrumbs__FNznPFG","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":570.705,"latency_breakdown":{"env_setup":4.94,"agent_setup":7.674,"agent_exec":494.296,"verifier":23.852},"taskName":"nested-layout-breadcrumbs","exec_duration":494.296}]},{"taskName":"polling-dashboard-resource","instruction":"$b","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"polling-dashboard-resource__LQgiaAy","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":636.387,"latency_breakdown":{"env_setup":97.715,"agent_setup":5.54,"agent_exec":358.414,"verifier":126.997},"taskName":"polling-dashboard-resource","exec_duration":358.414},{"job_name":"2026-07-17__22-21-48","trial_name":"polling-dashboard-resource__iEmc4zy","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":519.135,"latency_breakdown":{"env_setup":4.668,"agent_setup":5.489,"agent_exec":346.147,"verifier":135.084},"taskName":"polling-dashboard-resource","exec_duration":346.147},{"job_name":"2026-07-17__22-40-26","trial_name":"polling-dashboard-resource__4jce775","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":473.449,"latency_breakdown":{"env_setup":5.131,"agent_setup":5.487,"agent_exec":290.819,"verifier":135.151},"taskName":"polling-dashboard-resource","exec_duration":290.819},{"job_name":"2026-07-17__22-55-43","trial_name":"polling-dashboard-resource__NCGXibz","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":535.797,"latency_breakdown":{"env_setup":4.802,"agent_setup":5.587,"agent_exec":345.35,"verifier":142.517},"taskName":"polling-dashboard-resource","exec_duration":345.35}]},{"taskName":"qwik_api_key_manager","instruction":"$c","trials":[{"job_name":"2026-08-01__23-53-27","trial_name":"qwik_api_key_manager__kDMVo9M","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":false,"latency_sec":499.691,"latency_breakdown":{"env_setup":81.426,"agent_setup":10.39,"agent_exec":266.369,"verifier":92.444},"taskName":"qwik_api_key_manager","exec_duration":266.369},{"job_name":"2026-08-02__00-05-07","trial_name":"qwik_api_key_manager__8PMj2X6","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":false,"latency_sec":562.771,"latency_breakdown":{"env_setup":6.096,"agent_setup":5.346,"agent_exec":418.882,"verifier":86.686},"taskName":"qwik_api_key_manager","exec_duration":418.882},{"job_name":"2026-08-02__00-59-28","trial_name":"qwik_api_key_manager__TKnGSCm","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":false,"latency_sec":570.622,"latency_breakdown":{"env_setup":83.114,"agent_setup":10.259,"agent_exec":335.332,"verifier":72.541},"taskName":"qwik_api_key_manager","exec_duration":335.332}]},{"taskName":"qwik_full_text_search_sqlite","instruction":"$d","trials":[{"job_name":"2026-08-01__23-53-27","trial_name":"qwik_full_text_search_sqlite__28oivYg","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":true,"latency_sec":366.055,"latency_breakdown":{"env_setup":61.968,"agent_setup":5.26,"agent_exec":224.989,"verifier":8.843},"taskName":"qwik_full_text_search_sqlite","exec_duration":224.989},{"job_name":"2026-08-02__00-05-07","trial_name":"qwik_full_text_search_sqlite__hUdsETe","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":false,"latency_sec":372.009,"latency_breakdown":{"env_setup":5.468,"agent_setup":5.353,"agent_exec":313.821,"verifier":21.513},"taskName":"qwik_full_text_search_sqlite","exec_duration":313.821},{"job_name":"2026-08-02__00-59-28","trial_name":"qwik_full_text_search_sqlite__VR5u6Uf","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Agents.pochi:Pochi","passed":false,"reward":0,"error":false,"latency_sec":500.26,"latency_breakdown":{"env_setup":4.987,"agent_setup":5.472,"agent_exec":250.912,"verifier":203.647},"taskName":"qwik_full_text_search_sqlite","exec_duration":250.912}]},{"taskName":"qwik_image_gallery_optimizer","instruction":"$e","trials":[{"job_name":"2026-08-01__23-53-27","trial_name":"qwik_image_gallery_optimizer__sJKszdz","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":false,"latency_sec":572.615,"latency_breakdown":{"env_setup":94.081,"agent_setup":7.042,"agent_exec":305.545,"verifier":111.962},"taskName":"qwik_image_gallery_optimizer","exec_duration":305.545},{"job_name":"2026-08-02__00-05-07","trial_name":"qwik_image_gallery_optimizer__yHUG3vj","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Agents.pochi:Pochi","passed":false,"reward":0,"error":false,"latency_sec":610.747,"latency_breakdown":{"env_setup":5.867,"agent_setup":6.338,"agent_exec":323,"verifier":219.134},"taskName":"qwik_image_gallery_optimizer","exec_duration":323},{"job_name":"2026-08-02__00-59-28","trial_name":"qwik_image_gallery_optimizer__yXdqczE","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Agents.pochi:Pochi","passed":false,"reward":0,"error":false,"latency_sec":575.417,"latency_breakdown":{"env_setup":5.594,"agent_setup":6.995,"agent_exec":301.644,"verifier":191.667},"taskName":"qwik_image_gallery_optimizer","exec_duration":301.644}]},{"taskName":"qwik_polling_system_charts","instruction":"$f","trials":[{"job_name":"2026-08-01__23-53-27","trial_name":"qwik_polling_system_charts__83nEi7Q","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":false,"latency_sec":567.762,"latency_breakdown":{"env_setup":93.759,"agent_setup":5.341,"agent_exec":316.753,"verifier":105.921},"taskName":"qwik_polling_system_charts","exec_duration":316.753},{"job_name":"2026-08-02__00-05-07","trial_name":"qwik_polling_system_charts__jr573DY","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":true,"latency_sec":636.639,"latency_breakdown":{"env_setup":6.098,"agent_setup":5.323,"agent_exec":496.03,"verifier":81.213},"taskName":"qwik_polling_system_charts","exec_duration":496.03},{"job_name":"2026-08-02__00-59-28","trial_name":"qwik_polling_system_charts__Pe5Vzuh","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":true,"latency_sec":273.765,"latency_breakdown":{"env_setup":8.013,"agent_setup":5.384,"agent_exec":141.753,"verifier":90.385},"taskName":"qwik_polling_system_charts","exec_duration":141.753}]},{"taskName":"qwik_scheduled_tasks_dashboard","instruction":"$10","trials":[{"job_name":"2026-08-01__23-53-27","trial_name":"qwik_scheduled_tasks_dashboard__aG2NuB7","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":false,"latency_sec":617.245,"latency_breakdown":{"env_setup":92.286,"agent_setup":6.539,"agent_exec":400.135,"verifier":83.983},"taskName":"qwik_scheduled_tasks_dashboard","exec_duration":400.135},{"job_name":"2026-08-02__00-05-07","trial_name":"qwik_scheduled_tasks_dashboard__y2rVT7u","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":true,"latency_sec":452.353,"latency_breakdown":{"env_setup":5.47,"agent_setup":5.489,"agent_exec":319.117,"verifier":86.601},"taskName":"qwik_scheduled_tasks_dashboard","exec_duration":319.117},{"job_name":"2026-08-02__00-59-28","trial_name":"qwik_scheduled_tasks_dashboard__moQJJPp","model":"deepseek-4-pro","rawModel":"deepseek/deepseek-4-pro","agent":"Agents.pochi:Pochi","passed":true,"reward":1,"error":true,"latency_sec":460.748,"latency_breakdown":{"env_setup":4.89,"agent_setup":5.449,"agent_exec":317.197,"verifier":83.235},"taskName":"qwik_scheduled_tasks_dashboard","exec_duration":317.197}]},{"taskName":"rate-limited-endpoint","instruction":"$11","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"rate-limited-endpoint__Q2FJD5b","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":479.234,"latency_breakdown":{"env_setup":67.18,"agent_setup":5.581,"agent_exec":357.952,"verifier":22.41},"taskName":"rate-limited-endpoint","exec_duration":357.952},{"job_name":"2026-07-17__22-21-48","trial_name":"rate-limited-endpoint__bvsDz66","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":619.49,"latency_breakdown":{"env_setup":5.148,"agent_setup":5.654,"agent_exec":549.148,"verifier":17.332},"taskName":"rate-limited-endpoint","exec_duration":549.148},{"job_name":"2026-07-17__22-40-26","trial_name":"rate-limited-endpoint__wJm34FS","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":400.717,"latency_breakdown":{"env_setup":4.515,"agent_setup":5.629,"agent_exec":334.24,"verifier":15.198},"taskName":"rate-limited-endpoint","exec_duration":334.24},{"job_name":"2026-07-17__22-55-43","trial_name":"rate-limited-endpoint__4uvhGWo","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":422.304,"latency_breakdown":{"env_setup":4.575,"agent_setup":5.562,"agent_exec":342.771,"verifier":36.382},"taskName":"rate-limited-endpoint","exec_duration":342.771}]},{"taskName":"sqlite-blog-prisma","instruction":"$12","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sqlite-blog-prisma__ZucFof3","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":533.214,"latency_breakdown":{"env_setup":76.368,"agent_setup":5.42,"agent_exec":359.088,"verifier":23.948},"taskName":"sqlite-blog-prisma","exec_duration":359.088},{"job_name":"2026-07-17__22-21-48","trial_name":"sqlite-blog-prisma__bsZrCR2","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":734.246,"latency_breakdown":{"env_setup":4.394,"agent_setup":5.454,"agent_exec":603.512,"verifier":21.642},"taskName":"sqlite-blog-prisma","exec_duration":603.512},{"job_name":"2026-07-17__22-40-26","trial_name":"sqlite-blog-prisma__z6khYKo","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":274.367,"latency_breakdown":{"env_setup":4.477,"agent_setup":5.552,"agent_exec":196.835,"verifier":20.185},"taskName":"sqlite-blog-prisma","exec_duration":196.835},{"job_name":"2026-07-17__22-55-43","trial_name":"sqlite-blog-prisma__sYbseCH","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":496.777,"latency_breakdown":{"env_setup":4.295,"agent_setup":5.534,"agent_exec":410.071,"verifier":19.033},"taskName":"sqlite-blog-prisma","exec_duration":410.071}]},{"taskName":"sqlite-fts5-search","instruction":"$13","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sqlite-fts5-search__zLRwFpo","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":335.773,"latency_breakdown":{"env_setup":56.845,"agent_setup":5.565,"agent_exec":225.167,"verifier":17.869},"taskName":"sqlite-fts5-search","exec_duration":225.167},{"job_name":"2026-07-17__22-21-48","trial_name":"sqlite-fts5-search__Beeg6zm","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":711.297,"latency_breakdown":{"env_setup":4.738,"agent_setup":5.567,"agent_exec":603.457,"verifier":57.655},"taskName":"sqlite-fts5-search","exec_duration":603.457},{"job_name":"2026-07-17__22-40-26","trial_name":"sqlite-fts5-search__JLk85Jn","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":476.498,"latency_breakdown":{"env_setup":4.484,"agent_setup":5.605,"agent_exec":413.763,"verifier":26.454},"taskName":"sqlite-fts5-search","exec_duration":413.763},{"job_name":"2026-07-17__22-55-43","trial_name":"sqlite-fts5-search__yEuEmmh","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":421.742,"latency_breakdown":{"env_setup":5.375,"agent_setup":5.578,"agent_exec":339.177,"verifier":36.106},"taskName":"sqlite-fts5-search","exec_duration":339.177}]},{"taskName":"sse-live-counter","instruction":"$14","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"sse-live-counter__CJtNgNy","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":1002.478,"latency_breakdown":{"env_setup":86.523,"agent_setup":5.861,"agent_exec":421.753,"verifier":429.17},"taskName":"sse-live-counter","exec_duration":421.753},{"job_name":"2026-07-17__22-21-48","trial_name":"sse-live-counter__R7tZeqy","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":904.06,"latency_breakdown":{"env_setup":5.088,"agent_setup":6.526,"agent_exec":425.686,"verifier":434.421},"taskName":"sse-live-counter","exec_duration":425.686},{"job_name":"2026-07-17__22-40-26","trial_name":"sse-live-counter__7sXy5cJ","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":791.007,"latency_breakdown":{"env_setup":4.977,"agent_setup":5.747,"agent_exec":297.429,"verifier":438.221},"taskName":"sse-live-counter","exec_duration":297.429},{"job_name":"2026-07-17__22-55-43","trial_name":"sse-live-counter__STyFafC","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":846.889,"latency_breakdown":{"env_setup":5.049,"agent_setup":5.787,"agent_exec":346.589,"verifier":445.734},"taskName":"sse-live-counter","exec_duration":346.589}]},{"taskName":"tag-filter-blog-relations","instruction":"$15","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"tag-filter-blog-relations__rPP7Z3K","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":true,"latency_sec":738.003,"latency_breakdown":{"env_setup":57.004,"agent_setup":5.736,"agent_exec":603.679,"verifier":34.209},"taskName":"tag-filter-blog-relations","exec_duration":603.679},{"job_name":"2026-07-17__22-21-48","trial_name":"tag-filter-blog-relations__uAvxZkZ","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":440.998,"latency_breakdown":{"env_setup":9.669,"agent_setup":5.732,"agent_exec":337.387,"verifier":42.665},"taskName":"tag-filter-blog-relations","exec_duration":337.387},{"job_name":"2026-07-17__22-40-26","trial_name":"tag-filter-blog-relations__9oXhLyh","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":340.852,"latency_breakdown":{"env_setup":4.955,"agent_setup":5.786,"agent_exec":265.494,"verifier":31.067},"taskName":"tag-filter-blog-relations","exec_duration":265.494},{"job_name":"2026-07-17__22-55-43","trial_name":"tag-filter-blog-relations__smcPEou","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":639.663,"latency_breakdown":{"env_setup":4.608,"agent_setup":6.245,"agent_exec":558.485,"verifier":36.568},"taskName":"tag-filter-blog-relations","exec_duration":558.485}]},{"taskName":"theme-i18n-middleware","instruction":"$16","trials":[{"job_name":"2026-07-17__22-02-53","trial_name":"theme-i18n-middleware__QtSLwpV","model":"gemini-3.5-flash","rawModel":"google/gemini-3.5-flash","agent":"Pochi","passed":true,"reward":1,"error":false,"latency_sec":366.142,"latency_breakdown":{"env_setup":67.142,"agent_setup":5.578,"agent_exec":258.497,"verifier":8.96},"taskName":"theme-i18n-middleware","exec_duration":258.497},{"job_name":"2026-07-17__22-21-48","trial_name":"theme-i18n-middleware__RQLzz9e","model":"glm-5.2","rawModel":"zai/glm-5.2","agent":"Pochi","passed":false,"reward":0,"error":true,"latency_sec":715.986,"latency_breakdown":{"env_setup":4.825,"agent_setup":5.633,"agent_exec":603.503,"verifier":47.212},"taskName":"theme-i18n-middleware","exec_duration":603.503},{"job_name":"2026-07-17__22-40-26","trial_name":"theme-i18n-middleware__yFSTJNF","model":"MiniMax-M3","rawModel":"minimax/MiniMax-M3","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":498.765,"latency_breakdown":{"env_setup":4.688,"agent_setup":5.594,"agent_exec":432.738,"verifier":9.153},"taskName":"theme-i18n-middleware","exec_duration":432.738},{"job_name":"2026-07-17__22-55-43","trial_name":"theme-i18n-middleware__zgkjBWf","model":"claude-5-sonnet","rawModel":"anthropic/claude-5-sonnet","agent":"Pochi","passed":false,"reward":0,"error":false,"latency_sec":332.519,"latency_breakdown":{"env_setup":4.822,"agent_setup":5.613,"agent_exec":275.669,"verifier":15.252},"taskName":"theme-i18n-middleware","exec_duration":275.669}]}]}]}]]}],["$L17","$L18"],"$L19"]}],"loading":null,"isPartial":false}
+17:["$","script","script-0",{"src":"/qwik-benchmark/_next/static/chunks/b7786bc204f070d9.js","async":true}]
+18:["$","script","script-1",{"src":"/qwik-benchmark/_next/static/chunks/2ee232ed1e88c469.js","async":true}]
+19:["$","$L1a",null,{"children":["$","$2",null,{"name":"Next.MetadataOutlet","children":"$@1b"}]}]
+1b:null
